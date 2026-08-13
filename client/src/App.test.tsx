@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import App from "./App";
 
@@ -40,6 +40,7 @@ describe("App", () => {
     vi.unstubAllGlobals();
   });
 
+  // UI-01: TokTickIT heading renders
   it("renders the TokTickIT heading", () => {
     render(<App />);
     expect(
@@ -47,12 +48,12 @@ describe("App", () => {
     ).toBeInTheDocument();
   });
 
+  // UI-02: Loading state changes to category list
   it("shows a loading state, then the system status and category list on success", async () => {
     vi.stubGlobal("fetch", mockFetchSuccess());
-    const user = userEvent.setup();
 
     render(<App />);
-    await user.click(screen.getByTestId("check-system-btn"));
+    fireEvent.click(screen.getByTestId("check-system-btn"));
 
     expect(screen.getByTestId("loading-state")).toBeInTheDocument();
 
@@ -66,6 +67,7 @@ describe("App", () => {
     expect(screen.getByTestId("category-list")).toHaveTextContent("Network");
   });
 
+  // UI-03: API failure displays a useful error message
   it("shows a useful error message when the API is unavailable", async () => {
     vi.stubGlobal("fetch", mockFetchFailure());
     const user = userEvent.setup();
