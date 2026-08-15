@@ -13,4 +13,4 @@ I used [LLM/agent name] to help set up and implement the TokTickIT Lab 1 vertica
 | Review Final Lab 1 Work | ... | [your reflection] |
 
 ## Overall reflection
-[2-4 sentences]
+I used the AI assistant mainly to speed up scaffolding and to keep the Git workflow organized, including the git/gh commands for each branch and PR, which I then ran myself. I set up and debugged the local environment myself (PostgreSQL installation, PATH, .env files), ran and verified all the tests, and reviewed each change before merging on GitHub.
