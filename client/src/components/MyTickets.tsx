@@ -32,9 +32,10 @@ type Status = "loading" | "success" | "error";
 
 interface Props {
   onCreateTicket: () => void;
+  onOpenTicket: (id: number) => void;
 }
 
-function MyTickets({ onCreateTicket }: Props) {
+function MyTickets({ onCreateTicket, onOpenTicket }: Props) {
   const { requester } = useRequester();
 
   const [categories, setCategories] = useState<Category[]>([]);
@@ -217,7 +218,12 @@ function MyTickets({ onCreateTicket }: Props) {
             </thead>
             <tbody>
               {data.items.map((t) => (
-                <tr key={t.id} data-testid="my-tickets-row">
+                <tr
+                  key={t.id}
+                  data-testid="my-tickets-row"
+                  onClick={() => onOpenTicket(t.id)}
+                  style={{ cursor: "pointer" }}
+                >
                   <td>{t.ticketNumber}</td>
                   <td>{new Date(t.createdAt).toLocaleDateString()}</td>
                   <td>{t.summary}</td>

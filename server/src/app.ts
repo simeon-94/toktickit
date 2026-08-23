@@ -5,6 +5,7 @@ import categoriesRouter from "./routes/categories";
 import devRequestersRouter from "./routes/devRequesters";
 import relatedSystemsRouter from "./routes/relatedSystems";
 import ticketsRouter from "./routes/tickets";
+import attachmentsRouter from "./routes/attachments";
 
 const app = express();
 app.use(cors());
@@ -14,5 +15,6 @@ app.use("/api", categoriesRouter);
 app.use("/api/dev-requesters", devRequestersRouter);
 app.use("/api/related-systems", relatedSystemsRouter);
 app.use("/api/tickets", ticketsRouter);
+app.use("/api/attachments", attachmentsRouter);
 
 export default app;
