@@ -65,6 +65,76 @@ function validateTicketBody(body: any) {
   return errors;
 }
 
+const ORDER_BY_MAP: Record<string, any> = {
+  createdAt_desc: { createdAt: "desc" },
+  createdAt_asc: { createdAt: "asc" },
+  summary_asc: { summary: "asc" },
+  summary_desc: { summary: "desc" },
+};
+
+router.get("/", async (req, res) => {
+  const requesterId = Number(req.query.requesterId);
+  if (!requesterId) {
+    return res.status(400).json({ error: "requesterId is required." });
+  }
+
+  const search = typeof req.query.search === "string" ? req.query.search.trim() : "";
+  const categoryId = req.query.category ? Number(req.query.category) : undefined;
+  const priority = typeof req.query.priority === "string" ? req.query.priority : undefined;
+  const status = typeof req.query.status === "string" ? req.query.status : undefined;
+  const sort = typeof req.query.sort === "string" ? req.query.sort : "createdAt_desc";
+
+  let page = Number(req.query.page);
+  if (!Number.isInteger(page) || page < 1) page = 1;
+
+  let pageSize = Number(req.query.pageSize);
+  if (!Number.isInteger(pageSize) || pageSize < 1) pageSize = 10;
+
+  const where: any = { requesterId };
+
+  if (search) {
+    where.OR = [
+      { ticketNumber: { contains: search, mode: "insensitive" } },
+      { summary: { contains: search, mode: "insensitive" } },
+    ];
+  }
+  if (categoryId) where.categoryId = categoryId;
+  if (priority) where.requestedPriority = priority;
+  if (status) where.currentStatus = status;
+
+  const orderBy = ORDER_BY_MAP[sort] || ORDER_BY_MAP.createdAt_desc;
+
+  const [items, totalItems] = await Promise.all([
+    prisma.ticket.findMany({
+      where,
+      orderBy,
+      skip: (page - 1) * pageSize,
+      take: pageSize,
+      include: { category: true, relatedSystem: true },
+    }),
+    prisma.ticket.count({ where }),
+  ]);
+
+  res.json({
+    items: items.map((t) => ({
+      id: t.id,
+      ticketNumber: t.ticketNumber,
+      summary: t.summary,
+      categoryName: t.category.name,
+      relatedSystemName: t.relatedSystem.name,
+      requestedPriority: t.requestedPriority,
+      itPriority: t.itPriority,
+      currentStatus: t.currentStatus,
+      createdAt: t.createdAt,
+      updatedAt: t.updatedAt,
+    })),
+    page,
+    pageSize,
+    totalItems,
+    totalPages: Math.ceil(totalItems / pageSize) || 1,
+  });
+});
+
 router.post("/", async (req, res) => {
   const errors = validateTicketBody(req.body);
   if (Object.keys(errors).length > 0) {

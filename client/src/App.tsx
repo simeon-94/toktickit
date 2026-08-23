@@ -2,9 +2,10 @@ import { useState } from "react";
 import { useRequester } from "./context/RequesterContext";
 import RequesterSelect from "./components/RequesterSelect";
 import CreateTicket from "./components/CreateTicket";
+import MyTickets from "./components/MyTickets";
 
 type Status = "idle" | "loading" | "success" | "error";
-type View = "checkSystem" | "createTicket";
+type View = "checkSystem" | "createTicket" | "myTickets";
 
 interface Category {
   id: number;
@@ -54,7 +55,7 @@ function App() {
   }
 
   return (
-    <div className="container py-5" style={{ maxWidth: 560 }}>
+    <div className="container py-5" style={{ maxWidth: 960 }}>
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h1 className="mb-0">TokTickIT IT Service Desk</h1>
         <div className="text-end">
@@ -80,15 +81,24 @@ function App() {
           Check System
         </button>
         <button
-          className={`btn btn-sm ${view === "createTicket" ? "btn-success" : "btn-outline-success"}`}
+          className={`btn btn-sm me-2 ${view === "createTicket" ? "btn-success" : "btn-outline-success"}`}
           data-testid="nav-create-ticket"
           onClick={() => setView("createTicket")}
         >
           Create Ticket
         </button>
+        <button
+          className={`btn btn-sm ${view === "myTickets" ? "btn-success" : "btn-outline-success"}`}
+          data-testid="nav-my-tickets"
+          onClick={() => setView("myTickets")}
+        >
+          My Tickets
+        </button>
       </nav>
 
       {view === "createTicket" && <CreateTicket />}
+
+      {view === "myTickets" && <MyTickets onCreateTicket={() => setView("createTicket")} />}
 
       {view === "checkSystem" && (
         <>
