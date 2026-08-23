@@ -3,9 +3,10 @@ import { useRequester } from "./context/RequesterContext";
 import RequesterSelect from "./components/RequesterSelect";
 import CreateTicket from "./components/CreateTicket";
 import MyTickets from "./components/MyTickets";
+import TicketDetail from "./components/TicketDetail";
 
 type Status = "idle" | "loading" | "success" | "error";
-type View = "checkSystem" | "createTicket" | "myTickets";
+type View = "checkSystem" | "createTicket" | "myTickets" | "ticketDetail";
 
 interface Category {
   id: number;
@@ -22,6 +23,7 @@ const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4000";
 function App() {
   const { requester, setRequester } = useRequester();
   const [view, setView] = useState<View>("checkSystem");
+  const [selectedTicketId, setSelectedTicketId] = useState<number | null>(null);
   const [status, setStatus] = useState<Status>("idle");
   const [health, setHealth] = useState<HealthResponse | null>(null);
   const [categories, setCategories] = useState<Category[]>([]);
@@ -48,6 +50,11 @@ function App() {
       setErrorMessage("Unable to connect to TokTickIT API");
       setStatus("error");
     }
+  }
+
+  function openTicket(id: number) {
+    setSelectedTicketId(id);
+    setView("ticketDetail");
   }
 
   if (!requester) {
@@ -88,7 +95,7 @@ function App() {
           Create Ticket
         </button>
         <button
-          className={`btn btn-sm ${view === "myTickets" ? "btn-success" : "btn-outline-success"}`}
+          className={`btn btn-sm ${view === "myTickets" || view === "ticketDetail" ? "btn-success" : "btn-outline-success"}`}
           data-testid="nav-my-tickets"
           onClick={() => setView("myTickets")}
         >
@@ -98,7 +105,11 @@ function App() {
 
       {view === "createTicket" && <CreateTicket />}
 
-      {view === "myTickets" && <MyTickets onCreateTicket={() => setView("createTicket")} />}
+      {view === "myTickets" && <MyTickets onCreateTicket={() => setView("createTicket")} onOpenTicket={openTicket} />}
+
+      {view === "ticketDetail" && selectedTicketId !== null && (
+        <TicketDetail ticketId={selectedTicketId} onBack={() => setView("myTickets")} />
+      )}
 
       {view === "checkSystem" && (
         <>

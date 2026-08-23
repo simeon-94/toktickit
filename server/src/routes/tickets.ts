@@ -135,6 +135,68 @@ router.get("/", async (req, res) => {
   });
 });
 
+router.get("/:id", async (req, res) => {
+  const requesterId = Number(req.query.requesterId);
+  const ticketId = Number(req.params.id);
+
+  if (!requesterId) {
+    return res.status(400).json({ error: "requesterId is required." });
+  }
+
+  const ticket = await prisma.ticket.findUnique({
+    where: { id: ticketId },
+    include: { category: true, relatedSystem: true },
+  });
+
+  if (!ticket || ticket.requesterId !== requesterId) {
+    return res.status(404).json({ error: "Ticket not found." });
+  }
+
+  res.json({
+    id: ticket.id,
+    ticketNumber: ticket.ticketNumber,
+    summary: ticket.summary,
+    description: ticket.description,
+    categoryName: ticket.category.name,
+    relatedSystemName: ticket.relatedSystem.name,
+    requestedPriority: ticket.requestedPriority,
+    itPriority: ticket.itPriority,
+    currentStatus: ticket.currentStatus,
+    createdAt: ticket.createdAt,
+    updatedAt: ticket.updatedAt,
+  });
+});
+
+router.get("/:id/attachments", async (req, res) => {
+  const requesterId = Number(req.query.requesterId);
+  const ticketId = Number(req.params.id);
+
+  if (!requesterId) {
+    return res.status(400).json({ error: "requesterId is required." });
+  }
+
+  const ticket = await prisma.ticket.findUnique({ where: { id: ticketId } });
+  if (!ticket || ticket.requesterId !== requesterId) {
+    return res.status(404).json({ error: "Ticket not found." });
+  }
+
+  const attachments = await prisma.attachment.findMany({
+    where: { ticketId },
+    orderBy: { uploadedAt: "asc" },
+  });
+
+  res.json(
+    attachments.map((a) => ({
+      id: a.id,
+      fileName: a.fileName,
+      sizeBytes: a.sizeBytes,
+      isRemoved: a.isRemoved,
+      uploadedAt: a.uploadedAt,
+      removedAt: a.removedAt,
+    }))
+  );
+});
+
 router.post("/", async (req, res) => {
   const errors = validateTicketBody(req.body);
   if (Object.keys(errors).length > 0) {
@@ -200,7 +262,7 @@ router.post("/:id/attachments", (req, res) => {
     const attachment = await prisma.attachment.create({
       data: {
         ticketId,
-        fileName: req.file.originalname,
+        fileName: Buffer.from(req.file.originalname, "latin1").toString("utf8"),
         storedFileName: req.file.filename,
         mimeType: req.file.mimetype,
         sizeBytes: req.file.size,
