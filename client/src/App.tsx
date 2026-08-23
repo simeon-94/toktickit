@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { useRequester } from "./context/RequesterContext";
+import RequesterSelect from "./components/RequesterSelect";
 
 type Status = "idle" | "loading" | "success" | "error";
 
@@ -15,6 +17,7 @@ interface HealthResponse {
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4000";
 
 function App() {
+  const { requester, setRequester } = useRequester();
   const [status, setStatus] = useState<Status>("idle");
   const [health, setHealth] = useState<HealthResponse | null>(null);
   const [categories, setCategories] = useState<Category[]>([]);
@@ -43,9 +46,27 @@ function App() {
     }
   }
 
+  if (!requester) {
+    return <RequesterSelect />;
+  }
+
   return (
     <div className="container py-5" style={{ maxWidth: 560 }}>
-      <h1 className="mb-4">TokTickIT IT Service Desk</h1>
+      <div className="d-flex justify-content-between align-items-center mb-4">
+        <h1 className="mb-0">TokTickIT IT Service Desk</h1>
+        <div className="text-end">
+          <div className="small text-muted" data-testid="current-requester">
+            Signed in as {requester.name}
+          </div>
+          <button
+            className="btn btn-link btn-sm p-0"
+            data-testid="change-requester-btn"
+            onClick={() => setRequester(null)}
+          >
+            Change Requester
+          </button>
+        </div>
+      </div>
 
       <button
         className="btn btn-success mb-4"
