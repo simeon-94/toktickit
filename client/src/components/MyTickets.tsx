@@ -205,39 +205,64 @@ function MyTickets({ onCreateTicket, onOpenTicket }: Props) {
 
       {status === "success" && data && data.items.length > 0 && (
         <>
-          <table className="table table-sm" data-testid="my-tickets-table">
-            <thead>
-              <tr>
-                <th>Ticket No.</th>
-                <th>Created</th>
-                <th>Summary</th>
-                <th>Category</th>
-                <th>Requested Priority</th>
-                <th>Current Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              {data.items.map((t) => (
-                <tr
-                  key={t.id}
-                  data-testid="my-tickets-row"
-                  onClick={() => onOpenTicket(t.id)}
-                  style={{ cursor: "pointer" }}
-                >
-                  <td>{t.ticketNumber}</td>
-                  <td>{new Date(t.createdAt).toLocaleDateString()}</td>
-                  <td>{t.summary}</td>
-                  <td>{t.categoryName}</td>
-                  <td>
-                    <span className="badge bg-secondary">{t.requestedPriority}</span>
-                  </td>
-                  <td>
-                    <span className="badge bg-success">{t.currentStatus}</span>
-                  </td>
+          <div className="d-none d-md-block">
+            <table className="table table-sm" data-testid="my-tickets-table">
+              <thead>
+                <tr>
+                  <th>Ticket No.</th>
+                  <th>Created</th>
+                  <th>Summary</th>
+                  <th>Category</th>
+                  <th>Requested Priority</th>
+                  <th>Current Status</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {data.items.map((t) => (
+                  <tr
+                    key={t.id}
+                    data-testid="my-tickets-row"
+                    onClick={() => onOpenTicket(t.id)}
+                    style={{ cursor: "pointer" }}
+                  >
+                    <td>{t.ticketNumber}</td>
+                    <td>{new Date(t.createdAt).toLocaleDateString()}</td>
+                    <td>{t.summary}</td>
+                    <td>{t.categoryName}</td>
+                    <td>
+                      <span className="badge bg-secondary">{t.requestedPriority}</span>
+                    </td>
+                    <td>
+                      <span className="badge bg-success">{t.currentStatus}</span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          <div className="d-md-none" data-testid="my-tickets-cards">
+            {data.items.map((t) => (
+              <div
+                key={t.id}
+                className="card mb-2"
+                onClick={() => onOpenTicket(t.id)}
+                style={{ cursor: "pointer" }}
+                data-testid="my-tickets-card"
+              >
+                <div className="card-body py-2">
+                  <div className="d-flex justify-content-between">
+                    <strong>{t.ticketNumber}</strong>
+                    <span className="badge bg-success">{t.currentStatus}</span>
+                  </div>
+                  <div className="small">{t.summary}</div>
+                  <div className="small text-muted">
+                    Updated {new Date(t.updatedAt).toLocaleDateString()}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
 
           <div className="d-flex justify-content-between align-items-center">
             <span className="small text-muted">
