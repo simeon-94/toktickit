@@ -2,68 +2,78 @@ import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import App from "./App";
-import { RequesterProvider } from "./context/RequesterContext";
+import { AuthProvider } from "./context/AuthContext";
 
-const FAKE_REQUESTER = { id: 1, name: "Jennifer Anderson", email: "jennifer.anderson@example.com" };
+const FAKE_USER = {
+  id: 1,
+  name: "Jennifer Anderson",
+  email: "jennifer.anderson@example.com",
+  role: "REQUESTER",
+  mustChangePassword: false,
+};
 
-function renderAppWithRequesterSelected() {
-  localStorage.setItem("toktickit_selected_requester", JSON.stringify(FAKE_REQUESTER));
-  return render(
-    <RequesterProvider>
-      <App />
-    </RequesterProvider>
+function renderAppSignedIn(extraFetch?: (url: string) => Promise<any> | undefined) {
+  vi.stubGlobal(
+    "fetch",
+    vi.fn((url: string) => {
+      if (url.includes("/api/auth/me")) {
+        return Promise.resolve({ ok: true, json: () => Promise.resolve(FAKE_USER) });
+      }
+      if (extraFetch) {
+        const result = extraFetch(url);
+        if (result) return result;
+      }
+      return Promise.reject(new Error("Unknown URL: " + url));
+    }) as unknown as typeof fetch
   );
-}
 
-function mockFetchSuccess() {
-  return vi.fn((url: string) => {
-    if (url.includes("/api/health")) {
-      return Promise.resolve({
-        ok: true,
-        json: () => Promise.resolve({ status: "ok", service: "TokTickIT API" }),
-      });
-    }
-    if (url.includes("/api/categories")) {
-      return Promise.resolve({
-        ok: true,
-        json: () =>
-          Promise.resolve([
-            { id: 1, name: "Account and Access" },
-            { id: 2, name: "Hardware" },
-            { id: 3, name: "Software" },
-            { id: 4, name: "Network" },
-          ]),
-      });
-    }
-    return Promise.reject(new Error("Unknown URL"));
-  }) as unknown as typeof fetch;
-}
-
-function mockFetchFailure() {
-  return vi.fn(() => Promise.resolve({ ok: false })) as unknown as typeof fetch;
+  return render(
+    <AuthProvider>
+      <App />
+    </AuthProvider>
+  );
 }
 
 describe("App", () => {
   beforeEach(() => {
     vi.restoreAllMocks();
-    localStorage.clear();
   });
 
   afterEach(() => {
     vi.unstubAllGlobals();
-    localStorage.clear();
   });
 
-  it("renders the TokTickIT heading", () => {
-    renderAppWithRequesterSelected();
+  it("renders the TokTickIT heading", async () => {
+    renderAppSignedIn();
     expect(
-      screen.getByRole("heading", { name: /TokTickIT IT Service Desk/i })
+      await screen.findByRole("heading", { name: /TokTickIT IT Service Desk/i })
     ).toBeInTheDocument();
   });
 
   it("shows a loading state, then the system status and category list on success", async () => {
-    vi.stubGlobal("fetch", mockFetchSuccess());
-    renderAppWithRequesterSelected();
+    renderAppSignedIn((url) => {
+      if (url.includes("/api/health")) {
+        return Promise.resolve({
+          ok: true,
+          json: () => Promise.resolve({ status: "ok", service: "TokTickIT API" }),
+        });
+      }
+      if (url.includes("/api/categories")) {
+        return Promise.resolve({
+          ok: true,
+          json: () =>
+            Promise.resolve([
+              { id: 1, name: "Account and Access" },
+              { id: 2, name: "Hardware" },
+              { id: 3, name: "Software" },
+              { id: 4, name: "Network" },
+            ]),
+        });
+      }
+      return undefined;
+    });
+
+    await screen.findByTestId("check-system-btn");
     fireEvent.click(screen.getByTestId("check-system-btn"));
 
     expect(screen.getByTestId("loading-state")).toBeInTheDocument();
@@ -79,10 +89,15 @@ describe("App", () => {
   });
 
   it("shows a useful error message when the API is unavailable", async () => {
-    vi.stubGlobal("fetch", mockFetchFailure());
-    const user = userEvent.setup();
+    renderAppSignedIn((url) => {
+      if (url.includes("/api/health") || url.includes("/api/categories")) {
+        return Promise.resolve({ ok: false });
+      }
+      return undefined;
+    });
 
-    renderAppWithRequesterSelected();
+    const user = userEvent.setup();
+    await screen.findByTestId("check-system-btn");
     await user.click(screen.getByTestId("check-system-btn"));
 
     await waitFor(() => {

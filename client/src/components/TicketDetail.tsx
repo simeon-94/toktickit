@@ -1,5 +1,4 @@
-import { useEffect, useState, type ChangeEvent } from "react";
-import { useRequester } from "../context/RequesterContext";
+import { useEffect, useState, type ChangeEvent, type FormEvent } from "react";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4000";
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp", "application/pdf"];
@@ -28,6 +27,13 @@ interface AttachmentItem {
   removedAt: string | null;
 }
 
+interface CommentItem {
+  id: number;
+  content: string;
+  createdAt: string;
+  authorName: string;
+}
+
 type LoadStatus = "loading" | "success" | "error";
 
 interface Props {
@@ -36,11 +42,10 @@ interface Props {
 }
 
 function TicketDetail({ ticketId, onBack }: Props) {
-  const { requester } = useRequester();
-
   const [status, setStatus] = useState<LoadStatus>("loading");
   const [ticket, setTicket] = useState<TicketDetailData | null>(null);
   const [attachments, setAttachments] = useState<AttachmentItem[]>([]);
+  const [comments, setComments] = useState<CommentItem[]>([]);
 
   const [uploadError, setUploadError] = useState("");
   const [uploading, setUploading] = useState(false);
@@ -48,22 +53,28 @@ function TicketDetail({ ticketId, onBack }: Props) {
   const [removingId, setRemovingId] = useState<number | null>(null);
   const [removeError, setRemoveError] = useState("");
 
+  const [newComment, setNewComment] = useState("");
+  const [commentError, setCommentError] = useState("");
+  const [postingComment, setPostingComment] = useState(false);
+
   function loadTicketAndAttachments() {
-    if (!requester) return;
     setStatus("loading");
 
     Promise.all([
-      fetch(`${API_URL}/api/tickets/${ticketId}?requesterId=${requester.id}`),
-      fetch(`${API_URL}/api/tickets/${ticketId}/attachments?requesterId=${requester.id}`),
+      fetch(`${API_URL}/api/tickets/${ticketId}`, { credentials: "include" }),
+      fetch(`${API_URL}/api/tickets/${ticketId}/attachments`, { credentials: "include" }),
+      fetch(`${API_URL}/api/tickets/${ticketId}/comments`, { credentials: "include" }),
     ])
-      .then(async ([ticketRes, attachmentsRes]) => {
-        if (!ticketRes.ok || !attachmentsRes.ok) {
+      .then(async ([ticketRes, attachmentsRes, commentsRes]) => {
+        if (!ticketRes.ok || !attachmentsRes.ok || !commentsRes.ok) {
           throw new Error("Failed to load ticket");
         }
         const ticketData: TicketDetailData = await ticketRes.json();
         const attachmentsData: AttachmentItem[] = await attachmentsRes.json();
+        const commentsData: CommentItem[] = await commentsRes.json();
         setTicket(ticketData);
         setAttachments(attachmentsData);
+        setComments(commentsData);
         setStatus("success");
       })
       .catch((error) => {
@@ -75,12 +86,12 @@ function TicketDetail({ ticketId, onBack }: Props) {
   useEffect(() => {
     loadTicketAndAttachments();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ticketId, requester]);
+  }, [ticketId]);
 
   function handleFileChange(event: ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
     event.target.value = "";
-    if (!file || !requester) return;
+    if (!file) return;
 
     setUploadError("");
 
@@ -105,6 +116,7 @@ function TicketDetail({ ticketId, onBack }: Props) {
 
     fetch(`${API_URL}/api/tickets/${ticketId}/attachments`, {
       method: "POST",
+      credentials: "include",
       body: formData,
     })
       .then(async (res) => {
@@ -121,15 +133,15 @@ function TicketDetail({ ticketId, onBack }: Props) {
   }
 
   function handleRemove(attachmentId: number) {
-    if (!requester) return;
     const confirmed = window.confirm("Remove this attachment? This cannot be undone.");
     if (!confirmed) return;
 
     setRemoveError("");
     setRemovingId(attachmentId);
 
-    fetch(`${API_URL}/api/attachments/${attachmentId}?requesterId=${requester.id}`, {
+    fetch(`${API_URL}/api/attachments/${attachmentId}`, {
       method: "DELETE",
+      credentials: "include",
     })
       .then(async (res) => {
         if (!res.ok) {
@@ -142,6 +154,38 @@ function TicketDetail({ ticketId, onBack }: Props) {
         setRemoveError(error.message || "Unable to remove attachment.");
       })
       .finally(() => setRemovingId(null));
+  }
+
+  function handlePostComment(event: FormEvent) {
+    event.preventDefault();
+    const content = newComment.trim();
+    setCommentError("");
+
+    if (content.length < 1) {
+      setCommentError("Comment cannot be empty.");
+      return;
+    }
+
+    setPostingComment(true);
+    fetch(`${API_URL}/api/tickets/${ticketId}/comments`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({ content }),
+    })
+      .then(async (res) => {
+        if (!res.ok) {
+          const body = await res.json().catch(() => ({}));
+          throw new Error(body.error || "Unable to post comment.");
+        }
+        const comment: CommentItem = await res.json();
+        setComments((prev) => [...prev, comment]);
+        setNewComment("");
+      })
+      .catch((error) => {
+        setCommentError(error.message || "Unable to post comment.");
+      })
+      .finally(() => setPostingComment(false));
   }
 
   if (status === "loading") {
@@ -245,10 +289,10 @@ function TicketDetail({ ticketId, onBack }: Props) {
                     Download
                   </button>
                 ) : (
-                    <button type="button"
-                  
+                  <button
+                    type="button"
                     className="btn btn-outline-success btn-sm me-2"
-                    onClick={() => window.open(`${API_URL}/api/attachments/${a.id}/download?requesterId=${requester?.id}`, "_blank")}
+                    onClick={() => window.open(`${API_URL}/api/attachments/${a.id}/download`, "_blank")}
                     data-testid="attachment-download-link"
                   >
                     Download
@@ -276,7 +320,7 @@ function TicketDetail({ ticketId, onBack }: Props) {
         </div>
       )}
 
-      <div>
+      <div className="mb-4">
         <label className="form-label small">Add Attachment (JPG/PNG/WEBP/PDF, 5MB max)</label>
         <input
           type="file"
@@ -291,6 +335,47 @@ function TicketDetail({ ticketId, onBack }: Props) {
           </div>
         )}
       </div>
+
+      <h3 className="h6">Public Comments</h3>
+
+      {comments.length === 0 && <p className="text-muted small">No comments yet.</p>}
+
+      {comments.length > 0 && (
+        <ul className="list-group mb-3" data-testid="ticket-detail-comments">
+          {comments.map((c) => (
+            <li key={c.id} className="list-group-item" data-testid="ticket-detail-comment-row">
+              <div className="small text-muted">
+                {c.authorName} — {new Date(c.createdAt).toLocaleString()}
+              </div>
+              <div style={{ whiteSpace: "pre-wrap" }}>{c.content}</div>
+            </li>
+          ))}
+        </ul>
+      )}
+
+      <form onSubmit={handlePostComment} data-testid="ticket-detail-comment-form">
+        <label className="form-label small">Add a comment</label>
+        <textarea
+          className="form-control form-control-sm mb-2"
+          rows={2}
+          value={newComment}
+          onChange={(e) => setNewComment(e.target.value)}
+          data-testid="ticket-detail-comment-input"
+        />
+        {commentError && (
+          <div className="text-danger small mb-2" data-testid="ticket-detail-comment-error">
+            {commentError}
+          </div>
+        )}
+        <button
+          type="submit"
+          className="btn btn-outline-success btn-sm"
+          disabled={postingComment}
+          data-testid="ticket-detail-comment-submit"
+        >
+          {postingComment ? "Posting..." : "Post Comment"}
+        </button>
+      </form>
     </div>
   );
 }

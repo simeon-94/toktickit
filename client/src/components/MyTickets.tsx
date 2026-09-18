@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { useRequester } from "../context/RequesterContext";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4000";
 
@@ -36,8 +35,6 @@ interface Props {
 }
 
 function MyTickets({ onCreateTicket, onOpenTicket }: Props) {
-  const { requester } = useRequester();
-
   const [categories, setCategories] = useState<Category[]>([]);
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
@@ -51,7 +48,7 @@ function MyTickets({ onCreateTicket, onOpenTicket }: Props) {
   const [data, setData] = useState<TicketsResponse | null>(null);
 
   useEffect(() => {
-    fetch(`${API_URL}/api/categories`)
+    fetch(`${API_URL}/api/categories`, { credentials: "include" })
       .then((res) => res.json())
       .then(setCategories)
       .catch(() => setCategories([]));
@@ -66,12 +63,9 @@ function MyTickets({ onCreateTicket, onOpenTicket }: Props) {
   }, [search]);
 
   useEffect(() => {
-    if (!requester) return;
-
     setStatus("loading");
 
     const params = new URLSearchParams({
-      requesterId: String(requester.id),
       sort,
       page: String(page),
     });
@@ -80,7 +74,7 @@ function MyTickets({ onCreateTicket, onOpenTicket }: Props) {
     if (priorityFilter) params.set("priority", priorityFilter);
     if (statusFilter) params.set("status", statusFilter);
 
-    fetch(`${API_URL}/api/tickets?${params.toString()}`)
+    fetch(`${API_URL}/api/tickets?${params.toString()}`, { credentials: "include" })
       .then((res) => {
         if (!res.ok) throw new Error("Failed to load tickets");
         return res.json();
@@ -93,7 +87,7 @@ function MyTickets({ onCreateTicket, onOpenTicket }: Props) {
         console.error("Loading tickets failed:", error);
         setStatus("error");
       });
-  }, [requester, debouncedSearch, categoryFilter, priorityFilter, statusFilter, sort, page]);
+  }, [debouncedSearch, categoryFilter, priorityFilter, statusFilter, sort, page]);
 
   const hasActiveFilters = Boolean(debouncedSearch || categoryFilter || priorityFilter || statusFilter);
 

@@ -267,4 +267,56 @@ router.post("/:id/attachments", (req, res) => {
   });
 });
 
+router.get("/:id/comments", async (req, res) => {
+  const requesterId = req.auth!.userId;
+  const ticketId = Number(req.params.id);
+
+  const ticket = await prisma.ticket.findUnique({ where: { id: ticketId } });
+  if (!ticket || ticket.requesterId !== requesterId) {
+    return res.status(404).json({ error: "Ticket not found." });
+  }
+
+  const comments = await prisma.publicComment.findMany({
+    where: { ticketId },
+    orderBy: { createdAt: "asc" },
+    include: { author: true },
+  });
+
+  res.json(
+    comments.map((c) => ({
+      id: c.id,
+      content: c.content,
+      createdAt: c.createdAt,
+      authorName: c.author.name,
+    }))
+  );
+});
+
+router.post("/:id/comments", async (req, res) => {
+  const requesterId = req.auth!.userId;
+  const ticketId = Number(req.params.id);
+
+  const ticket = await prisma.ticket.findUnique({ where: { id: ticketId } });
+  if (!ticket || ticket.requesterId !== requesterId) {
+    return res.status(404).json({ error: "Ticket not found." });
+  }
+
+  const content = typeof req.body.content === "string" ? req.body.content.trim() : "";
+  if (content.length < 1 || content.length > 2000) {
+    return res.status(400).json({ error: "Comment must be between 1 and 2000 characters." });
+  }
+
+  const comment = await prisma.publicComment.create({
+    data: { ticketId, authorId: requesterId, content },
+    include: { author: true },
+  });
+
+  res.status(201).json({
+    id: comment.id,
+    content: comment.content,
+    createdAt: comment.createdAt,
+    authorName: comment.author.name,
+  });
+});
+
 export default router;
