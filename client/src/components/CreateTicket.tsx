@@ -1,5 +1,4 @@
 import { useEffect, useState, type ChangeEvent, type FormEvent } from "react";
-import { useRequester } from "../context/RequesterContext";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4000";
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp", "application/pdf"];
@@ -25,8 +24,6 @@ type OptionsStatus = "loading" | "success" | "error";
 type SubmitStatus = "idle" | "submitting" | "success" | "error";
 
 function CreateTicket() {
-  const { requester } = useRequester();
-
   const [optionsStatus, setOptionsStatus] = useState<OptionsStatus>("loading");
   const [categories, setCategories] = useState<Category[]>([]);
   const [relatedSystems, setRelatedSystems] = useState<RelatedSystem[]>([]);
@@ -50,8 +47,8 @@ function CreateTicket() {
     async function loadOptions() {
       try {
         const [categoriesRes, systemsRes] = await Promise.all([
-          fetch(`${API_URL}/api/categories`),
-          fetch(`${API_URL}/api/related-systems`),
+          fetch(`${API_URL}/api/categories`, { credentials: "include" }),
+          fetch(`${API_URL}/api/related-systems`, { credentials: "include" }),
         ]);
         if (!categoriesRes.ok || !systemsRes.ok) throw new Error("Failed to load options");
 
@@ -134,8 +131,8 @@ function CreateTicket() {
       const res = await fetch(`${API_URL}/api/tickets`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify({
-          requesterId: requester?.id,
           categoryId: Number(categoryId),
           relatedSystemId: Number(relatedSystemId),
           summary: summary.trim(),
@@ -166,6 +163,7 @@ function CreateTicket() {
         try {
           const uploadRes = await fetch(`${API_URL}/api/tickets/${ticket.id}/attachments`, {
             method: "POST",
+            credentials: "include",
             body: formData,
           });
           results.push({ name: file.name, ok: uploadRes.ok });
