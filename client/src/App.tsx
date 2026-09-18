@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { useRequester } from "./context/RequesterContext";
-import RequesterSelect from "./components/RequesterSelect";
+import { useAuth } from "./context/AuthContext";
+import Login from "./components/Login";
+import ChangePassword from "./components/ChangePassword";
 import CreateTicket from "./components/CreateTicket";
 import MyTickets from "./components/MyTickets";
 import TicketDetail from "./components/TicketDetail";
@@ -21,7 +22,7 @@ interface HealthResponse {
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4000";
 
 function App() {
-  const { requester, setRequester } = useRequester();
+  const { user, loading, logout } = useAuth();
   const [view, setView] = useState<View>("checkSystem");
   const [selectedTicketId, setSelectedTicketId] = useState<number | null>(null);
   const [status, setStatus] = useState<Status>("idle");
@@ -57,8 +58,16 @@ function App() {
     setView("ticketDetail");
   }
 
-  if (!requester) {
-    return <RequesterSelect />;
+  if (loading) {
+    return <div className="container py-5">Loading...</div>;
+  }
+
+  if (!user) {
+    return <Login />;
+  }
+
+  if (user.mustChangePassword) {
+    return <ChangePassword />;
   }
 
   return (
@@ -66,15 +75,15 @@ function App() {
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h1 className="mb-0">TokTickIT IT Service Desk</h1>
         <div className="text-end">
-          <div className="small text-muted" data-testid="current-requester">
-            Signed in as {requester.name}
+          <div className="small text-muted" data-testid="current-user">
+            Signed in as {user.name} ({user.role})
           </div>
           <button
             className="btn btn-link btn-sm p-0"
-            data-testid="change-requester-btn"
-            onClick={() => setRequester(null)}
+            data-testid="logout-btn"
+            onClick={() => logout()}
           >
-            Change Requester
+            Log Out
           </button>
         </div>
       </div>
