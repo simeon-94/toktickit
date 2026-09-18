@@ -2,12 +2,12 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "bootstrap/dist/css/bootstrap.min.css";
 import App from "./App";
-import { RequesterProvider } from "./context/RequesterContext";
+import { AuthProvider } from "./context/AuthContext";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
-    <RequesterProvider>
+    <AuthProvider>
       <App />
-    </RequesterProvider>
+    </AuthProvider>
   </React.StrictMode>
 );
