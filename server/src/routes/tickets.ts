@@ -4,6 +4,7 @@ import multer from "multer";
 import path from "path";
 import crypto from "crypto";
 import { generateTicketNumber } from "../utils/ticketNumber";
+import { requireAuth } from "../middleware/auth";
 
 const router = Router();
 const prisma = new PrismaClient();
@@ -11,6 +12,8 @@ const prisma = new PrismaClient();
 const ALLOWED_MIME_TYPES = ["image/jpeg", "image/png", "image/webp", "application/pdf"];
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
 const MAX_ATTACHMENTS_PER_TICKET = 5;
+
+router.use(requireAuth);
 
 const storage = multer.diskStorage({
   destination: (_req, _file, cb) => {
@@ -37,9 +40,6 @@ const upload = multer({
 function validateTicketBody(body: any) {
   const errors: Record<string, string> = {};
 
-  if (!body.requesterId || typeof body.requesterId !== "number") {
-    errors.requesterId = "required";
-  }
   if (!body.categoryId || typeof body.categoryId !== "number") {
     errors.categoryId = "required";
   }
@@ -73,10 +73,7 @@ const ORDER_BY_MAP: Record<string, any> = {
 };
 
 router.get("/", async (req, res) => {
-  const requesterId = Number(req.query.requesterId);
-  if (!requesterId) {
-    return res.status(400).json({ error: "requesterId is required." });
-  }
+  const requesterId = req.auth!.userId;
 
   const search = typeof req.query.search === "string" ? req.query.search.trim() : "";
   const categoryId = req.query.category ? Number(req.query.category) : undefined;
@@ -136,12 +133,8 @@ router.get("/", async (req, res) => {
 });
 
 router.get("/:id", async (req, res) => {
-  const requesterId = Number(req.query.requesterId);
+  const requesterId = req.auth!.userId;
   const ticketId = Number(req.params.id);
-
-  if (!requesterId) {
-    return res.status(400).json({ error: "requesterId is required." });
-  }
 
   const ticket = await prisma.ticket.findUnique({
     where: { id: ticketId },
@@ -168,12 +161,8 @@ router.get("/:id", async (req, res) => {
 });
 
 router.get("/:id/attachments", async (req, res) => {
-  const requesterId = Number(req.query.requesterId);
+  const requesterId = req.auth!.userId;
   const ticketId = Number(req.params.id);
-
-  if (!requesterId) {
-    return res.status(400).json({ error: "requesterId is required." });
-  }
 
   const ticket = await prisma.ticket.findUnique({ where: { id: ticketId } });
   if (!ticket || ticket.requesterId !== requesterId) {
@@ -207,7 +196,7 @@ router.post("/", async (req, res) => {
     const created = await prisma.ticket.create({
       data: {
         ticketNumber: `PENDING-${Date.now()}-${Math.random().toString(36).slice(2)}`,
-        requesterId: req.body.requesterId,
+        requesterId: req.auth!.userId,
         categoryId: req.body.categoryId,
         relatedSystemId: req.body.relatedSystemId,
         summary: req.body.summary.trim(),
@@ -248,7 +237,7 @@ router.post("/:id/attachments", (req, res) => {
 
     const ticketId = Number(req.params.id);
     const ticket = await prisma.ticket.findUnique({ where: { id: ticketId } });
-    if (!ticket) {
+    if (!ticket || ticket.requesterId !== req.auth!.userId) {
       return res.status(404).json({ error: "Ticket not found." });
     }
 
