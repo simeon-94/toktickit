@@ -1,18 +1,10 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { describe, it, expect, vi, afterEach } from "vitest";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import CreateTicket from "./CreateTicket";
-import { RequesterProvider } from "../context/RequesterContext";
-
-const FAKE_REQUESTER = { id: 1, name: "Jennifer Anderson", email: "jennifer.anderson@example.com" };
 
 function renderCreateTicket() {
-  localStorage.setItem("toktickit_selected_requester", JSON.stringify(FAKE_REQUESTER));
-  return render(
-    <RequesterProvider>
-      <CreateTicket />
-    </RequesterProvider>
-  );
+  return render(<CreateTicket />);
 }
 
 function mockFetchImpl({ createTicketOk = true } = {}) {
@@ -44,13 +36,8 @@ function mockFetchImpl({ createTicketOk = true } = {}) {
 }
 
 describe("CreateTicket", () => {
-  beforeEach(() => {
-    localStorage.clear();
-  });
-
   afterEach(() => {
     vi.unstubAllGlobals();
-    localStorage.clear();
   });
 
   it("shows a field error and does not call the API when summary is empty", async () => {

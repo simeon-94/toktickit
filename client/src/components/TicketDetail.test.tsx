@@ -1,33 +1,23 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { describe, it, expect, vi, afterEach } from "vitest";
 import { render, screen, waitFor } from "@testing-library/react";
 import TicketDetail from "./TicketDetail";
-import { RequesterProvider } from "../context/RequesterContext";
-
-const FAKE_REQUESTER = { id: 1, name: "Jennifer Anderson", email: "jennifer.anderson@example.com" };
 
 function renderTicketDetail() {
-  localStorage.setItem("toktickit_selected_requester", JSON.stringify(FAKE_REQUESTER));
-  return render(
-    <RequesterProvider>
-      <TicketDetail ticketId={1} onBack={() => {}} />
-    </RequesterProvider>
-  );
+  return render(<TicketDetail ticketId={1} onBack={() => {}} />);
 }
 
 describe("TicketDetail", () => {
-  beforeEach(() => {
-    localStorage.clear();
-  });
-
   afterEach(() => {
     vi.unstubAllGlobals();
-    localStorage.clear();
   });
 
   it("shows a removed attachment with its download button disabled", async () => {
     vi.stubGlobal(
       "fetch",
       vi.fn((url: string) => {
+        if (url.includes("/comments")) {
+          return Promise.resolve({ ok: true, json: () => Promise.resolve([]) });
+        }
         if (url.includes("/attachments")) {
           return Promise.resolve({
             ok: true,

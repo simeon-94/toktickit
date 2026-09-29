@@ -1,24 +1,26 @@
 import { Router } from "express";
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, Role } from "@prisma/client";
 import path from "path";
+import { requireAuth } from "../middleware/auth";
 
 const router = Router();
 const prisma = new PrismaClient();
 
-router.get("/:id/download", async (req, res) => {
-  const requesterId = Number(req.query.requesterId);
-  const attachmentId = Number(req.params.id);
+router.use(requireAuth);
 
-  if (!requesterId) {
-    return res.status(400).json({ error: "requesterId is required." });
-  }
+function canAccessAttachment(ticketRequesterId: number, auth: { userId: number; role: Role }) {
+  return ticketRequesterId === auth.userId || auth.role === Role.IT_STAFF || auth.role === Role.ADMINISTRATOR;
+}
+
+router.get("/:id/download", async (req, res) => {
+  const attachmentId = Number(req.params.id);
 
   const attachment = await prisma.attachment.findUnique({
     where: { id: attachmentId },
     include: { ticket: true },
   });
 
-  if (!attachment || attachment.ticket.requesterId !== requesterId) {
+  if (!attachment || !canAccessAttachment(attachment.ticket.requesterId, req.auth!)) {
     return res.status(404).json({ error: "Attachment not found." });
   }
 
@@ -31,19 +33,14 @@ router.get("/:id/download", async (req, res) => {
 });
 
 router.delete("/:id", async (req, res) => {
-  const requesterId = Number(req.query.requesterId);
   const attachmentId = Number(req.params.id);
-
-  if (!requesterId) {
-    return res.status(400).json({ error: "requesterId is required." });
-  }
 
   const attachment = await prisma.attachment.findUnique({
     where: { id: attachmentId },
     include: { ticket: true },
   });
 
-  if (!attachment || attachment.ticket.requesterId !== requesterId) {
+  if (!attachment || attachment.ticket.requesterId !== req.auth!.userId) {
     return res.status(404).json({ error: "Attachment not found." });
   }
 

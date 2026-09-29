@@ -1,17 +1,9 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { describe, it, expect, vi, afterEach } from "vitest";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import MyTickets from "./MyTickets";
-import { RequesterProvider } from "../context/RequesterContext";
-
-const FAKE_REQUESTER = { id: 1, name: "Jennifer Anderson", email: "jennifer.anderson@example.com" };
 
 function renderMyTickets() {
-  localStorage.setItem("toktickit_selected_requester", JSON.stringify(FAKE_REQUESTER));
-  return render(
-    <RequesterProvider>
-      <MyTickets onCreateTicket={() => {}} />
-    </RequesterProvider>
-  );
+  return render(<MyTickets onCreateTicket={() => {}} onOpenTicket={() => {}} />);
 }
 
 function emptyTicketsResponse() {
@@ -19,13 +11,8 @@ function emptyTicketsResponse() {
 }
 
 describe("MyTickets", () => {
-  beforeEach(() => {
-    localStorage.clear();
-  });
-
   afterEach(() => {
     vi.unstubAllGlobals();
-    localStorage.clear();
   });
 
   it("shows the empty state with a Create Ticket button when there are zero tickets", async () => {

@@ -5,9 +5,10 @@ test.describe("Responsive check", () => {
 
   test("My Tickets has no horizontal scroll on a mobile viewport", async ({ page }) => {
     await page.goto("/");
-    await page.getByTestId("requester-dropdown").waitFor();
-    await page.getByTestId("requester-dropdown").selectOption({ label: "Jennifer Anderson" });
-    await page.getByTestId("continue-btn").click();
+    await page.getByTestId("login-email").waitFor();
+    await page.getByTestId("login-email").fill("jennifer.anderson@example.com");
+    await page.getByTestId("login-password").fill("JenniferSecure2026!");
+    await page.getByTestId("login-submit").click();
 
     await page.getByTestId("nav-my-tickets").click();
     await page.getByTestId("my-tickets-cards").waitFor();
