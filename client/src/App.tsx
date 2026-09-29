@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "./context/AuthContext";
 import Login from "./components/Login";
 import ChangePassword from "./components/ChangePassword";
@@ -36,12 +36,20 @@ function App() {
   const isStaff = user?.role === "IT_STAFF" || user?.role === "ADMINISTRATOR";
   const isAdmin = user?.role === "ADMINISTRATOR";
 
-  const [view, setView] = useState<View>(isStaff ? "staffQueue" : "checkSystem");
+  const [view, setView] = useState<View>("checkSystem");
+  const [hasSetDefaultView, setHasSetDefaultView] = useState(false);
   const [selectedTicketId, setSelectedTicketId] = useState<number | null>(null);
   const [status, setStatus] = useState<Status>("idle");
   const [health, setHealth] = useState<HealthResponse | null>(null);
   const [categories, setCategories] = useState<Category[]>([]);
   const [errorMessage, setErrorMessage] = useState<string>("");
+
+  useEffect(() => {
+    if (user && !hasSetDefaultView) {
+      setView(isStaff ? "staffQueue" : "checkSystem");
+      setHasSetDefaultView(true);
+    }
+  }, [user, isStaff, hasSetDefaultView]);
 
   async function handleCheckSystem() {
     setStatus("loading");

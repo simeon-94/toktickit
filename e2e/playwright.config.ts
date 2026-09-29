@@ -1,8 +1,9 @@
 import { defineConfig } from "@playwright/test";
 
 export default defineConfig({
-  testDir: "./lab-02",
+  testDir: "./",
   timeout: 30000,
+  workers: 1,
   use: {
     baseURL: "http://localhost:5173",
     screenshot: "only-on-failure",
