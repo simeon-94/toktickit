@@ -7,6 +7,7 @@ import relatedSystemsRouter from "./routes/relatedSystems";
 import ticketsRouter from "./routes/tickets";
 import attachmentsRouter from "./routes/attachments";
 import authRouter from "./routes/auth";
+import staffTicketsRouter from "./routes/staffTickets";
 
 const app = express();
 app.use(
@@ -21,6 +22,7 @@ app.use("/api", healthRouter);
 app.use("/api", categoriesRouter);
 app.use("/api/related-systems", relatedSystemsRouter);
 app.use("/api/tickets", ticketsRouter);
+app.use("/api/staff", staffTicketsRouter);
 app.use("/api/attachments", attachmentsRouter);
 app.use("/api/auth", authRouter);
 

@@ -1,0 +1,279 @@
+import { useEffect, useState } from "react";
+
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4000";
+
+interface Category {
+  id: number;
+  name: string;
+}
+
+interface StaffTicketItem {
+  id: number;
+  ticketNumber: string;
+  createdAt: string;
+  updatedAt: string;
+  summary: string;
+  categoryName: string;
+  requestedPriority: string;
+  itPriority: string | null;
+  currentStatus: string;
+  requesterName: string;
+  ticketOwnerName: string | null;
+}
+
+interface StaffTicketsResponse {
+  items: StaffTicketItem[];
+  page: number;
+  pageSize: number;
+  totalItems: number;
+  totalPages: number;
+}
+
+type Status = "loading" | "success" | "error";
+
+interface Props {
+  onOpenTicket: (id: number) => void;
+}
+
+const STATUS_OPTIONS = [
+  "NEW",
+  "OPEN",
+  "IN_PROGRESS",
+  "WAITING_FOR_REQUESTER",
+  "RESOLVED",
+  "CLOSED",
+  "REOPENED",
+  "CANCELLED",
+];
+
+function StaffQueue({ onOpenTicket }: Props) {
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [search, setSearch] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
+  const [categoryFilter, setCategoryFilter] = useState("");
+  const [statusFilter, setStatusFilter] = useState("");
+  const [unassignedOnly, setUnassignedOnly] = useState(false);
+  const [sort, setSort] = useState("createdAt_desc");
+  const [page, setPage] = useState(1);
+
+  const [status, setStatus] = useState<Status>("loading");
+  const [data, setData] = useState<StaffTicketsResponse | null>(null);
+
+  useEffect(() => {
+    fetch(`${API_URL}/api/categories`, { credentials: "include" })
+      .then((res) => res.json())
+      .then(setCategories)
+      .catch(() => setCategories([]));
+  }, []);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(search);
+      setPage(1);
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [search]);
+
+  useEffect(() => {
+    setStatus("loading");
+
+    const params = new URLSearchParams({ sort, page: String(page) });
+    if (debouncedSearch) params.set("search", debouncedSearch);
+    if (categoryFilter) params.set("category", categoryFilter);
+    if (statusFilter) params.set("status", statusFilter);
+    if (unassignedOnly) params.set("unassigned", "true");
+
+    fetch(`${API_URL}/api/staff/tickets?${params.toString()}`, { credentials: "include" })
+      .then((res) => {
+        if (!res.ok) throw new Error("Failed to load tickets");
+        return res.json();
+      })
+      .then((body: StaffTicketsResponse) => {
+        setData(body);
+        setStatus("success");
+      })
+      .catch((error) => {
+        console.error("Loading staff queue failed:", error);
+        setStatus("error");
+      });
+  }, [debouncedSearch, categoryFilter, statusFilter, unassignedOnly, sort, page]);
+
+  return (
+    <div data-testid="staff-queue">
+      <h2 className="h5 mb-3">Ticket Queue</h2>
+
+      <div className="row g-2 mb-3">
+        <div className="col-12 col-md-4">
+          <input
+            type="text"
+            className="form-control form-control-sm"
+            placeholder="Search by ticket number or summary"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            data-testid="staff-queue-search"
+          />
+        </div>
+        <div className="col-6 col-md-2">
+          <select
+            className="form-select form-select-sm"
+            value={categoryFilter}
+            onChange={(e) => {
+              setCategoryFilter(e.target.value);
+              setPage(1);
+            }}
+            data-testid="staff-queue-filter-category"
+          >
+            <option value="">All categories</option>
+            {categories.map((c) => (
+              <option key={c.id} value={c.id}>
+                {c.name}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="col-6 col-md-2">
+          <select
+            className="form-select form-select-sm"
+            value={statusFilter}
+            onChange={(e) => {
+              setStatusFilter(e.target.value);
+              setPage(1);
+            }}
+            data-testid="staff-queue-filter-status"
+          >
+            <option value="">All statuses</option>
+            {STATUS_OPTIONS.map((s) => (
+              <option key={s} value={s}>
+                {s}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="col-6 col-md-2">
+          <select
+            className="form-select form-select-sm"
+            value={sort}
+            onChange={(e) => setSort(e.target.value)}
+            data-testid="staff-queue-sort"
+          >
+            <option value="createdAt_desc">Newest first</option>
+            <option value="createdAt_asc">Oldest first</option>
+            <option value="updatedAt_desc">Recently updated</option>
+            <option value="summary_asc">Summary A-Z</option>
+            <option value="summary_desc">Summary Z-A</option>
+          </select>
+        </div>
+        <div className="col-6 col-md-2 d-flex align-items-center">
+          <div className="form-check">
+            <input
+              type="checkbox"
+              className="form-check-input"
+              id="unassigned-only"
+              checked={unassignedOnly}
+              onChange={(e) => {
+                setUnassignedOnly(e.target.checked);
+                setPage(1);
+              }}
+              data-testid="staff-queue-unassigned-only"
+            />
+            <label className="form-check-label small" htmlFor="unassigned-only">
+              Unassigned only
+            </label>
+          </div>
+        </div>
+      </div>
+
+      {status === "loading" && <p data-testid="staff-queue-loading">Loading tickets...</p>}
+
+      {status === "error" && (
+        <div className="alert alert-danger" data-testid="staff-queue-error">
+          Unable to load the ticket queue right now. Please try again later.
+        </div>
+      )}
+
+      {status === "success" && data && data.items.length === 0 && (
+        <div className="alert alert-secondary" data-testid="staff-queue-empty">
+          No tickets match your search or filters.
+        </div>
+      )}
+
+      {status === "success" && data && data.items.length > 0 && (
+        <>
+          <div className="table-responsive">
+            <table className="table table-sm" data-testid="staff-queue-table">
+              <thead>
+                <tr>
+                  <th>Ticket No.</th>
+                  <th>Created</th>
+                  <th>Summary</th>
+                  <th>Category</th>
+                  <th>Requested Priority</th>
+                  <th>IT Priority</th>
+                  <th>Current Status</th>
+                  <th>Ticket Owner</th>
+                  <th>Last Updated</th>
+                </tr>
+              </thead>
+              <tbody>
+                {data.items.map((t) => (
+                  <tr
+                    key={t.id}
+                    data-testid="staff-queue-row"
+                    onClick={() => onOpenTicket(t.id)}
+                    style={{ cursor: "pointer" }}
+                  >
+                    <td>{t.ticketNumber}</td>
+                    <td>{new Date(t.createdAt).toLocaleDateString()}</td>
+                    <td>{t.summary}</td>
+                    <td>{t.categoryName}</td>
+                    <td>
+                      <span className="badge bg-secondary">{t.requestedPriority}</span>
+                    </td>
+                    <td>
+                      {t.itPriority ? (
+                        <span className="badge bg-secondary">{t.itPriority}</span>
+                      ) : (
+                        <span className="text-muted">—</span>
+                      )}
+                    </td>
+                    <td>
+                      <span className="badge bg-success">{t.currentStatus}</span>
+                    </td>
+                    <td>{t.ticketOwnerName || <span className="text-muted">Unassigned</span>}</td>
+                    <td>{new Date(t.updatedAt).toLocaleDateString()}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          <div className="d-flex justify-content-between align-items-center">
+            <span className="small text-muted">
+              Page {data.page} of {data.totalPages} ({data.totalItems} tickets)
+            </span>
+            <div>
+              <button
+                className="btn btn-outline-success btn-sm me-2"
+                disabled={data.page <= 1}
+                onClick={() => setPage((p) => p - 1)}
+                data-testid="staff-queue-prev-page"
+              >
+                Previous
+              </button>
+              <button
+                className="btn btn-outline-success btn-sm"
+                disabled={data.page >= data.totalPages}
+                onClick={() => setPage((p) => p + 1)}
+                data-testid="staff-queue-next-page"
+              >
+                Next
+              </button>
+            </div>
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
+export default StaffQueue;

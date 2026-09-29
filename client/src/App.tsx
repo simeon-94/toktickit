@@ -5,9 +5,10 @@ import ChangePassword from "./components/ChangePassword";
 import CreateTicket from "./components/CreateTicket";
 import MyTickets from "./components/MyTickets";
 import TicketDetail from "./components/TicketDetail";
+import StaffQueue from "./components/StaffQueue";
 
 type Status = "idle" | "loading" | "success" | "error";
-type View = "checkSystem" | "createTicket" | "myTickets" | "ticketDetail";
+type View = "checkSystem" | "createTicket" | "myTickets" | "ticketDetail" | "staffQueue";
 
 interface Category {
   id: number;
@@ -23,7 +24,9 @@ const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4000";
 
 function App() {
   const { user, loading, logout } = useAuth();
-  const [view, setView] = useState<View>("checkSystem");
+  const isStaff = user?.role === "IT_STAFF" || user?.role === "ADMINISTRATOR";
+
+  const [view, setView] = useState<View>(isStaff ? "staffQueue" : "checkSystem");
   const [selectedTicketId, setSelectedTicketId] = useState<number | null>(null);
   const [status, setStatus] = useState<Status>("idle");
   const [health, setHealth] = useState<HealthResponse | null>(null);
@@ -58,6 +61,10 @@ function App() {
     setView("ticketDetail");
   }
 
+  function openStaffTicket(id: number) {
+    window.alert(`Staff Ticket Detail for ticket #${id} is coming in the next Issue.`);
+  }
+
   if (loading) {
     return <div className="container py-5">Loading...</div>;
   }
@@ -89,34 +96,50 @@ function App() {
       </div>
 
       <nav className="mb-4">
+        {isStaff ? (
+          <button
+            className={`btn btn-sm me-2 ${view === "staffQueue" ? "btn-success" : "btn-outline-success"}`}
+            data-testid="nav-staff-queue"
+            onClick={() => setView("staffQueue")}
+          >
+            Ticket Queue
+          </button>
+        ) : (
+          <>
+            <button
+              className={`btn btn-sm me-2 ${view === "createTicket" ? "btn-success" : "btn-outline-success"}`}
+              data-testid="nav-create-ticket"
+              onClick={() => setView("createTicket")}
+            >
+              Create Ticket
+            </button>
+            <button
+              className={`btn btn-sm me-2 ${view === "myTickets" || view === "ticketDetail" ? "btn-success" : "btn-outline-success"}`}
+              data-testid="nav-my-tickets"
+              onClick={() => setView("myTickets")}
+            >
+              My Tickets
+            </button>
+          </>
+        )}
         <button
-          className={`btn btn-sm me-2 ${view === "checkSystem" ? "btn-success" : "btn-outline-success"}`}
+          className={`btn btn-sm ${view === "checkSystem" ? "btn-success" : "btn-outline-success"}`}
           data-testid="nav-check-system"
           onClick={() => setView("checkSystem")}
         >
           Check System
         </button>
-        <button
-          className={`btn btn-sm me-2 ${view === "createTicket" ? "btn-success" : "btn-outline-success"}`}
-          data-testid="nav-create-ticket"
-          onClick={() => setView("createTicket")}
-        >
-          Create Ticket
-        </button>
-        <button
-          className={`btn btn-sm ${view === "myTickets" || view === "ticketDetail" ? "btn-success" : "btn-outline-success"}`}
-          data-testid="nav-my-tickets"
-          onClick={() => setView("myTickets")}
-        >
-          My Tickets
-        </button>
       </nav>
 
-      {view === "createTicket" && <CreateTicket />}
+      {view === "staffQueue" && isStaff && <StaffQueue onOpenTicket={openStaffTicket} />}
 
-      {view === "myTickets" && <MyTickets onCreateTicket={() => setView("createTicket")} onOpenTicket={openTicket} />}
+      {view === "createTicket" && !isStaff && <CreateTicket />}
 
-      {view === "ticketDetail" && selectedTicketId !== null && (
+      {view === "myTickets" && !isStaff && (
+        <MyTickets onCreateTicket={() => setView("createTicket")} onOpenTicket={openTicket} />
+      )}
+
+      {view === "ticketDetail" && !isStaff && selectedTicketId !== null && (
         <TicketDetail ticketId={selectedTicketId} onBack={() => setView("myTickets")} />
       )}
 
