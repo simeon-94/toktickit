@@ -75,5 +75,14 @@ router.get("/tickets", async (req, res) => {
     totalPages: Math.ceil(totalItems / pageSize) || 1,
   });
 });
+router.get("/users", async (_req, res) => {
+  const staffUsers = await prisma.user.findMany({
+    where: { role: { in: [Role.IT_STAFF, Role.ADMINISTRATOR] }, isActive: true },
+    orderBy: { name: "asc" },
+    select: { id: true, name: true, role: true },
+  });
+  res.json(staffUsers);
+});
+
 
 export default router;
