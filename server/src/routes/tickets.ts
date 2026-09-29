@@ -1,10 +1,10 @@
 import { Router } from "express";
-import { PrismaClient, Priority } from "@prisma/client";
+import { PrismaClient, Priority, Role, TicketStatus } from "@prisma/client";
 import multer from "multer";
 import path from "path";
 import crypto from "crypto";
 import { generateTicketNumber } from "../utils/ticketNumber";
-import { requireAuth } from "../middleware/auth";
+import { requireAuth, requireRole } from "../middleware/auth";
 
 const router = Router();
 const prisma = new PrismaClient();
@@ -14,6 +14,14 @@ const MAX_FILE_SIZE = 5 * 1024 * 1024;
 const MAX_ATTACHMENTS_PER_TICKET = 5;
 
 router.use(requireAuth);
+
+function isStaffRole(role: Role) {
+  return role === Role.IT_STAFF || role === Role.ADMINISTRATOR;
+}
+
+function canAccessTicket(ticketRequesterId: number, auth: { userId: number; role: Role }) {
+  return ticketRequesterId === auth.userId || isStaffRole(auth.role);
+}
 
 const storage = multer.diskStorage({
   destination: (_req, _file, cb) => {
@@ -133,15 +141,14 @@ router.get("/", async (req, res) => {
 });
 
 router.get("/:id", async (req, res) => {
-  const requesterId = req.auth!.userId;
   const ticketId = Number(req.params.id);
 
   const ticket = await prisma.ticket.findUnique({
     where: { id: ticketId },
-    include: { category: true, relatedSystem: true },
+    include: { category: true, relatedSystem: true, requester: true, ticketOwner: true },
   });
 
-  if (!ticket || ticket.requesterId !== requesterId) {
+  if (!ticket || !canAccessTicket(ticket.requesterId, req.auth!)) {
     return res.status(404).json({ error: "Ticket not found." });
   }
 
@@ -155,17 +162,20 @@ router.get("/:id", async (req, res) => {
     requestedPriority: ticket.requestedPriority,
     itPriority: ticket.itPriority,
     currentStatus: ticket.currentStatus,
+    requesterName: ticket.requester.name,
+    ticketOwnerId: ticket.ticketOwnerId,
+    ticketOwnerName: ticket.ticketOwner ? ticket.ticketOwner.name : null,
+    requesterIndicatedResolved: ticket.requesterIndicatedResolved,
     createdAt: ticket.createdAt,
     updatedAt: ticket.updatedAt,
   });
 });
 
 router.get("/:id/attachments", async (req, res) => {
-  const requesterId = req.auth!.userId;
   const ticketId = Number(req.params.id);
 
   const ticket = await prisma.ticket.findUnique({ where: { id: ticketId } });
-  if (!ticket || ticket.requesterId !== requesterId) {
+  if (!ticket || !canAccessTicket(ticket.requesterId, req.auth!)) {
     return res.status(404).json({ error: "Ticket not found." });
   }
 
@@ -268,11 +278,10 @@ router.post("/:id/attachments", (req, res) => {
 });
 
 router.get("/:id/comments", async (req, res) => {
-  const requesterId = req.auth!.userId;
   const ticketId = Number(req.params.id);
 
   const ticket = await prisma.ticket.findUnique({ where: { id: ticketId } });
-  if (!ticket || ticket.requesterId !== requesterId) {
+  if (!ticket || !canAccessTicket(ticket.requesterId, req.auth!)) {
     return res.status(404).json({ error: "Ticket not found." });
   }
 
@@ -293,11 +302,10 @@ router.get("/:id/comments", async (req, res) => {
 });
 
 router.post("/:id/comments", async (req, res) => {
-  const requesterId = req.auth!.userId;
   const ticketId = Number(req.params.id);
 
   const ticket = await prisma.ticket.findUnique({ where: { id: ticketId } });
-  if (!ticket || ticket.requesterId !== requesterId) {
+  if (!ticket || !canAccessTicket(ticket.requesterId, req.auth!)) {
     return res.status(404).json({ error: "Ticket not found." });
   }
 
@@ -307,7 +315,7 @@ router.post("/:id/comments", async (req, res) => {
   }
 
   const comment = await prisma.publicComment.create({
-    data: { ticketId, authorId: requesterId, content },
+    data: { ticketId, authorId: req.auth!.userId, content },
     include: { author: true },
   });
 
@@ -317,6 +325,125 @@ router.post("/:id/comments", async (req, res) => {
     createdAt: comment.createdAt,
     authorName: comment.author.name,
   });
+});
+
+router.get("/:id/notes", requireRole(Role.IT_STAFF, Role.ADMINISTRATOR), async (req, res) => {
+  const ticketId = Number(req.params.id);
+
+  const ticket = await prisma.ticket.findUnique({ where: { id: ticketId } });
+  if (!ticket) {
+    return res.status(404).json({ error: "Ticket not found." });
+  }
+
+  const notes = await prisma.internalNote.findMany({
+    where: { ticketId },
+    orderBy: { createdAt: "asc" },
+    include: { author: true },
+  });
+
+  res.json(
+    notes.map((n) => ({
+      id: n.id,
+      content: n.content,
+      createdAt: n.createdAt,
+      authorName: n.author.name,
+    }))
+  );
+});
+
+router.post("/:id/notes", requireRole(Role.IT_STAFF, Role.ADMINISTRATOR), async (req, res) => {
+  const ticketId = Number(req.params.id);
+
+  const ticket = await prisma.ticket.findUnique({ where: { id: ticketId } });
+  if (!ticket) {
+    return res.status(404).json({ error: "Ticket not found." });
+  }
+
+  const content = typeof req.body.content === "string" ? req.body.content.trim() : "";
+  if (content.length < 1 || content.length > 2000) {
+    return res.status(400).json({ error: "Note must be between 1 and 2000 characters." });
+  }
+
+  const note = await prisma.internalNote.create({
+    data: { ticketId, authorId: req.auth!.userId, content },
+    include: { author: true },
+  });
+
+  res.status(201).json({
+    id: note.id,
+    content: note.content,
+    createdAt: note.createdAt,
+    authorName: note.author.name,
+  });
+});
+
+router.patch("/:id/owner", requireRole(Role.IT_STAFF, Role.ADMINISTRATOR), async (req, res) => {
+  const ticketId = Number(req.params.id);
+  const ticket = await prisma.ticket.findUnique({ where: { id: ticketId } });
+  if (!ticket) {
+    return res.status(404).json({ error: "Ticket not found." });
+  }
+
+  const ticketOwnerId = req.body.ticketOwnerId === null ? null : Number(req.body.ticketOwnerId);
+
+  if (ticketOwnerId !== null) {
+    const owner = await prisma.user.findUnique({ where: { id: ticketOwnerId } });
+    if (!owner || !isStaffRole(owner.role) || !owner.isActive) {
+      return res.status(400).json({ error: "ticketOwnerId must be an active IT Staff or Administrator user." });
+    }
+  }
+
+  const updated = await prisma.ticket.update({
+    where: { id: ticketId },
+    data: { ticketOwnerId },
+    include: { ticketOwner: true },
+  });
+
+  res.json({
+    id: updated.id,
+    ticketOwnerId: updated.ticketOwnerId,
+    ticketOwnerName: updated.ticketOwner ? updated.ticketOwner.name : null,
+  });
+});
+
+router.patch("/:id/priority", requireRole(Role.IT_STAFF, Role.ADMINISTRATOR), async (req, res) => {
+  const ticketId = Number(req.params.id);
+  const ticket = await prisma.ticket.findUnique({ where: { id: ticketId } });
+  if (!ticket) {
+    return res.status(404).json({ error: "Ticket not found." });
+  }
+
+  const validPriorities = ["LOW", "MEDIUM", "HIGH"];
+  if (!validPriorities.includes(req.body.itPriority)) {
+    return res.status(400).json({ error: "itPriority must be LOW, MEDIUM, or HIGH." });
+  }
+
+  const updated = await prisma.ticket.update({
+    where: { id: ticketId },
+    data: { itPriority: req.body.itPriority as Priority },
+  });
+
+  res.json({ id: updated.id, itPriority: updated.itPriority });
+});
+
+router.patch("/:id/status", requireRole(Role.IT_STAFF, Role.ADMINISTRATOR), async (req, res) => {
+  const ticketId = Number(req.params.id);
+  const ticket = await prisma.ticket.findUnique({ where: { id: ticketId } });
+  if (!ticket) {
+    return res.status(404).json({ error: "Ticket not found." });
+  }
+
+  const validStatuses = Object.values(TicketStatus);
+  if (!validStatuses.includes(req.body.currentStatus)) {
+    return res.status(400).json({ error: `currentStatus must be one of: ${validStatuses.join(", ")}` });
+  }
+
+  const updated = await prisma.ticket.update({
+    where: { id: ticketId },
+    data: { currentStatus: req.body.currentStatus as TicketStatus },
+  });
+
+  res.json({ id: updated.id, currentStatus: updated.currentStatus });
 });
 
 export default router;

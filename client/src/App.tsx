@@ -6,9 +6,10 @@ import CreateTicket from "./components/CreateTicket";
 import MyTickets from "./components/MyTickets";
 import TicketDetail from "./components/TicketDetail";
 import StaffQueue from "./components/StaffQueue";
+import StaffTicketDetail from "./components/StaffTicketDetail";
 
 type Status = "idle" | "loading" | "success" | "error";
-type View = "checkSystem" | "createTicket" | "myTickets" | "ticketDetail" | "staffQueue";
+type View = "checkSystem" | "createTicket" | "myTickets" | "ticketDetail" | "staffQueue" | "staffTicketDetail";
 
 interface Category {
   id: number;
@@ -62,7 +63,8 @@ function App() {
   }
 
   function openStaffTicket(id: number) {
-    window.alert(`Staff Ticket Detail for ticket #${id} is coming in the next Issue.`);
+    setSelectedTicketId(id);
+    setView("staffTicketDetail");
   }
 
   if (loading) {
@@ -98,7 +100,7 @@ function App() {
       <nav className="mb-4">
         {isStaff ? (
           <button
-            className={`btn btn-sm me-2 ${view === "staffQueue" ? "btn-success" : "btn-outline-success"}`}
+            className={`btn btn-sm me-2 ${view === "staffQueue" || view === "staffTicketDetail" ? "btn-success" : "btn-outline-success"}`}
             data-testid="nav-staff-queue"
             onClick={() => setView("staffQueue")}
           >
@@ -132,6 +134,10 @@ function App() {
       </nav>
 
       {view === "staffQueue" && isStaff && <StaffQueue onOpenTicket={openStaffTicket} />}
+
+      {view === "staffTicketDetail" && isStaff && selectedTicketId !== null && (
+        <StaffTicketDetail ticketId={selectedTicketId} onBack={() => setView("staffQueue")} />
+      )}
 
       {view === "createTicket" && !isStaff && <CreateTicket />}
 
