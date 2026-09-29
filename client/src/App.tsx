@@ -7,9 +7,17 @@ import MyTickets from "./components/MyTickets";
 import TicketDetail from "./components/TicketDetail";
 import StaffQueue from "./components/StaffQueue";
 import StaffTicketDetail from "./components/StaffTicketDetail";
+import AdminUsers from "./components/AdminUsers";
 
 type Status = "idle" | "loading" | "success" | "error";
-type View = "checkSystem" | "createTicket" | "myTickets" | "ticketDetail" | "staffQueue" | "staffTicketDetail";
+type View =
+  | "checkSystem"
+  | "createTicket"
+  | "myTickets"
+  | "ticketDetail"
+  | "staffQueue"
+  | "staffTicketDetail"
+  | "adminUsers";
 
 interface Category {
   id: number;
@@ -26,6 +34,7 @@ const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4000";
 function App() {
   const { user, loading, logout } = useAuth();
   const isStaff = user?.role === "IT_STAFF" || user?.role === "ADMINISTRATOR";
+  const isAdmin = user?.role === "ADMINISTRATOR";
 
   const [view, setView] = useState<View>(isStaff ? "staffQueue" : "checkSystem");
   const [selectedTicketId, setSelectedTicketId] = useState<number | null>(null);
@@ -124,6 +133,15 @@ function App() {
             </button>
           </>
         )}
+        {isAdmin && (
+          <button
+            className={`btn btn-sm me-2 ${view === "adminUsers" ? "btn-success" : "btn-outline-success"}`}
+            data-testid="nav-admin-users"
+            onClick={() => setView("adminUsers")}
+          >
+            User Management
+          </button>
+        )}
         <button
           className={`btn btn-sm ${view === "checkSystem" ? "btn-success" : "btn-outline-success"}`}
           data-testid="nav-check-system"
@@ -138,6 +156,8 @@ function App() {
       {view === "staffTicketDetail" && isStaff && selectedTicketId !== null && (
         <StaffTicketDetail ticketId={selectedTicketId} onBack={() => setView("staffQueue")} />
       )}
+
+      {view === "adminUsers" && isAdmin && <AdminUsers />}
 
       {view === "createTicket" && !isStaff && <CreateTicket />}
 
