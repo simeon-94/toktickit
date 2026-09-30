@@ -446,4 +446,20 @@ router.patch("/:id/status", requireRole(Role.IT_STAFF, Role.ADMINISTRATOR), asyn
   res.json({ id: updated.id, currentStatus: updated.currentStatus });
 });
 
+router.post("/:id/indicate-resolved", async (req, res) => {
+  const ticketId = Number(req.params.id);
+  const ticket = await prisma.ticket.findUnique({ where: { id: ticketId } });
+
+  if (!ticket || ticket.requesterId !== req.auth!.userId) {
+    return res.status(404).json({ error: "Ticket not found." });
+  }
+
+  const updated = await prisma.ticket.update({
+    where: { id: ticketId },
+    data: { requesterIndicatedResolved: true },
+  });
+
+  res.json({ requesterIndicatedResolved: updated.requesterIndicatedResolved });
+});
+
 export default router;

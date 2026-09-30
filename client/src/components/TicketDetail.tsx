@@ -14,6 +14,7 @@ interface TicketDetailData {
   requestedPriority: string;
   itPriority: string | null;
   currentStatus: string;
+  requesterIndicatedResolved: boolean;
   createdAt: string;
   updatedAt: string;
 }
@@ -56,6 +57,9 @@ function TicketDetail({ ticketId, onBack }: Props) {
   const [newComment, setNewComment] = useState("");
   const [commentError, setCommentError] = useState("");
   const [postingComment, setPostingComment] = useState(false);
+
+  const [markingResolved, setMarkingResolved] = useState(false);
+  const [markResolvedError, setMarkResolvedError] = useState("");
 
   function loadTicketAndAttachments() {
     setStatus("loading");
@@ -188,6 +192,30 @@ function TicketDetail({ ticketId, onBack }: Props) {
       .finally(() => setPostingComment(false));
   }
 
+  function handleMarkResolved() {
+    const confirmed = window.confirm("Let IT Staff know this problem appears resolved?");
+    if (!confirmed) return;
+
+    setMarkResolvedError("");
+    setMarkingResolved(true);
+
+    fetch(`${API_URL}/api/tickets/${ticketId}/indicate-resolved`, {
+      method: "POST",
+      credentials: "include",
+    })
+      .then(async (res) => {
+        if (!res.ok) {
+          const body = await res.json().catch(() => ({}));
+          throw new Error(body.error || "Unable to update this ticket.");
+        }
+        setTicket((prev) => (prev ? { ...prev, requesterIndicatedResolved: true } : prev));
+      })
+      .catch((error) => {
+        setMarkResolvedError(error.message || "Unable to update this ticket.");
+      })
+      .finally(() => setMarkingResolved(false));
+  }
+
   if (status === "loading") {
     return <p data-testid="ticket-detail-loading">Loading ticket...</p>;
   }
@@ -256,6 +284,29 @@ function TicketDetail({ ticketId, onBack }: Props) {
       <div className="mb-4">
         <div className="small text-muted">Description</div>
         <div style={{ whiteSpace: "pre-wrap" }}>{ticket.description}</div>
+      </div>
+
+      <div className="mb-4" data-testid="ticket-detail-indicate-resolved">
+        {ticket.requesterIndicatedResolved ? (
+          <div className="alert py-2" style={{ backgroundColor: "#eaf6ef", border: "1px solid #bfe3cc" }} data-testid="indicate-resolved-banner">
+            Thanks — IT Staff will follow up.
+          </div>
+        ) : (
+          <button
+            type="button"
+            className="btn btn-outline-success btn-sm"
+            onClick={handleMarkResolved}
+            disabled={markingResolved}
+            data-testid="indicate-resolved-btn"
+          >
+            {markingResolved ? "Saving..." : "Problem Appears Resolved"}
+          </button>
+        )}
+        {markResolvedError && (
+          <div className="text-danger small mt-1" data-testid="indicate-resolved-error">
+            {markResolvedError}
+          </div>
+        )}
       </div>
 
       <h3 className="h6">Attachments</h3>
