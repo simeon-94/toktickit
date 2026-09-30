@@ -84,11 +84,48 @@ router.patch("/:id", async (req, res) => {
     data.name = name;
   }
 
+  if (req.body.email !== undefined) {
+    const email = typeof req.body.email === "string" ? req.body.email.trim().toLowerCase() : "";
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      return res.status(400).json({ errors: { email: "must be a valid email" } });
+    }
+    if (email !== user.email) {
+      const existing = await prisma.user.findUnique({ where: { email } });
+      if (existing) {
+        return res.status(409).json({ error: "A user with this email already exists." });
+      }
+    }
+    data.email = email;
+  }
+
   if (req.body.role !== undefined) {
     if (!Object.values(Role).includes(req.body.role)) {
       return res.status(400).json({ errors: { role: "must be REQUESTER, IT_STAFF, or ADMINISTRATOR" } });
     }
     data.role = req.body.role;
+  }
+
+  const targetIsActive = req.body.isActive !== undefined ? Boolean(req.body.isActive) : user.isActive;
+  const targetRole = data.role ?? user.role;
+  const wasActiveAdmin = user.role === Role.ADMINISTRATOR && user.isActive;
+  const willStillBeActiveAdmin = targetRole === Role.ADMINISTRATOR && targetIsActive;
+  const losingAdminStatus = wasActiveAdmin && !willStillBeActiveAdmin;
+
+  if (req.body.isActive !== undefined && !Boolean(req.body.isActive)) {
+    if (user.id === req.auth!.userId) {
+      return res.status(409).json({ error: "You cannot deactivate your own account." });
+    }
+  }
+
+  if (losingAdminStatus) {
+    const activeAdminCount = await prisma.user.count({
+      where: { role: Role.ADMINISTRATOR, isActive: true },
+    });
+    if (activeAdminCount <= 1) {
+      return res.status(409).json({
+        error: "At least one active Administrator must remain. Cannot deactivate or change the role of the last active Administrator.",
+      });
+    }
   }
 
   if (req.body.isActive !== undefined) {
