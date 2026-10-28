@@ -47,15 +47,15 @@ then re-run on `main` before the final report.
 | REG-02 | Regression | AC-21 | Full Lab 1-3 client suite | All pass | client/src/components/*.test.tsx | Planned |
 | REG-03 | Regression | AC-21 | Lab 2/3 E2E suites | All pass | e2e/lab-02, e2e/lab-03 | Planned |
 | PERF-01 | Performance smoke | AC-14 | Both dashboards respond < 500 ms on seeded data | Under threshold | server/tests/lab-04/staff-dashboard.api.test.ts | Pass |
-| UI-01 | UI component | AC-17 | Actions panel: loading, empty, list, error+retry | States render | client/src/components/lab-04/ActionsTaken.test.tsx | Planned |
-| UI-02 | UI component | AC-17 | Create form validation, follow-up note toggling, submit disabled while pending, data kept after failure | As specified | client/src/components/lab-04/ActionsTaken.test.tsx | Planned |
-| UI-03 | UI component | AC-17 | Edit / complete (result required) / cancel actions; locked rows have no buttons | As specified | client/src/components/lab-04/ActionsTaken.test.tsx | Planned |
-| UI-04 | UI component | AC-17, AC-02 | Requester view is read-only | No buttons/forms | client/src/components/lab-04/ActionsTaken.test.tsx | Planned |
+| UI-01 | UI component | AC-17 | Actions panel: loading, empty, list, error+retry | States render | client/src/components/lab-04/ActionsTaken.test.tsx | Pass |
+| UI-02 | UI component | AC-17 | Create form validation, follow-up note toggling, submit disabled while pending, data kept after failure | As specified | client/src/components/lab-04/ActionsTaken.test.tsx | Pass |
+| UI-03 | UI component | AC-17 | Edit / complete (result required) / cancel actions; locked rows have no buttons | As specified | client/src/components/lab-04/ActionsTaken.test.tsx | Pass |
+| UI-04 | UI component | AC-17, AC-02 | Requester view is read-only | No buttons/forms | client/src/components/lab-04/ActionsTaken.test.tsx | Pass |
 | UI-05 | UI component | AC-18 | Only permitted transitions offered; success refreshes badge | As specified | client/src/components/lab-04/TicketWorkflow.test.tsx | Planned |
 | UI-06 | UI component | AC-18 | Gate / invalid-transition / 409 messages displayed | Messages and banner shown | client/src/components/lab-04/TicketWorkflow.test.tsx | Planned |
 | UI-07 | UI component | AC-19 | Staff dashboard: cards, links, lists, loading, empty, forbidden, failure+retry, admin users card | As specified | client/src/components/lab-04/StaffDashboard.test.tsx | Planned |
 | UI-08 | UI component | AC-19 | Requester dashboard: cards, links, lists, empty, forbidden, failure | As specified | client/src/components/lab-04/RequesterDashboard.test.tsx | Planned |
-| STYLE-01 | UI style | AC-22 | Status/priority badges include text; focus-visible styles present; aria attributes on errors | Assertions pass | client/src/components/lab-04/ActionsTaken.test.tsx | Planned |
+| STYLE-01 | UI style | AC-22 | Status/priority badges include text; focus-visible styles present; aria attributes on errors | Assertions pass | client/src/components/lab-04/ActionsTaken.test.tsx | Pass |
 | E2E-01 | E2E | AC-01, AC-07, AC-17 | Staff A and B add different actions on one Ticket; Requester sees them read-only | Pass | e2e/lab-04/actions-taken-flow.spec.ts | Planned |
 | E2E-02 | E2E | AC-11, AC-18 | Gate blocks RESOLVED; complete action; resolve; close; reopen | Pass | e2e/lab-04/ticket-resolution.spec.ts | Planned |
 | E2E-03 | E2E | AC-13..16, AC-19 | Dashboards by role, drill-down totals match | Pass | e2e/lab-04/dashboards.spec.ts | Planned |

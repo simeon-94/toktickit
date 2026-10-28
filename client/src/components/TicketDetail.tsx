@@ -1,4 +1,5 @@
 import { useEffect, useState, type ChangeEvent, type FormEvent } from "react";
+import ActionsTaken from "./lab-04/ActionsTaken";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4000";
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp", "application/pdf"];
@@ -386,6 +387,8 @@ function TicketDetail({ ticketId, onBack }: Props) {
           </div>
         )}
       </div>
+
+      <ActionsTaken ticketId={ticket.id} mode="requester" />
 
       <h3 className="h6">Public Comments</h3>
 

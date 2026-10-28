@@ -162,7 +162,11 @@ function App() {
       {view === "staffQueue" && isStaff && <StaffQueue onOpenTicket={openStaffTicket} />}
 
       {view === "staffTicketDetail" && isStaff && selectedTicketId !== null && (
-        <StaffTicketDetail ticketId={selectedTicketId} onBack={() => setView("staffQueue")} />
+        <StaffTicketDetail
+          ticketId={selectedTicketId}
+          onBack={() => setView("staffQueue")}
+          currentUser={user ? { id: user.id, name: user.name } : undefined}
+        />
       )}
 
       {view === "adminUsers" && isAdmin && <AdminUsers />}
