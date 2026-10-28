@@ -45,7 +45,8 @@ Body: `{ description, actionAt?, assigneeId?, followUpRequired?, followUpNote?, 
   with `fields.clientRequestId`.
 - 400 `VALIDATION` (fields: description, actionAt, assigneeId, followUpNote, attachmentNotes);
   400 for inactive/non-staff assignee (`fields.assigneeId`).
-- 404 Ticket missing; 422 `TICKET_TERMINAL` if Ticket is CLOSED or CANCELLED.
+- 404 Ticket missing; 422 `TICKET_TERMINAL` if Ticket is CLOSED or CANCELLED. `TICKET_TERMINAL` blocks
+  create only; edit/complete/cancel of an existing PLANNED action are not blocked by Ticket status.
 - Side effect: parent Ticket `updatedAt` touched.
 
 ## 3. Update Action Taken
