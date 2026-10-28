@@ -9,6 +9,7 @@ import attachmentsRouter from "./routes/attachments";
 import authRouter from "./routes/auth";
 import staffTicketsRouter from "./routes/staffTickets";
 import adminUsersRouter from "./routes/adminUsers";
+import actionsRouter from "./routes/actions";
 
 const app = express();
 app.use(
@@ -22,6 +23,7 @@ app.use(cookieParser());
 app.use("/api", healthRouter);
 app.use("/api", categoriesRouter);
 app.use("/api/related-systems", relatedSystemsRouter);
+app.use("/api/tickets/:id/actions", actionsRouter);
 app.use("/api/tickets", ticketsRouter);
 app.use("/api/staff", staffTicketsRouter);
 app.use("/api/admin/users", adminUsersRouter);
