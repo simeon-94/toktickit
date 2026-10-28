@@ -1,7 +1,6 @@
 # Lab 4 API Specification
 
-All endpoints require the session cookie (401 if missing/invalid) and `mustChangePassword=false`
-(Lab 3 behaviour). Base path `/api`. JSON in/out. Timestamps are ISO-8601 UTC.
+All endpoints require the session cookie (401 if missing/invalid). Base path `/api`. JSON in/out. Timestamps are ISO-8601 UTC.
 
 ## Conventions
 - Error body: `{ "error": "<safe message>", "code": "<MACHINE_CODE>", "fields"?: { "<field>": "<message>" } }`
