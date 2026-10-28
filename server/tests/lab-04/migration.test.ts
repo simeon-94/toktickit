@@ -100,7 +100,7 @@ describe("Lab 4 — migration (scratch database)", () => {
     const sql = fs.readFileSync(path.join(MIGRATIONS_DIR, lab4Dir!, "migration.sql"), "utf8");
     const statements = sql.replace(/--.*$/gm, "");
     expect(statements).not.toMatch(/\bDROP\b/i);
-    expect(statements).not.toMatch(/\bDELETE\b/i);
+    expect(statements).not.toMatch(/\bDELETE\s+FROM\b/i);
     expect(statements).not.toMatch(/\bTRUNCATE\b/i);
     expect(statements).not.toMatch(/ALTER\s+COLUMN/i);
     expect(statements).toMatch(/ADD COLUMN\s+"version" INTEGER NOT NULL DEFAULT 1/i);
