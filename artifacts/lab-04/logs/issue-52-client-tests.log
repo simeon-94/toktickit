@@ -1,0 +1,87 @@
+# command : (cd client && npx vitest run)
+# commit  : e47da3c55f7ea2435615ac1f813a36327abf7e40 (feature/52-actions-taken-ui)
+# date    : 2026-10-28T13:28:54Z (UTC)
+# host    : MINGW64_NT-10.0-26200 node v24.19.0
+
+
+ RUN  v2.1.9 C:/dev/toktickit/client
+
+stderr | src/components/StaffQueue.test.tsx > StaffQueue > shows a safe failure message when the queue fails to load
+Loading staff queue failed: Error: Failed to load tickets
+    at C:\dev\toktickit\client\src\components\StaffQueue.tsx:88:28
+
+ ✓ src/components/TicketDetail.test.tsx (1 test) 74ms
+ ✓ src/components/Login.test.tsx (4 tests) 131ms
+ ✓ src/components/StaffQueue.test.tsx (5 tests) 251ms
+ ✓ src/components/ChangePassword.test.tsx (5 tests) 213ms
+stderr | src/components/AdminUsers.test.tsx > AdminUsers > shows a safe failure message when the user list fails to load
+Loading users failed: Error: Failed to load users
+    at C:\dev\toktickit\client\src\components\AdminUsers.tsx:41:28
+
+ ✓ src/components/AdminUsers.test.tsx (6 tests) 333ms
+stderr | src/App.test.tsx > App > shows a useful error message when the API is unavailable
+Check System failed: Error: Health check failed
+    at handleCheckSystem (C:\dev\toktickit\client\src\App.tsx:60:32)
+
+ ✓ src/components/MyTickets.test.tsx (2 tests) 439ms
+   ✓ MyTickets > shows a no-results state (not the empty state) when a search matches nothing 342ms
+ ✓ src/App.test.tsx (3 tests) 267ms
+stderr | src/components/StaffTicketDetail.test.tsx > StaffTicketDetail > posting a Public Comment shows it in the Public Comments panel
+Warning: Encountered two children with the same key, `1`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at div
+    at div
+    at div
+    at div
+    at StaffTicketDetail (C:\dev\toktickit\client\src\components\StaffTicketDetail.tsx:18:30)
+Warning: Encountered two children with the same key, `1`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at div
+    at div
+    at div
+    at div
+    at StaffTicketDetail (C:\dev\toktickit\client\src\components\StaffTicketDetail.tsx:18:30)
+
+stderr | src/components/StaffTicketDetail.test.tsx > StaffTicketDetail > posting an Internal Note appears only in the Internal Notes panel, never in Public Comments
+Warning: Encountered two children with the same key, `1`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at div
+    at div
+    at div
+    at div
+    at StaffTicketDetail (C:\dev\toktickit\client\src\components\StaffTicketDetail.tsx:18:30)
+Warning: Encountered two children with the same key, `1`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at div
+    at div
+    at div
+    at div
+    at StaffTicketDetail (C:\dev\toktickit\client\src\components\StaffTicketDetail.tsx:18:30)
+
+stderr | src/components/StaffTicketDetail.test.tsx > StaffTicketDetail > shows a safe failure message when the ticket fails to load
+Loading staff ticket detail failed: Error: Failed to load ticket
+    at C:\dev\toktickit\client\src\components\StaffTicketDetail.tsx:104:17
+    at runNextTicks (node:internal/process/task_queues:65:5)
+    at listOnTimeout (node:internal/timers:597:9)
+    at processTimers (node:internal/timers:571:7)
+
+ ✓ src/components/StaffTicketDetail.test.tsx (7 tests) 405ms
+stderr | src/components/CreateTicket.test.tsx > CreateTicket > shows a safe error message and keeps form values when the API is down
+Create ticket failed: Error: Ticket creation failed
+    at handleSubmit (C:\dev\toktickit\client\src\components\CreateTicket.tsx:153:15)
+
+ ✓ src/components/CreateTicket.test.tsx (3 tests) 3495ms
+   ✓ CreateTicket > shows a field error and does not call the API when summary is empty 961ms
+   ✓ CreateTicket > shows the ticket number on successful submit 1287ms
+   ✓ CreateTicket > shows a safe error message and keeps form values when the API is down 1246ms
+ ✓ src/components/lab-04/ActionsTaken.test.tsx (12 tests) 3663ms
+   ✓ ActionsTaken > UI-02: submit is disabled while pending (single request) and a new action appears after success 634ms
+   ✓ ActionsTaken > UI-02: keeps typed data after a failure, maps server field errors, and retries with the same clientRequestId 547ms
+   ✓ ActionsTaken > UI-03: edit is pre-filled and sends expectedVersion 374ms
+   ✓ ActionsTaken > UI-03: complete requires a result; cancel sends expectedVersion; locked rows have no buttons 699ms
+   ✓ ActionsTaken > UI-03: a 409 shows the conflict banner; Reload refetches and keeps the draft 467ms
+   ✓ ActionsTaken > UI-03: a 403 shows a forbidden message 340ms
+
+ Test Files  10 passed (10)
+      Tests  48 passed (48)
+   Start at  20:28:57
+   Duration  7.23s (transform 1.27s, setup 2.87s, collect 5.48s, tests 9.27s, environment 19.34s, prepare 2.81s)
+
+
+# exit code: 0
