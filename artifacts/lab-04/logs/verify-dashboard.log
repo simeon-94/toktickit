@@ -1,0 +1,35 @@
+# command : (cd server && npx tsx scripts/verify-dashboard.ts)
+# commit  : 87c43346a23329cded573230c94940cbc48573a3 (feature/51-dashboards-backend)
+# date    : 2026-10-28T13:00:15Z (UTC)
+# host    : MINGW64_NT-10.0-26200 node v24.19.0
+
+Dashboard verification - staff: priya.nair@example.com, requester: jennifer.anderson@example.com, at 2026-10-28T13:00:18.610Z
+metric                                  api    sql  result
+staff.unassignedOpen                    464    464  OK
+staff.ownedByMeOpen                       3      3  OK
+staff.urgentOpen                         17     17  OK
+staff.openFollowUps                      11     11  OK
+staff.myPlannedActions                    1      1  OK
+staff.byStatus.NEW                      368    368  OK
+staff.byStatus.OPEN                     141    141  OK
+staff.byStatus.IN_PROGRESS               24     24  OK
+staff.byStatus.WAITING_FOR_REQUESTER     19     19  OK
+staff.byStatus.RESOLVED                  33     33  OK
+staff.byStatus.CLOSED                    20     20  OK
+staff.byStatus.REOPENED                  18     18  OK
+staff.byStatus.CANCELLED                 23     23  OK
+staff.byItPriority.LOW                  255    255  OK
+staff.byItPriority.MEDIUM               278    278  OK
+staff.byItPriority.HIGH                  37     37  OK
+admin.userCounts.active                 165    165  OK
+admin.userCounts.inactive                17     17  OK
+admin.userCounts.byRole.REQUESTER       116    116  OK
+admin.userCounts.byRole.IT_STAFF         50     50  OK
+admin.userCounts.byRole.ADMINISTRATOR     16     16  OK
+requester.openTickets                     8      8  OK
+requester.waitingForRequester             1      1  OK
+requester.recentlyResolved                0      0  OK
+
+24/24 metrics match raw SQL.
+
+# exit code: 0

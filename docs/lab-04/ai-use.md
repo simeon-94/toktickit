@@ -6,6 +6,7 @@
 | # | Agent | Prompt (short) | Result / how it was used |
 | --- | --- | --- | --- |
 | 1 | Specification agent | Turn the Lab 4 handout into specification.md, api-spec.md, ui-spec.md, tests.md | TODO |
+| 3 | Coding agent (Claude Code) | Issue #51: build the requester and IT Staff dashboard APIs test-first, with counts verified against raw SQL | The agent stopped on two contract gaps (null itPriority drill-down; action cards without a drill-down total) and asked; I chose an additive `effectivePriority` filter (CL-01) and it implemented `/api/staff/actions` (CL-02) as a separate commit. Kept, with the contract updated in the same PR |
 
 ## My Reflection
 TODO (specification-agent use, coding-agent use, what I corrected, what I would do differently).
