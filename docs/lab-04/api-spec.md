@@ -41,6 +41,8 @@ All endpoints require the session cookie (401 if missing/invalid) and `mustChang
 Body: `{ description, actionAt?, assigneeId?, followUpRequired?, followUpNote?, attachmentNotes?, clientRequestId? }`
 - `performedBy` always = authenticated user; `assigneeId` default = authenticated user; status starts PLANNED; `result` is not accepted at creation.
 - 201 Action. If `clientRequestId` already exists for this Ticket -> 200 with the existing Action.
+  `clientRequestId` is unique across all Tickets: reusing it on a different Ticket -> 400 `VALIDATION`
+  with `fields.clientRequestId`.
 - 400 `VALIDATION` (fields: description, actionAt, assigneeId, followUpNote, attachmentNotes);
   400 for inactive/non-staff assignee (`fields.assigneeId`).
 - 404 Ticket missing; 422 `TICKET_TERMINAL` if Ticket is CLOSED or CANCELLED.
