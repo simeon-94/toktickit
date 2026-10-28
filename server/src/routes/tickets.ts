@@ -166,6 +166,7 @@ router.get("/:id", async (req, res) => {
     ticketOwnerId: ticket.ticketOwnerId,
     ticketOwnerName: ticket.ticketOwner ? ticket.ticketOwner.name : null,
     requesterIndicatedResolved: ticket.requesterIndicatedResolved,
+    version: ticket.version,
     createdAt: ticket.createdAt,
     updatedAt: ticket.updatedAt,
   });
