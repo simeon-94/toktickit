@@ -96,6 +96,7 @@ Only edits listed as CHG-xx in specification.md section 11 (matrix-compliant sta
 
 | CHG | Test file | Change |
 | --- | --- | --- |
+| CHG-02 | server/tests/lab-03/staff-ticket-detail.api.test.ts | "a permitted status change is accepted" now sends `expectedVersion: 1` (NEW -> OPEN is already in the matrix, so no CHG-01 edit was needed) |
 | CHG-05 | client/src/components/CreateTicket.test.tsx | `fetchMock.mock.calls` -> `vi.mocked(fetchMock).mock.calls` (2 lines, type-only; assertions unchanged) |
 
 ## 5. Final Results

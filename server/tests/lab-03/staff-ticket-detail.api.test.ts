@@ -92,7 +92,7 @@ describe("Lab 3 — staff-ticket-detail.api", () => {
     const ticket = await makeTicket(requester.id, { currentStatus: TicketStatus.NEW });
     const agent = await loginAgent("detail-staff6@example.com");
 
-    const res = await agent.patch(`/api/tickets/${ticket.id}/status`).send({ currentStatus: "OPEN" });
+    const res = await agent.patch(`/api/tickets/${ticket.id}/status`).send({ currentStatus: "OPEN", expectedVersion: 1 });
     expect(res.status).toBe(200);
     expect(res.body.currentStatus).toBe("OPEN");
   });
