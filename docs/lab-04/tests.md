@@ -98,6 +98,8 @@ Only edits listed as CHG-xx in specification.md section 11 (matrix-compliant sta
 | --- | --- | --- |
 | CHG-02 | server/tests/lab-03/staff-ticket-detail.api.test.ts | "a permitted status change is accepted" now sends `expectedVersion: 1` (NEW -> OPEN is already in the matrix, so no CHG-01 edit was needed) |
 | CHG-05 | client/src/components/CreateTicket.test.tsx | `fetchMock.mock.calls` -> `vi.mocked(fetchMock).mock.calls` (2 lines, type-only; assertions unchanged) |
+| CHG-06 | client/src/App.test.tsx | "shows a loading state, then the system status..." and "shows a useful error message...": one added line each, clicking `nav-check-system` before the existing `check-system-btn` steps; assertions unchanged |
+| CHG-06 | e2e/lab-03/auth-role-flow.spec.ts | "IT staff sees the Ticket Queue...": one added line clicking `nav-staff-queue` before the existing `staff-queue-table` assertion; assertions unchanged |
 
 ## 5. Final Results
 Filled at the end from real runs on `main` (server, client, E2E output pasted in the report).
