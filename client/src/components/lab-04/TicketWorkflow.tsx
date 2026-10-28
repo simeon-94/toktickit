@@ -104,7 +104,8 @@ function TicketWorkflow({ ticketId, currentStatus, version, onUpdated, onReload,
       <div className="d-flex flex-wrap gap-2">
         <select
           id={selectId}
-          className="form-select form-select-sm flex-grow-1 w-auto"
+          className="form-select form-select-sm"
+          style={{ flex: "1 1 12rem", minWidth: 0 }}
           value={target}
           onChange={(e) => {
             setTarget(e.target.value);
@@ -115,7 +116,7 @@ function TicketWorkflow({ ticketId, currentStatus, version, onUpdated, onReload,
           data-testid={selectTestId}
         >
           <option value={currentStatus} disabled>
-            {currentStatus} (current)
+            {currentStatus}
           </option>
           {options.map((s) => (
             <option key={s} value={s}>
