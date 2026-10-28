@@ -95,7 +95,7 @@ Only edits listed as CHG-xx in specification.md section 11 (matrix-compliant sta
 
 | CHG | Test file | Change |
 | --- | --- | --- |
-| (none yet) | | |
+| CHG-05 | client/src/components/CreateTicket.test.tsx | `fetchMock.mock.calls` -> `vi.mocked(fetchMock).mock.calls` (2 lines, type-only; assertions unchanged) |
 
 ## 5. Final Results
 Filled at the end from real runs on `main` (server, client, E2E output pasted in the report).
