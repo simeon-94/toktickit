@@ -1,8 +1,16 @@
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 
-export default function ChangePassword() {
+interface Props {
+  // Lab 4 (ui-spec section 1): "voluntary" is the Change Password nav item; the default stays the
+  // forced first-login flow from Lab 3.
+  mode?: "forced" | "voluntary";
+}
+
+export default function ChangePassword({ mode = "forced" }: Props) {
   const { changePassword, logout } = useAuth();
+  const voluntary = mode === "voluntary";
+  const [changed, setChanged] = useState(false);
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -23,8 +31,15 @@ export default function ChangePassword() {
     }
 
     setSubmitting(true);
+    setChanged(false);
     try {
       await changePassword(currentPassword, newPassword);
+      if (voluntary) {
+        setChanged(true);
+        setCurrentPassword("");
+        setNewPassword("");
+        setConfirmPassword("");
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Unable to change password");
     } finally {
@@ -33,11 +48,22 @@ export default function ChangePassword() {
   }
 
   return (
-    <div className="container py-5" style={{ maxWidth: 420 }}>
-      <h1 className="h4 mb-2">Change Your Password</h1>
-      <p className="text-muted small mb-4">
-        This is a first login (or an administrator reset your password). You must set a new password before continuing.
-      </p>
+    <div className={voluntary ? "py-2" : "container py-5"} style={{ maxWidth: 420 }}>
+      {voluntary ? (
+        <h2 className="h5 mb-3">Change Password</h2>
+      ) : (
+        <>
+          <h1 className="h4 mb-2">Change Your Password</h1>
+          <p className="text-muted small mb-4">
+            This is a first login (or an administrator reset your password). You must set a new password before continuing.
+          </p>
+        </>
+      )}
+      {changed && (
+        <div className="alert alert-success" role="status" data-testid="change-password-success">
+          Your password has been changed.
+        </div>
+      )}
       <form onSubmit={handleSubmit} data-testid="change-password-form">
         <div className="mb-3">
           <label className="form-label" htmlFor="current-password">Current Password</label>
@@ -88,9 +114,11 @@ export default function ChangePassword() {
         >
           {submitting ? "Saving..." : "Save New Password"}
         </button>
-        <button type="button" className="btn btn-link w-100" onClick={() => logout()}>
-          Cancel and sign out
-        </button>
+        {!voluntary && (
+          <button type="button" className="btn btn-link w-100" onClick={() => logout()}>
+            Cancel and sign out
+          </button>
+        )}
       </form>
     </div>
   );
