@@ -1,0 +1,79 @@
+# command : (cd server && npx vitest run)
+# commit  : 89a1c76ab925447602c38b4d5ee2bcf6999e8408 (feature/55-final-hardening)
+# date    : 2026-10-28T18:33:27Z (UTC)
+# host    : MINGW64_NT-10.0-26200 node v24.19.0
+
+The CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.
+
+ RUN  v2.1.9 C:/dev/toktickit/server
+
+[test setup] using fresh test database "toktickit_test" (migrated and seeded)
+ ✓ tests/lab-04/actions-taken.api.test.ts (11 tests) 4684ms
+   ✓ Lab 4 — actions-taken.api > API-01 (AC-01): staff creates a valid action; performer = caller, assignee defaults to caller 612ms
+   ✓ Lab 4 — actions-taken.api > API-02 (AC-03): invalid create payloads return 400 VALIDATION with field errors and store nothing 314ms
+   ✓ Lab 4 — actions-taken.api > API-03 (AC-04): inactive or Requester-role assignee is rejected; active staff assignee is accepted 464ms
+   ✓ Lab 4 — actions-taken.api > API-04 (AC-05): PLANNED actions can be edited; COMPLETED/CANCELLED are locked (422 ACTION_LOCKED) 332ms
+   ✓ Lab 4 — actions-taken.api > API-05 (AC-06): complete requires a result; cancel sets CANCELLED; no DELETE endpoint 340ms
+   ✓ Lab 4 — actions-taken.api > API-06 (AC-07): staff B acts on a Ticket owned by staff A; list is stable (actionAt desc, id desc) 532ms
+   ✓ Lab 4 — actions-taken.api > API-07 (AC-08): stale action updates return 409 STALE_UPDATE and leave data unchanged 324ms
+   ✓ Lab 4 — actions-taken.api > API-09 (AC-02): Requesters cannot write actions, can read their own Ticket's actions, get 404 on others 691ms
+   ✓ Lab 4 — actions-taken.api > Ticket version is exposed on Ticket Detail and staff queue items (api-spec conventions) 477ms
+stdout | tests/lab-04/staff-dashboard.api.test.ts > Lab 4 — staff-dashboard.api > PERF-01 (AC-14): both dashboards respond in under 500 ms on seeded data
+PERF-01 staff dashboard 10.2 ms, requester dashboard 140.1 ms
+
+ ✓ tests/lab-04/staff-dashboard.api.test.ts (7 tests) 2387ms
+   ✓ Lab 4 — staff-dashboard.api > API-14 (AC-14): every metric equals a direct SQL count (null itPriority counted as requestedPriority) 468ms
+   ✓ Lab 4 — staff-dashboard.api > API-17 (AC-16): each card count equals its drill-down total (queue and actions lists) 313ms
+   ✓ Lab 4 — staff-dashboard.api > PERF-01 (AC-14): both dashboards respond in under 500 ms on seeded data 338ms
+ ✓ tests/lab-04/ticket-workflow.api.test.ts (11 tests) 1973ms
+   ✓ Lab 4 — ticket-workflow.api > WF-01 (AC-10): every allowed transition succeeds for staff and bumps version 493ms
+ ✓ tests/lab-04/migration.test.ts (3 tests) 27844ms
+   ✓ Lab 4 — migration (scratch database) > MIG-01 (AC-20): Lab 3 data is preserved after migrating and every Ticket gets version = 1 14239ms
+   ✓ Lab 4 — migration (scratch database) > MIG-02 (AC-20): rollback.sql removes Lab 4 objects cleanly, the migration re-applies, and seeding twice creates no duplicates 10747ms
+ ✓ tests/lab-03/staff-ticket-detail.api.test.ts (8 tests) 2760ms
+   ✓ Lab 3 — staff-ticket-detail.api > IT Staff can retrieve any Ticket by id, not just their own 593ms
+   ✓ Lab 3 — staff-ticket-detail.api > IT Staff can reassign ownership to another active staff member 352ms
+   ✓ Lab 3 — staff-ticket-detail.api > assigning ownership to an inactive or non-staff user is rejected 360ms
+ ✓ tests/lab-04/requester-dashboard.api.test.ts (5 tests) 1651ms
+   ✓ Lab 4 — requester-dashboard.api > API-11 (AC-13): counts and lists are scoped to the authenticated Requester 355ms
+   ✓ Lab 4 — requester-dashboard.api > API-12 (AC-13): staff and administrators get 403, anonymous gets 401 362ms
+ ✓ tests/lab-04/hardening.api.test.ts (6 tests) 2588ms
+   ✓ Lab 4 — hardening.api (#55) > HARD-02: a user who must change their password is blocked from the API until they do 715ms
+   ✓ Lab 4 — hardening.api (#55) > HARD-03: concurrent reuse of one clientRequestId on two Tickets never returns 500 942ms
+   ✓ Lab 4 — hardening.api (#55) > HARD-02: the seeded first-login flow still works (forced change, then access) 629ms
+ ✓ tests/lab-03/comments-notes.api.test.ts (6 tests) 1955ms
+   ✓ Lab 3 — comments-notes.api > BR-04: a Requester can post and read Public Comments on their own ticket 494ms
+   ✓ Lab 3 — comments-notes.api > BR-04: a Public Comment posted by IT Staff is visible to the Requester 368ms
+   ✓ Lab 3 — comments-notes.api > BR-04: IT Staff can post and read Internal Notes; content never appears via the Public Comments endpoint 381ms
+ ✓ tests/lab-03/users-admin.api.test.ts (5 tests) 1913ms
+   ✓ Lab 3 — users-admin.api > AC-13: creating a user with a duplicate email is rejected 570ms
+   ✓ Lab 3 — users-admin.api > AC-15: resetting a user's password forces mustChangePassword at next login 397ms
+   ✓ Lab 3 — users-admin.api > BR-15: the last active Administrator cannot be deactivated or have their role changed 378ms
+ ✓ tests/lab-03/staff-queue.api.test.ts (6 tests) 2123ms
+   ✓ Lab 3 — staff-queue.api > IT Staff can retrieve the queue with pagination metadata 623ms
+   ✓ Lab 3 — staff-queue.api > unassigned=true returns only tickets with no Ticket Owner 468ms
+   ✓ Lab 3 — staff-queue.api > GET /api/staff/users returns only active IT Staff and Administrator accounts 304ms
+ ✓ src/utils/actionValidation.test.ts (10 tests) 6ms
+ ✓ tests/lab-03/authorization.api.test.ts (5 tests) 1619ms
+   ✓ Lab 3 — authorization.api > AC-06: a client-supplied requesterId is ignored; ownership always comes from the authenticated user 577ms
+   ✓ Lab 3 — authorization.api > IT Staff and Administrator can both reach the Ticket Queue 475ms
+Wed, 28 Oct 2026 18:34:39 GMT express deprecated res.clearCookie: Passing "options.maxAge" is deprecated. In v5.0.0 of Express, this option will be ignored, as res.clearCookie will automatically set cookies to expire immediately. Please update your code to omit this option. at src\routes\auth.ts:43:7
+ ✓ tests/lab-03/auth.api.test.ts (5 tests) 929ms
+   ✓ Lab 3 — auth.api > AC-01: valid active-user login returns authenticated identity and role 317ms
+ ✓ tests/lab-02/attachments.api.test.ts (3 tests) 682ms
+ ✓ src/utils/ticketWorkflow.test.ts (5 tests) 6ms
+ ✓ tests/lab-02/my-tickets.api.test.ts (2 tests) 693ms
+ ✓ tests/lab-02/ticket-detail.api.test.ts (2 tests) 642ms
+ ✓ tests/lab-02/create-ticket.api.test.ts (2 tests) 472ms
+ ✓ src/config.test.ts (2 tests) 5ms
+ ✓ tests/lab-01/categories.test.ts (1 test) 71ms
+ ✓ src/utils/ticketNumber.test.ts (3 tests) 3ms
+ ✓ tests/lab-01/health.test.ts (1 test) 23ms
+
+ Test Files  22 passed (22)
+      Tests  109 passed (109)
+   Start at  01:33:30
+   Duration  76.61s (transform 388ms, setup 0ms, collect 8.13s, tests 55.03s, environment 4ms, prepare 2.39s)
+
+
+# exit code: 0

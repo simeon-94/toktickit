@@ -2,9 +2,12 @@
 
 Evidence is produced from real runs only. Every log starts with the command, commit hash, branch
 and UTC date, and ends with the process exit code. Screenshots are taken by Playwright at
-1280 / 768 / 320 px from the running app with seeded data and the E2E fixtures
-(`server/scripts/e2e-lab4-fixtures.ts`); the spec also asserts there is no horizontal page scroll
-before each screenshot (RESP-01).
+1280 / 768 / 320 px from the running app; the specs assert there is no horizontal page scroll before
+each screenshot (RESP-01).
+
+**All 78 screenshots were retaken in #55 on a clean database** (migrations + seed + E2E fixtures from
+`server/scripts/e2e-lab4-fixtures.ts`), so the dashboard counts are demo-sized. Earlier versions in the
+Git history of #52-#54 were taken on the shared dev database that also held automated-test rows.
 
 ## Logs (`logs/`)
 | File | What | Issue |
@@ -17,7 +20,7 @@ before each screenshot (RESP-01).
 | logs/issue-51-client-tests.log | `npx vitest run` (client) | #51 |
 | logs/issue-51-server-build.log | `npm run build` (server) | #51 |
 | logs/issue-51-client-build.log | `npm run build` (client) | #51 |
-| logs/verify-dashboard.log | `npx tsx scripts/verify-dashboard.ts` - every dashboard metric vs raw SQL | #51 |
+| logs/verify-dashboard.log | `verify-dashboard.ts` in #51, on the shared dev database before #55 (24/24 matched) | #51 |
 | logs/issue-52-server-tests.log | `npx vitest run` (server, all labs) | #52 |
 | logs/issue-52-client-tests.log | `npx vitest run` (client) | #52 |
 | logs/issue-52-server-build.log | `npm run build` (server) | #52 |
@@ -39,6 +42,19 @@ before each screenshot (RESP-01).
 | logs/issue-54-client-build.log | `npm run build` (client) | #54 |
 | logs/issue-54-e2e-dashboard-screens.log | `npx playwright test lab-04/dashboards.spec.ts` (screenshots, card = drill-down total) | #54 |
 | logs/issue-54-e2e-lab02-lab03.log | `npx playwright test lab-02 lab-03` - CHG-06 IT Staff test passes; 3 tests fail at login (local accounts, see #55) | #54 |
+| logs/batch-b-staging-migrate-deploy.log | `npx prisma migrate deploy` on lab4-staging after Batch B (#63, #64) merged | Batch B |
+| logs/batch-b-staging-server-tests.log | `npx vitest run` (server) on lab4-staging after Batch B | Batch B |
+| logs/batch-b-staging-client-tests.log | `npx vitest run` (client) on lab4-staging after Batch B | Batch B |
+| logs/batch-b-staging-server-build.log | `npm run build` (server) on lab4-staging after Batch B | Batch B |
+| logs/batch-b-staging-client-build.log | `npm run build` (client) on lab4-staging after Batch B | Batch B |
+| logs/issue-55-e2e-all.log | `npx playwright test` - Lab 2, 3 and 4 suites on the clean database (retakes all screenshots) | #55 |
+| logs/verify-dashboard-staff.log | `npm run verify:dashboard` as IT Staff (priya.nair) + Requester (jennifer.anderson), clean database | #55 |
+| logs/verify-dashboard-admin.log | `npm run verify:dashboard` as Administrator (olivia.grant, incl. user counts) + Requester (michael.brown) | #55 |
+| logs/verify-dashboard-requester.log | `npm run verify:dashboard` as e2e.staff + Requester e2e.requester (fixture data) | #55 |
+| logs/issue-55-server-tests.log | `npx vitest run` (server, all labs, own test database) | #55 |
+| logs/issue-55-client-tests.log | `npx vitest run` (client) | #55 |
+| logs/issue-55-server-build.log | `npm run build` (server) | #55 |
+| logs/issue-55-client-build.log | `npm run build` (client) | #55 |
 
 ## Screenshots (`screenshots/`)
 | File | Screen / state | Width | Issue |
