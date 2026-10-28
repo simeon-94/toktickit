@@ -6,7 +6,8 @@ written before or alongside each feature (Test DD / TDD): each Issue starts with
 then code, then green. Types: unit, API/integration, UI component, UI style, responsive,
 authorization, workflow, migration/regression, performance-smoke, E2E.
 Server tests run sequentially (`fileParallelism: false`) because they share one database.
-Final column is updated to Pass/Fail only from real runs on `main`.
+Final column is updated to Pass/Fail only from real runs: first on the Issue's feature branch,
+then re-run on `main` before the final report.
 
 ## 2. Planned Tests
 
