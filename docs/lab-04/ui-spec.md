@@ -55,7 +55,7 @@ private Internal Notes (neutral border + "Visible to Requester" label; Internal 
 - `RESOLUTION_GATE` 422 -> inline alert listing reasons in plain words ("Assign a Ticket Owner", "Complete at least one action", "Complete or cancel planned actions").
 - `INVALID_TRANSITION` -> alert "That change is not allowed from <status>"; 409 -> conflict banner as above.
 - Requesters see status as a read-only badge plus the existing "Problem appears resolved" button (advisory; text clarifies staff will confirm).
-- data-testids: `status-select`, `status-submit`, `status-error`, `status-gate-reasons`, `ticket-status-badge`, `no-further-changes`.
+- data-testids: `status-select` (`staff-status-select` on Staff Ticket Detail, CL-04), `status-submit`, `status-error`, `status-gate-reasons`, `ticket-status-badge`, `no-further-changes`.
 
 ## 6. Feedback Conventions (all screens)
 Loading (`role=status`), validation (inline), success (dismissible toast/alert `role=status`), empty / no results,

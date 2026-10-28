@@ -51,8 +51,8 @@ then re-run on `main` before the final report.
 | UI-02 | UI component | AC-17 | Create form validation, follow-up note toggling, submit disabled while pending, data kept after failure | As specified | client/src/components/lab-04/ActionsTaken.test.tsx | Pass |
 | UI-03 | UI component | AC-17 | Edit / complete (result required) / cancel actions; locked rows have no buttons | As specified | client/src/components/lab-04/ActionsTaken.test.tsx | Pass |
 | UI-04 | UI component | AC-17, AC-02 | Requester view is read-only | No buttons/forms | client/src/components/lab-04/ActionsTaken.test.tsx | Pass |
-| UI-05 | UI component | AC-18 | Only permitted transitions offered; success refreshes badge | As specified | client/src/components/lab-04/TicketWorkflow.test.tsx | Planned |
-| UI-06 | UI component | AC-18 | Gate / invalid-transition / 409 messages displayed | Messages and banner shown | client/src/components/lab-04/TicketWorkflow.test.tsx | Planned |
+| UI-05 | UI component | AC-18 | Only permitted transitions offered; success refreshes badge | As specified | client/src/components/lab-04/TicketWorkflow.test.tsx | Pass |
+| UI-06 | UI component | AC-18 | Gate / invalid-transition / 409 messages displayed | Messages and banner shown | client/src/components/lab-04/TicketWorkflow.test.tsx | Pass |
 | UI-07 | UI component | AC-19 | Staff dashboard: cards, links, lists, loading, empty, forbidden, failure+retry, admin users card | As specified | client/src/components/lab-04/StaffDashboard.test.tsx | Planned |
 | UI-08 | UI component | AC-19 | Requester dashboard: cards, links, lists, empty, forbidden, failure | As specified | client/src/components/lab-04/RequesterDashboard.test.tsx | Planned |
 | STYLE-01 | UI style | AC-22 | Status/priority badges include text; focus-visible styles present; aria attributes on errors | Assertions pass | client/src/components/lab-04/ActionsTaken.test.tsx | Pass |
