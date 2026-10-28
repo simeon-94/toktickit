@@ -55,11 +55,11 @@ describe("CreateTicket", () => {
     await user.selectOptions(screen.getByTestId("create-ticket-related-system"), "1");
     await user.type(screen.getByTestId("create-ticket-description"), "A description long enough to pass.");
 
-    const callsBeforeSubmit = fetchMock.mock.calls.length;
+    const callsBeforeSubmit = vi.mocked(fetchMock).mock.calls.length;
     await user.click(screen.getByTestId("create-ticket-submit"));
 
     expect(screen.getByText(/Summary must be between/i)).toBeInTheDocument();
-    expect(fetchMock.mock.calls.length).toBe(callsBeforeSubmit);
+    expect(vi.mocked(fetchMock).mock.calls.length).toBe(callsBeforeSubmit);
   });
 
   it("shows the ticket number on successful submit", async () => {

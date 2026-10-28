@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import jwt from "jsonwebtoken";
+import jwt, { SignOptions } from "jsonwebtoken";
 import { Role } from "@prisma/client";
 
 const JWT_SECRET = process.env.JWT_SECRET as string;
@@ -18,7 +18,9 @@ declare global {
 }
 
 export function signToken(payload: AuthPayload): string {
-  return jwt.sign(payload, JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES_IN || "8h" });
+  return jwt.sign(payload, JWT_SECRET, {
+    expiresIn: (process.env.JWT_EXPIRES_IN || "8h") as SignOptions["expiresIn"],
+  });
 }
 
 export function requireAuth(req: Request, res: Response, next: NextFunction) {
