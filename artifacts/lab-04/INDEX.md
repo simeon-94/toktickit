@@ -7,6 +7,10 @@ and UTC date, and ends with the process exit code. Screenshots are taken by Play
 ## Logs (`logs/`)
 | File | What | Issue |
 | --- | --- | --- |
+| logs/issue-50-server-tests.log | `npx vitest run` (server, all labs) | #50 |
+| logs/issue-50-client-tests.log | `npx vitest run` (client) | #50 |
+| logs/issue-50-server-build.log | `npm run build` (server) | #50 |
+| logs/issue-50-client-build.log | `npm run build` (client) | #50 |
 | logs/issue-51-server-tests.log | `npx vitest run` (server, all labs) | #51 |
 | logs/issue-51-client-tests.log | `npx vitest run` (client) | #51 |
 | logs/issue-51-server-build.log | `npm run build` (server) | #51 |

@@ -27,6 +27,7 @@ interface TicketDetailData {
   ticketOwnerId: number | null;
   ticketOwnerName: string | null;
   requesterIndicatedResolved: boolean;
+  version: number;
   createdAt: string;
   updatedAt: string;
 }
@@ -167,7 +168,7 @@ function StaffTicketDetail({ ticketId, onBack }: Props) {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
-      body: JSON.stringify({ currentStatus: value }),
+      body: JSON.stringify({ currentStatus: value, expectedVersion: ticket?.version }),
     })
       .then(async (res) => {
         if (!res.ok) {
