@@ -14,7 +14,7 @@ describe("AuthProvider start-up session check (HARD-05)", () => {
   });
 
   it("asks /api/auth/me?optional=1 and treats a 200 null as logged out (no 401 in the console)", async () => {
-    const fetchMock = vi.fn(() => Promise.resolve({ ok: true, status: 200, json: () => Promise.resolve(null) } as Response));
+    const fetchMock = vi.fn((_url: string) => Promise.resolve({ ok: true, status: 200, json: () => Promise.resolve(null) } as Response));
     vi.stubGlobal("fetch", fetchMock);
     render(
       <AuthProvider>
