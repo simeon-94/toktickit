@@ -50,7 +50,8 @@ export async function expectNoHorizontalScroll(page: Page) {
 
 export async function shot(page: Page, name: string, width: number) {
   await expectNoHorizontalScroll(page);
-  await page.screenshot({ path: path.join(SCREENSHOT_DIR, `${name}-${width}.png`), fullPage: true });
+  // animations: "disabled" finishes CSS transitions (e.g. Bootstrap button colours) before capturing.
+  await page.screenshot({ path: path.join(SCREENSHOT_DIR, `${name}-${width}.png`), fullPage: true, animations: "disabled" });
 }
 
 export function collectConsoleErrors(page: Page) {
