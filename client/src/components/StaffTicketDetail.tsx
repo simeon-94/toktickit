@@ -1,4 +1,5 @@
 import { useEffect, useState, type FormEvent } from "react";
+import ActionsTaken from "./lab-04/ActionsTaken";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4000";
 
@@ -65,9 +66,10 @@ type LoadStatus = "loading" | "success" | "error";
 interface Props {
   ticketId: number;
   onBack: () => void;
+  currentUser?: { id: number; name: string };
 }
 
-function StaffTicketDetail({ ticketId, onBack }: Props) {
+function StaffTicketDetail({ ticketId, onBack, currentUser }: Props) {
   const [status, setStatus] = useState<LoadStatus>("loading");
   const [ticket, setTicket] = useState<TicketDetailData | null>(null);
   const [attachments, setAttachments] = useState<AttachmentItem[]>([]);
@@ -359,6 +361,8 @@ function StaffTicketDetail({ ticketId, onBack }: Props) {
           </select>
         </div>
       </div>
+
+      <ActionsTaken ticketId={ticket.id} mode="staff" currentUser={currentUser} staffUsers={staffUsers} />
 
       <h3 className="h6">Attachments</h3>
       {attachments.length === 0 && <p className="text-muted small">No attachments.</p>}
