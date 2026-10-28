@@ -72,13 +72,13 @@ Remove leftovers: temporary buttons, duplicate headings, "TODO"/lorem text, obso
 ## 8. Visual and Accessibility Checklist (completed at the end; copy into Part 9)
 | # | Item | Dashboards | Actions Taken | Workflow | Result |
 | --- | --- | --- | --- | --- | --- |
-| 1 | Zen Green tokens/components reused | | | | |
-| 2 | Active nav indicated | | | | |
-| 3 | Editable vs read-only fields distinguishable | n/a | | | |
-| 4 | Validation next to field, linked by aria | n/a | | | |
-| 5 | Visible keyboard focus | | | | |
-| 6 | No clipping/overlap at 320/768/1280 | | | | |
-| 7 | No horizontal page scroll | | | | |
-| 8 | Non-colour status cues | | | | |
-| 9 | Private vs shared content distinguished | n/a | | | |
-| 10 | No console errors / placeholder text | | | | |
+| 1 | Zen Green tokens/components reused | Yes (Bootstrap greens, cards) | Yes | Yes | Pass (screenshots) |
+| 2 | Active nav indicated | Yes: `aria-current` + bold/underline | n/a | n/a | Pass (UI-07/08, E2E) |
+| 3 | Editable vs read-only fields distinguishable | n/a | Yes: inline form vs list, "Locked" cue, read-only for Requester | Yes: select for staff, badge for Requester | Pass (UI-03/04, UI-05) |
+| 4 | Validation next to field, linked by aria | n/a | Yes: `role=alert`, `aria-invalid`, `aria-describedby` | Yes: alert linked by `aria-describedby` | Pass (UI-02, UI-06) |
+| 5 | Visible keyboard focus | Yes (`:focus-visible` outline) | Yes | Yes | Pass (STYLE-01, A11Y-01, A11Y-02) |
+| 6 | No clipping/overlap at 320/768/1280 | Yes | Yes (CL-03 breakpoint) | Yes | Pass (78 screenshots reviewed) |
+| 7 | No horizontal page scroll | Yes | Yes | Yes | Pass (asserted before every screenshot, RESP-01) |
+| 8 | Non-colour status cues | Yes: text labels, counts | Yes: badge text | Yes: status text | Pass (STYLE-01) |
+| 9 | Private vs shared content distinguished | n/a | Yes: "Visible to Requester" vs "Internal Notes (staff only)" | n/a | Pass |
+| 10 | No console errors / placeholder text | Yes | Yes | Yes | Pass (HARD-01; no TODO/lorem in client source) |

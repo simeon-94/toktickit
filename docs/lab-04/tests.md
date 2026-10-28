@@ -43,9 +43,9 @@ then re-run on `main` before the final report.
 | API-17 | API | AC-16 | Staff card counts equal drill-down totals: queue (ownerId=me, statusGroup=open, effectivePriority=P incl. null itPriority, status=X) and /api/staff/actions views (CL-01, CL-02) | Equal | server/tests/lab-04/staff-dashboard.api.test.ts | Pass |
 | MIG-01 | Migration | AC-20 | Lab 3 data preserved after migration; version = 1 | Row counts and sample rows unchanged | server/tests/lab-04/migration.test.ts | Pass |
 | MIG-02 | Migration | AC-20 | rollback.sql on scratch DB; seed run twice | Clean rollback; no duplicates | server/tests/lab-04/migration.test.ts | Pass |
-| REG-01 | Regression | AC-21 | Full Lab 1-3 server suite (with CHG edits only) | All pass | server/tests/lab-01..03 | Planned |
-| REG-02 | Regression | AC-21 | Full Lab 1-3 client suite | All pass | client/src/components/*.test.tsx | Planned |
-| REG-03 | Regression | AC-21 | Lab 2/3 E2E suites | All pass | e2e/lab-02, e2e/lab-03 | Planned |
+| REG-01 | Regression | AC-21 | Full Lab 1-3 server suite (with CHG edits only) | All pass | server/tests/lab-01..03 | Pass |
+| REG-02 | Regression | AC-21 | Full Lab 1-3 client suite | All pass | client/src/components/*.test.tsx | Pass |
+| REG-03 | Regression | AC-21 | Lab 2/3 E2E suites | All pass | e2e/lab-02, e2e/lab-03 | Pass |
 | PERF-01 | Performance smoke | AC-14 | Both dashboards respond < 500 ms on seeded data | Under threshold | server/tests/lab-04/staff-dashboard.api.test.ts | Pass |
 | UI-01 | UI component | AC-17 | Actions panel: loading, empty, list, error+retry | States render | client/src/components/lab-04/ActionsTaken.test.tsx | Pass |
 | UI-02 | UI component | AC-17 | Create form validation, follow-up note toggling, submit disabled while pending, data kept after failure | As specified | client/src/components/lab-04/ActionsTaken.test.tsx | Pass |
@@ -56,12 +56,17 @@ then re-run on `main` before the final report.
 | UI-07 | UI component | AC-19 | Staff dashboard: cards, links, lists, loading, empty, forbidden, failure+retry, admin users card | As specified | client/src/components/lab-04/StaffDashboard.test.tsx | Pass |
 | UI-08 | UI component | AC-19 | Requester dashboard: cards, links, lists, empty, forbidden, failure | As specified | client/src/components/lab-04/RequesterDashboard.test.tsx | Pass |
 | STYLE-01 | UI style | AC-22 | Status/priority badges include text; focus-visible styles present; aria attributes on errors | Assertions pass | client/src/components/lab-04/ActionsTaken.test.tsx | Pass |
-| E2E-01 | E2E | AC-01, AC-07, AC-17 | Staff A and B add different actions on one Ticket; Requester sees them read-only | Pass | e2e/lab-04/actions-taken-flow.spec.ts | Planned |
-| E2E-02 | E2E | AC-11, AC-18 | Gate blocks RESOLVED; complete action; resolve; close; reopen | Pass | e2e/lab-04/ticket-resolution.spec.ts | Planned |
-| E2E-03 | E2E | AC-13..16, AC-19 | Dashboards by role, drill-down totals match | Pass | e2e/lab-04/dashboards.spec.ts | Planned |
-| RESP-01 | Responsive | AC-22 | Screenshots 1280/768/320 of dashboards and actions; asserts no horizontal scroll | Pass; images saved | e2e/lab-04/dashboards.spec.ts, e2e/lab-04/actions-taken-flow.spec.ts | Planned |
-| A11Y-01 | Accessibility | AC-22 | Keyboard-only create-action flow; labels and focus order | Pass | e2e/lab-04/actions-taken-flow.spec.ts | Planned |
-| HARD-01 | Hardening | AC-23 | No console errors during E2E; README steps verified manually | Pass | e2e/lab-04/dashboards.spec.ts + manual checklist | Planned |
+| E2E-01 | E2E | AC-01, AC-07, AC-17 | Staff A and B add different actions on one Ticket; Requester sees them read-only | Pass | e2e/lab-04/actions-taken-flow.spec.ts | Pass |
+| E2E-02 | E2E | AC-11, AC-18 | Gate blocks RESOLVED; complete action; resolve; close; reopen | Pass | e2e/lab-04/ticket-resolution.spec.ts | Pass |
+| E2E-03 | E2E | AC-13..16, AC-19 | Dashboards by role, drill-down totals match | Pass | e2e/lab-04/dashboards.spec.ts | Pass |
+| RESP-01 | Responsive | AC-22 | Screenshots 1280/768/320 of dashboards and actions; asserts no horizontal scroll | Pass; images saved | e2e/lab-04/dashboards.spec.ts, e2e/lab-04/actions-taken-flow.spec.ts | Pass |
+| A11Y-01 | Accessibility | AC-22 | Keyboard-only create-action flow; labels and focus order | Pass | e2e/lab-04/actions-taken-flow.spec.ts | Pass |
+| HARD-01 | Hardening | AC-23 | No console errors during E2E; README steps verified manually | Pass | e2e/lab-04/dashboards.spec.ts + manual checklist | Pass |
+| HARD-02 | Hardening | AC-23 | `mustChangePassword` enforced server-side (403 until changed); deactivated user's token rejected (401); first-login flow | As specified | server/tests/lab-04/hardening.api.test.ts | Pass |
+| HARD-03 | Hardening | AC-09 | Concurrent reuse of one clientRequestId on two Tickets: 201 + 400 VALIDATION, never 500 (P2002 mapped) | As specified | server/tests/lab-04/hardening.api.test.ts | Pass |
+| HARD-04 | Hardening | AC-23 | Startup validation of JWT_SECRET / JWT_EXPIRES_IN | Invalid values rejected with a message | server/src/config.test.ts | Pass |
+| HARD-05 | Hardening | AC-23 | Logged-out session check `/api/auth/me?optional=1` returns 200 null (no console 401); client uses it | As specified | server/tests/lab-04/hardening.api.test.ts, client/src/components/lab-04/AuthSession.test.tsx | Pass |
+| A11Y-02 | Accessibility | AC-22 | Ticket Queue / My Tickets rows and cards open with Enter or Space | As specified | client/src/components/lab-04/KeyboardRows.test.tsx | Pass |
 
 ## 3. Acceptance Criteria Traceability
 | AC | Tests |
@@ -74,7 +79,7 @@ then re-run on `main` before the final report.
 | AC-06 | API-05 |
 | AC-07 | API-06, E2E-01 |
 | AC-08 | API-07, WF-07, WF-08 |
-| AC-09 | API-08 |
+| AC-09 | API-08, HARD-03 |
 | AC-10 | UNIT-01, WF-01, WF-02, WF-03 |
 | AC-11 | UNIT-02, WF-04, WF-05, E2E-02 |
 | AC-12 | WF-06, API-10 |
@@ -87,8 +92,8 @@ then re-run on `main` before the final report.
 | AC-19 | UI-07, UI-08, E2E-03 |
 | AC-20 | MIG-01, MIG-02 |
 | AC-21 | REG-01..03 |
-| AC-22 | RESP-01, A11Y-01, STYLE-01 |
-| AC-23 | HARD-01 |
+| AC-22 | RESP-01, A11Y-01, A11Y-02, STYLE-01 |
+| AC-23 | HARD-01, HARD-02, HARD-04, HARD-05 |
 
 ## 4. Allowed Changes to Earlier Tests
 Only edits listed as CHG-xx in specification.md section 11 (matrix-compliant status jumps,
@@ -100,6 +105,8 @@ Only edits listed as CHG-xx in specification.md section 11 (matrix-compliant sta
 | CHG-05 | client/src/components/CreateTicket.test.tsx | `fetchMock.mock.calls` -> `vi.mocked(fetchMock).mock.calls` (2 lines, type-only; assertions unchanged) |
 | CHG-06 | client/src/App.test.tsx | "shows a loading state, then the system status..." and "shows a useful error message...": one added line each, clicking `nav-check-system` before the existing `check-system-btn` steps; assertions unchanged |
 | CHG-06 | e2e/lab-03/auth-role-flow.spec.ts | "IT staff sees the Ticket Queue...": one added line clicking `nav-staff-queue` before the existing `staff-queue-table` assertion; assertions unchanged |
+| CHG-07 | e2e/lab-02/responsive.spec.ts | login email/password literals -> `e2e.requester@example.com` / fixture password; assertions unchanged |
+| CHG-07 | e2e/lab-03/auth-role-flow.spec.ts | the 3 `login(...)` calls use `e2e.requester` / `e2e.staff` / `e2e.admin` with the fixture password; assertions unchanged |
 
 ## 5. Final Results
 Filled at the end from real runs on `main` (server, client, E2E output pasted in the report).
