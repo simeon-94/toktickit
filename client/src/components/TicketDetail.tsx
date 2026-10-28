@@ -239,7 +239,10 @@ function TicketDetail({ ticketId, onBack }: Props) {
       </button>
 
       <h2 className="h5">
-        {ticket.ticketNumber} — <span className="badge bg-success">{ticket.currentStatus}</span>
+        {ticket.ticketNumber} —{" "}
+        <span className="badge bg-success" data-testid="ticket-status-badge">
+          {ticket.currentStatus}
+        </span>
       </h2>
 
       <div className="row g-3 mb-3">
@@ -302,6 +305,11 @@ function TicketDetail({ ticketId, onBack }: Props) {
           >
             {markingResolved ? "Saving..." : "Problem Appears Resolved"}
           </button>
+        )}
+        {!ticket.requesterIndicatedResolved && (
+          <div className="small text-muted mt-1" data-testid="indicate-resolved-help">
+            This tells IT Staff the problem looks fixed. Staff will confirm and resolve the Ticket.
+          </div>
         )}
         {markResolvedError && (
           <div className="text-danger small mt-1" data-testid="indicate-resolved-error">
