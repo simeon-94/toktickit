@@ -13,8 +13,8 @@ then re-run on `main` before the final report.
 
 | Test ID | Type | Requirement / AC | What It Tests | Expected Result | Automated Test File | Final |
 | --- | --- | --- | --- | --- | --- | --- |
-| UNIT-01 | Unit | L4-BR-12 | Transition matrix helper: every (from,to) pair | Only the 20 allowed pairs return true (all other of the 64 pairs return false) | server/src/utils/ticketWorkflow.test.ts | Planned |
-| UNIT-02 | Unit | L4-BR-13 | Resolution gate helper reasons | Correct reasons array for each combination | server/src/utils/ticketWorkflow.test.ts | Planned |
+| UNIT-01 | Unit | L4-BR-12 | Transition matrix helper: every (from,to) pair | Only the 20 allowed pairs return true (all other of the 64 pairs return false) | server/src/utils/ticketWorkflow.test.ts | Pass |
+| UNIT-02 | Unit | L4-BR-13 | Resolution gate helper reasons | Correct reasons array for each combination | server/src/utils/ticketWorkflow.test.ts | Pass |
 | UNIT-03 | Unit | L4-BR-05/06 | Action input validator | Field errors for short description, missing follow-up note, over-length | server/src/utils/actionValidation.test.ts | Pass |
 | API-01 | API | AC-01 | Staff creates valid action | 201, correct ticket, performer = caller, assignee default = caller | server/tests/lab-04/actions-taken.api.test.ts | Pass |
 | API-02 | API | AC-03 | Invalid create payloads | 400 with field errors, nothing stored | server/tests/lab-04/actions-taken.api.test.ts | Pass |
@@ -26,14 +26,14 @@ then re-run on `main` before the final report.
 | API-08 | API | AC-09 | Duplicate clientRequestId | One action, second call 200 same id | server/tests/lab-04/actions-taken.api.test.ts | Pass |
 | API-09 | API | AC-02 | Requester create/edit/complete/cancel forbidden; own list readable; other's ticket 404 | 403 / 200 / 404 | server/tests/lab-04/actions-taken.api.test.ts | Pass |
 | API-10 | API | L4-BR-11 | Create on CLOSED / CANCELLED Ticket | 422 TICKET_TERMINAL | server/tests/lab-04/actions-taken.api.test.ts | Pass |
-| WF-01 | Workflow | AC-10 | Every allowed transition succeeds for staff | 200, version +1 | server/tests/lab-04/ticket-workflow.api.test.ts | Planned |
-| WF-02 | Workflow | AC-10 | Disallowed, same-status and from-CANCELLED transitions | 422 INVALID_TRANSITION with allowed list | server/tests/lab-04/ticket-workflow.api.test.ts | Planned |
-| WF-03 | Workflow | AC-10 | Requester changes status | 403 | server/tests/lab-04/ticket-workflow.api.test.ts | Planned |
-| WF-04 | Workflow | AC-11 | Resolution gate: no owner / no completed / planned pending | 422 RESOLUTION_GATE with reasons | server/tests/lab-04/ticket-workflow.api.test.ts | Planned |
-| WF-05 | Workflow | AC-11 | Gate satisfied -> RESOLVED; Requester indicator alone does not resolve | 200; status unchanged by indicate-resolved | server/tests/lab-04/ticket-workflow.api.test.ts | Planned |
-| WF-06 | Workflow | AC-12 | Reopen resets requesterIndicatedResolved | false after REOPENED | server/tests/lab-04/ticket-workflow.api.test.ts | Planned |
-| WF-07 | Workflow | AC-08 | Stale ticket status update (two users) | 409, second write rejected | server/tests/lab-04/ticket-workflow.api.test.ts | Planned |
-| WF-08 | Workflow | AC-08 | Missing expectedVersion on status | 400 | server/tests/lab-04/ticket-workflow.api.test.ts | Planned |
+| WF-01 | Workflow | AC-10 | Every allowed transition succeeds for staff | 200, version +1 | server/tests/lab-04/ticket-workflow.api.test.ts | Pass |
+| WF-02 | Workflow | AC-10 | Disallowed, same-status and from-CANCELLED transitions | 422 INVALID_TRANSITION with allowed list | server/tests/lab-04/ticket-workflow.api.test.ts | Pass |
+| WF-03 | Workflow | AC-10 | Requester changes status | 403 | server/tests/lab-04/ticket-workflow.api.test.ts | Pass |
+| WF-04 | Workflow | AC-11 | Resolution gate: no owner / no completed / planned pending | 422 RESOLUTION_GATE with reasons | server/tests/lab-04/ticket-workflow.api.test.ts | Pass |
+| WF-05 | Workflow | AC-11 | Gate satisfied -> RESOLVED; Requester indicator alone does not resolve | 200; status unchanged by indicate-resolved | server/tests/lab-04/ticket-workflow.api.test.ts | Pass |
+| WF-06 | Workflow | AC-12 | Reopen resets requesterIndicatedResolved | false after REOPENED | server/tests/lab-04/ticket-workflow.api.test.ts | Pass |
+| WF-07 | Workflow | AC-08 | Stale ticket status update (two users) | 409, second write rejected | server/tests/lab-04/ticket-workflow.api.test.ts | Pass |
+| WF-08 | Workflow | AC-08 | Missing expectedVersion on status | 400 | server/tests/lab-04/ticket-workflow.api.test.ts | Pass |
 | API-11 | API | AC-13 | Requester dashboard scoped to caller; zero state | Only own counts; zeros for empty user | server/tests/lab-04/requester-dashboard.api.test.ts | Planned |
 | API-12 | API | AC-13 | Role restriction on requester dashboard | 403 for staff/admin, 401 anonymous | server/tests/lab-04/requester-dashboard.api.test.ts | Planned |
 | API-13 | API | AC-16 | Requester card counts equal drill-down totals | Equal | server/tests/lab-04/requester-dashboard.api.test.ts | Planned |
