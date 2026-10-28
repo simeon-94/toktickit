@@ -6,6 +6,7 @@ import {
   validateActionInput,
   validateActionResult,
   validateClientRequestId,
+  clientRequestConflictOutcome,
 } from "../utils/actionValidation";
 
 // Actions Taken under a Ticket (api-spec.md sections 1-5). Mounted at /api/tickets/:id/actions.
@@ -163,16 +164,19 @@ router.post(
       prisma.actionTaken.findUnique({ where: { clientRequestId: clientRequestId! }, include: ACTION_INCLUDE });
 
     // Idempotent create (L4-BR-17): a repeat of the same request returns the stored action.
-    if (clientRequestId) {
-      const existing = await findExisting();
-      if (existing) {
-        if (existing.ticketId !== ticket.id) {
-          return sendError(res, 400, "VALIDATION", "Please correct the highlighted fields.", {
-            clientRequestId: "clientRequestId was already used for another Ticket.",
-          });
-        }
-        return res.status(200).json(toActionDto(existing));
+    const answerExisting = (existing: Awaited<ReturnType<typeof findExisting>>) => {
+      const outcome = clientRequestConflictOutcome(existing ? existing.ticketId : null, ticket.id);
+      if (outcome === "otherTicket") {
+        return sendError(res, 400, "VALIDATION", "Please correct the highlighted fields.", {
+          clientRequestId: "clientRequestId was already used for another Ticket.",
+        });
       }
+      if (outcome === "existing") return res.status(200).json(toActionDto(existing!));
+      return null;
+    };
+    if (clientRequestId) {
+      const answered = answerExisting(await findExisting());
+      if (answered) return answered;
     }
 
     if (TERMINAL_TICKET_STATUSES.includes(ticket.currentStatus)) {
@@ -200,10 +204,11 @@ router.post(
       });
       res.status(201).json(toActionDto(created));
     } catch (err) {
-      // A concurrent duplicate submit won the unique clientRequestId race: return its result.
+      // A concurrent request with the same clientRequestId won the unique-constraint race: answer
+      // exactly as the pre-check would have (same Ticket -> 200 existing, other Ticket -> 400).
       if (clientRequestId && err instanceof Prisma.PrismaClientKnownRequestError && err.code === "P2002") {
-        const existing = await findExisting();
-        if (existing && existing.ticketId === ticket.id) return res.status(200).json(toActionDto(existing));
+        const answered = answerExisting(await findExisting());
+        if (answered) return answered;
       }
       throw err;
     }
