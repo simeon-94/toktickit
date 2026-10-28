@@ -14,6 +14,7 @@ as the query parameters named in api-spec.md. Adding a real router is out of sco
 - Requester nav: **Dashboard** (new, default landing page after login), My Tickets, Create Ticket, Change Password, Logout.
 - IT Staff nav: **Dashboard** (new, default landing), Ticket Queue, Change Password, Logout.
 - Administrator nav: Dashboard, Ticket Queue, Users, Change Password, Logout.
+- All roles also keep the Lab 1 "Check System" item after these (CL-05).
 - The active page has `aria-current="page"` and a visible highlight (not colour alone: underline/bold).
 - Header must not clip at 320px (collapse into a toggle or wrap).
 

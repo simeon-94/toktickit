@@ -1,0 +1,16 @@
+# command : (cd client && npm run build)
+# commit  : 90498bc4a12c25a0e5d3a39649b421eb5723cb84 (feature/54-dashboards-ui)
+# date    : 2026-10-28T17:33:26Z (UTC)
+# host    : MINGW64_NT-10.0-26200 node v24.19.0
+
+vite v5.4.21 building for production...
+transforming...
+✓ 48 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                   0.41 kB │ gzip:  0.28 kB
+dist/assets/index-DXXMLD8M.css  234.52 kB │ gzip: 31.68 kB
+dist/assets/index-B0586gI3.js   221.18 kB │ gzip: 61.87 kB
+✓ built in 2.70s
+
+# exit code: 0

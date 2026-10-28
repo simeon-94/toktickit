@@ -33,6 +33,12 @@ before each screenshot (RESP-01).
 | logs/issue-53-server-build.log | `npm run build` (server) | #53 |
 | logs/issue-53-client-build.log | `npm run build` (client) | #53 |
 | logs/issue-53-e2e-workflow-screens.log | `npx playwright test lab-04/ticket-resolution.spec.ts` (screenshots) | #53 |
+| logs/issue-54-server-tests.log | `npx vitest run` (server, all labs) | #54 |
+| logs/issue-54-client-tests.log | `npx vitest run` (client, incl. CHG-06 App tests) | #54 |
+| logs/issue-54-server-build.log | `npm run build` (server) | #54 |
+| logs/issue-54-client-build.log | `npm run build` (client) | #54 |
+| logs/issue-54-e2e-dashboard-screens.log | `npx playwright test lab-04/dashboards.spec.ts` (screenshots, card = drill-down total) | #54 |
+| logs/issue-54-e2e-lab02-lab03.log | `npx playwright test lab-02 lab-03` - CHG-06 IT Staff test passes; 3 tests fail at login (local accounts, see #55) | #54 |
 
 ## Screenshots (`screenshots/`)
 | File | Screen / state | Width | Issue |
@@ -82,3 +88,36 @@ before each screenshot (RESP-01).
 | screenshots/workflow-requester-status-1280.png | Requester Ticket Detail - read-only status badge and resolved-signal note | 1280 | #53 |
 | screenshots/workflow-requester-status-768.png | Requester Ticket Detail - read-only status badge and resolved-signal note | 768 | #53 |
 | screenshots/workflow-requester-status-320.png | Requester Ticket Detail - read-only status badge and resolved-signal note | 320 | #53 |
+| screenshots/dashboard-staff-1280.png | IT Staff Dashboard - cards, status and priority breakdowns, lists; Dashboard nav active | 1280 | #54 |
+| screenshots/dashboard-staff-768.png | IT Staff Dashboard - cards, status and priority breakdowns, lists; Dashboard nav active | 768 | #54 |
+| screenshots/dashboard-staff-320.png | IT Staff Dashboard - cards, status and priority breakdowns, lists; Dashboard nav active | 320 | #54 |
+| screenshots/dashboard-staff-drilldown-queue-1280.png | Unassigned open card -> Ticket Queue with filter chip; chip total equals card value | 1280 | #54 |
+| screenshots/dashboard-staff-drilldown-queue-768.png | Unassigned open card -> Ticket Queue with filter chip; chip total equals card value | 768 | #54 |
+| screenshots/dashboard-staff-drilldown-queue-320.png | Unassigned open card -> Ticket Queue with filter chip; chip total equals card value | 320 | #54 |
+| screenshots/dashboard-staff-followups-list-1280.png | Open follow-ups card -> actions list (CL-02); total equals card value | 1280 | #54 |
+| screenshots/dashboard-staff-followups-list-768.png | Open follow-ups card -> actions list (CL-02); total equals card value | 768 | #54 |
+| screenshots/dashboard-staff-followups-list-320.png | Open follow-ups card -> actions list (CL-02); total equals card value | 320 | #54 |
+| screenshots/dashboard-admin-1280.png | Administrator Dashboard with Users card; nav shows Users | 1280 | #54 |
+| screenshots/dashboard-admin-768.png | Administrator Dashboard with Users card; nav shows Users | 768 | #54 |
+| screenshots/dashboard-admin-320.png | Administrator Dashboard with Users card; nav shows Users | 320 | #54 |
+| screenshots/dashboard-staff-loading-1280.png | IT Staff Dashboard loading state | 1280 | #54 |
+| screenshots/dashboard-staff-loading-768.png | IT Staff Dashboard loading state | 768 | #54 |
+| screenshots/dashboard-staff-loading-320.png | IT Staff Dashboard loading state | 320 | #54 |
+| screenshots/dashboard-staff-error-1280.png | IT Staff Dashboard failure: safe message + Retry | 1280 | #54 |
+| screenshots/dashboard-staff-error-768.png | IT Staff Dashboard failure: safe message + Retry | 768 | #54 |
+| screenshots/dashboard-staff-error-320.png | IT Staff Dashboard failure: safe message + Retry | 320 | #54 |
+| screenshots/dashboard-staff-forbidden-1280.png | IT Staff Dashboard forbidden (403) state with link to own dashboard | 1280 | #54 |
+| screenshots/dashboard-staff-forbidden-768.png | IT Staff Dashboard forbidden (403) state with link to own dashboard | 768 | #54 |
+| screenshots/dashboard-staff-forbidden-320.png | IT Staff Dashboard forbidden (403) state with link to own dashboard | 320 | #54 |
+| screenshots/dashboard-requester-1280.png | Requester Dashboard - cards and lists; Dashboard nav active | 1280 | #54 |
+| screenshots/dashboard-requester-768.png | Requester Dashboard - cards and lists; Dashboard nav active | 768 | #54 |
+| screenshots/dashboard-requester-320.png | Requester Dashboard - cards and lists; Dashboard nav active | 320 | #54 |
+| screenshots/dashboard-requester-drilldown-1280.png | Open tickets card -> My Tickets with filter chip; total equals card value | 1280 | #54 |
+| screenshots/dashboard-requester-drilldown-768.png | Open tickets card -> My Tickets with filter chip; total equals card value | 768 | #54 |
+| screenshots/dashboard-requester-drilldown-320.png | Open tickets card -> My Tickets with filter chip; total equals card value | 320 | #54 |
+| screenshots/dashboard-change-password-1280.png | Change Password from the nav (voluntary form) | 1280 | #54 |
+| screenshots/dashboard-change-password-768.png | Change Password from the nav (voluntary form) | 768 | #54 |
+| screenshots/dashboard-change-password-320.png | Change Password from the nav (voluntary form) | 320 | #54 |
+| screenshots/dashboard-requester-empty-1280.png | Requester with no tickets: zeros, Nothing to show, Create a ticket | 1280 | #54 |
+| screenshots/dashboard-requester-empty-768.png | Requester with no tickets: zeros, Nothing to show, Create a ticket | 768 | #54 |
+| screenshots/dashboard-requester-empty-320.png | Requester with no tickets: zeros, Nothing to show, Create a ticket | 320 | #54 |

@@ -1,0 +1,27 @@
+# command : (cd e2e && npx playwright test lab-04/dashboards.spec.ts --reporter=list)
+# commit  : 90498bc4a12c25a0e5d3a39649b421eb5723cb84 (feature/54-dashboards-ui)
+# date    : 2026-10-28T17:33:34Z (UTC)
+# host    : MINGW64_NT-10.0-26200 node v24.19.0
+
+
+Running 15 tests using 1 worker
+
+  ok  1 lab-04\dashboards.spec.ts:17:9 › Dashboards at 1280px › IT Staff dashboard, drill-downs and active nav (1280) (4.2s)
+  ok  2 lab-04\dashboards.spec.ts:44:9 › Dashboards at 1280px › Administrator dashboard with Users card (1280) (3.6s)
+  ok  3 lab-04\dashboards.spec.ts:51:9 › Dashboards at 1280px › IT Staff dashboard loading, failure and forbidden states (1280) (3.5s)
+  ok  4 lab-04\dashboards.spec.ts:87:9 › Dashboards at 1280px › Requester dashboard, drill-down and Change Password (1280) (3.5s)
+  ok  5 lab-04\dashboards.spec.ts:110:9 › Dashboards at 1280px › Requester with no tickets (1280) (3.1s)
+  ok  6 lab-04\dashboards.spec.ts:17:9 › Dashboards at 768px › IT Staff dashboard, drill-downs and active nav (768) (3.4s)
+  ok  7 lab-04\dashboards.spec.ts:44:9 › Dashboards at 768px › Administrator dashboard with Users card (768) (3.0s)
+  ok  8 lab-04\dashboards.spec.ts:51:9 › Dashboards at 768px › IT Staff dashboard loading, failure and forbidden states (768) (3.5s)
+  ok  9 lab-04\dashboards.spec.ts:87:9 › Dashboards at 768px › Requester dashboard, drill-down and Change Password (768) (3.3s)
+  ok 10 lab-04\dashboards.spec.ts:110:9 › Dashboards at 768px › Requester with no tickets (768) (3.0s)
+  ok 11 lab-04\dashboards.spec.ts:17:9 › Dashboards at 320px › IT Staff dashboard, drill-downs and active nav (320) (3.6s)
+  ok 12 lab-04\dashboards.spec.ts:44:9 › Dashboards at 320px › Administrator dashboard with Users card (320) (3.5s)
+  ok 13 lab-04\dashboards.spec.ts:51:9 › Dashboards at 320px › IT Staff dashboard loading, failure and forbidden states (320) (3.8s)
+  ok 14 lab-04\dashboards.spec.ts:87:9 › Dashboards at 320px › Requester dashboard, drill-down and Change Password (320) (4.2s)
+  ok 15 lab-04\dashboards.spec.ts:110:9 › Dashboards at 320px › Requester with no tickets (320) (3.6s)
+
+  15 passed (54.2s)
+
+# exit code: 0

@@ -52,6 +52,7 @@ test.describe("Authentication and role-based access", () => {
     await expect(page.getByTestId("nav-create-ticket")).not.toBeVisible();
     await expect(page.getByTestId("nav-admin-users")).not.toBeVisible();
 
+    await page.getByTestId("nav-staff-queue").click(); // CHG-06: Lab 4 lands on the Dashboard
     await expect(page.getByTestId("staff-queue-table")).toBeVisible({ timeout: 10000 });
     await page.getByTestId("staff-queue-row").first().click();
 
