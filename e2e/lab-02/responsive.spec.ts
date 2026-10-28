@@ -6,8 +6,8 @@ test.describe("Responsive check", () => {
   test("My Tickets has no horizontal scroll on a mobile viewport", async ({ page }) => {
     await page.goto("/");
     await page.getByTestId("login-email").waitFor();
-    await page.getByTestId("login-email").fill("jennifer.anderson@example.com");
-    await page.getByTestId("login-password").fill("JenniferSecure2026!");
+    await page.getByTestId("login-email").fill("e2e.requester@example.com"); // CHG-07: E2E fixture account
+    await page.getByTestId("login-password").fill("TestPass123!"); // CHG-07: fixture password (testAuth.ts)
     await page.getByTestId("login-submit").click();
 
     await page.getByTestId("nav-my-tickets").click();
