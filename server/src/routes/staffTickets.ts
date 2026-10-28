@@ -1,6 +1,7 @@
 import { Router } from "express";
-import { PrismaClient, Role } from "@prisma/client";
+import { Prisma, PrismaClient, Role } from "@prisma/client";
 import { requireAuth, requireRole } from "../middleware/auth";
+import { effectivePriorityWhere, isPriority, statusGroupWhere } from "../utils/statusGroups";
 
 const router = Router();
 const prisma = new PrismaClient();
@@ -41,6 +42,36 @@ router.get("/tickets", async (req, res) => {
   if (requestedPriority) where.requestedPriority = requestedPriority;
   if (itPriority) where.itPriority = itPriority;
   if (unassigned) where.ticketOwnerId = null;
+
+  // Lab 4 drill-down filters (api-spec.md section 10, spec CL-01); combinable with the above.
+  const and: Prisma.TicketWhereInput[] = [];
+  const ownerId = req.query.ownerId;
+  if (ownerId !== undefined) {
+    const id = ownerId === "me" ? req.auth!.userId : Number(ownerId);
+    if (!Number.isInteger(id) || id < 1) {
+      return res.status(400).json({ error: "ownerId must be 'me' or a user id.", code: "VALIDATION", fields: { ownerId: "invalid" } });
+    }
+    and.push({ ticketOwnerId: id });
+  }
+  const statusGroup = req.query.statusGroup;
+  if (statusGroup !== undefined) {
+    if (statusGroup !== "open") {
+      return res.status(400).json({ error: "statusGroup must be open.", code: "VALIDATION", fields: { statusGroup: "invalid" } });
+    }
+    and.push(statusGroupWhere(statusGroup));
+  }
+  const effectivePriority = req.query.effectivePriority;
+  if (effectivePriority !== undefined) {
+    if (!isPriority(effectivePriority)) {
+      return res.status(400).json({
+        error: "effectivePriority must be LOW, MEDIUM, or HIGH.",
+        code: "VALIDATION",
+        fields: { effectivePriority: "invalid" },
+      });
+    }
+    and.push(effectivePriorityWhere(effectivePriority));
+  }
+  if (and.length > 0) where.AND = and;
 
   const orderBy = ORDER_BY_MAP[sort] || ORDER_BY_MAP.createdAt_desc;
 

@@ -1,10 +1,13 @@
 import { Router } from "express";
-import { PrismaClient, Priority, Role, TicketStatus } from "@prisma/client";
+import { ActionStatus, Prisma, PrismaClient, Priority, Role, TicketStatus } from "@prisma/client";
 import multer from "multer";
 import path from "path";
 import crypto from "crypto";
 import { generateTicketNumber } from "../utils/ticketNumber";
 import { requireAuth, requireRole } from "../middleware/auth";
+import { parseExpectedVersion } from "../utils/actionValidation";
+import { allowedTransitions, isTransitionAllowed, resolutionGateReasons } from "../utils/ticketWorkflow";
+import { isStatusGroup, statusGroupWhere } from "../utils/statusGroups";
 
 const router = Router();
 const prisma = new PrismaClient();
@@ -106,6 +109,19 @@ router.get("/", async (req, res) => {
   if (categoryId) where.categoryId = categoryId;
   if (priority) where.requestedPriority = priority;
   if (status) where.currentStatus = status;
+
+  // Lab 4 drill-down filter from the Requester dashboard (api-spec.md section 10).
+  const statusGroup = req.query.statusGroup;
+  if (statusGroup !== undefined) {
+    if (!isStatusGroup(statusGroup)) {
+      return res.status(400).json({
+        error: "statusGroup must be open or resolvedRecent.",
+        code: "VALIDATION",
+        fields: { statusGroup: "invalid" },
+      });
+    }
+    where.AND = [statusGroupWhere(statusGroup)];
+  }
 
   const orderBy = ORDER_BY_MAP[sort] || ORDER_BY_MAP.createdAt_desc;
 
@@ -378,73 +394,145 @@ router.post("/:id/notes", requireRole(Role.IT_STAFF, Role.ADMINISTRATOR), async 
   });
 });
 
+const STALE_TICKET = {
+  error: "This Ticket was changed by someone else. Reload and try again.",
+  code: "STALE_UPDATE",
+};
+
+// Optional expectedVersion for owner/priority (L4-BR-15): undefined = not supplied, null = invalid.
+function optionalExpectedVersion(body: any): number | undefined | null {
+  if (!Object.prototype.hasOwnProperty.call(body, "expectedVersion")) return undefined;
+  return parseExpectedVersion(body.expectedVersion) ?? null;
+}
+
+// Writes a Ticket change and bumps its version in one statement; when expectedVersion is given
+// the write only happens if the stored version still matches. Returns null on a stale write.
+async function versionedTicketUpdate(ticketId: number, expectedVersion: number | undefined, data: Prisma.TicketUpdateManyMutationInput & { ticketOwnerId?: number | null }) {
+  const { count } = await prisma.ticket.updateMany({
+    where: expectedVersion === undefined ? { id: ticketId } : { id: ticketId, version: expectedVersion },
+    data: { ...data, version: { increment: 1 } },
+  });
+  if (count === 0) return null;
+  return prisma.ticket.findUniqueOrThrow({ where: { id: ticketId }, include: { ticketOwner: true } });
+}
+
 router.patch("/:id/owner", requireRole(Role.IT_STAFF, Role.ADMINISTRATOR), async (req, res) => {
   const ticketId = Number(req.params.id);
-  const ticket = await prisma.ticket.findUnique({ where: { id: ticketId } });
+  const ticket = Number.isInteger(ticketId) ? await prisma.ticket.findUnique({ where: { id: ticketId } }) : null;
   if (!ticket) {
-    return res.status(404).json({ error: "Ticket not found." });
+    return res.status(404).json({ error: "Ticket not found.", code: "NOT_FOUND" });
   }
 
   const ticketOwnerId = req.body.ticketOwnerId === null ? null : Number(req.body.ticketOwnerId);
 
   if (ticketOwnerId !== null) {
-    const owner = await prisma.user.findUnique({ where: { id: ticketOwnerId } });
+    const owner = Number.isInteger(ticketOwnerId) ? await prisma.user.findUnique({ where: { id: ticketOwnerId } }) : null;
     if (!owner || !isStaffRole(owner.role) || !owner.isActive) {
-      return res.status(400).json({ error: "ticketOwnerId must be an active IT Staff or Administrator user." });
+      return res.status(400).json({
+        error: "ticketOwnerId must be an active IT Staff or Administrator user.",
+        code: "VALIDATION",
+        fields: { ticketOwnerId: "must be an active IT Staff or Administrator user" },
+      });
     }
   }
 
-  const updated = await prisma.ticket.update({
-    where: { id: ticketId },
-    data: { ticketOwnerId },
-    include: { ticketOwner: true },
-  });
+  const expectedVersion = optionalExpectedVersion(req.body);
+  if (expectedVersion === null) {
+    return res.status(400).json({ error: "expectedVersion must be a positive integer.", code: "VALIDATION", fields: { expectedVersion: "invalid" } });
+  }
+
+  const updated = await versionedTicketUpdate(ticketId, expectedVersion, { ticketOwnerId });
+  if (!updated) return res.status(409).json(STALE_TICKET);
 
   res.json({
     id: updated.id,
     ticketOwnerId: updated.ticketOwnerId,
     ticketOwnerName: updated.ticketOwner ? updated.ticketOwner.name : null,
+    version: updated.version,
   });
 });
 
 router.patch("/:id/priority", requireRole(Role.IT_STAFF, Role.ADMINISTRATOR), async (req, res) => {
   const ticketId = Number(req.params.id);
-  const ticket = await prisma.ticket.findUnique({ where: { id: ticketId } });
+  const ticket = Number.isInteger(ticketId) ? await prisma.ticket.findUnique({ where: { id: ticketId } }) : null;
   if (!ticket) {
-    return res.status(404).json({ error: "Ticket not found." });
+    return res.status(404).json({ error: "Ticket not found.", code: "NOT_FOUND" });
   }
 
   const validPriorities = ["LOW", "MEDIUM", "HIGH"];
   if (!validPriorities.includes(req.body.itPriority)) {
-    return res.status(400).json({ error: "itPriority must be LOW, MEDIUM, or HIGH." });
+    return res.status(400).json({ error: "itPriority must be LOW, MEDIUM, or HIGH.", code: "VALIDATION", fields: { itPriority: "must be LOW, MEDIUM, or HIGH" } });
   }
 
-  const updated = await prisma.ticket.update({
-    where: { id: ticketId },
-    data: { itPriority: req.body.itPriority as Priority },
-  });
+  const expectedVersion = optionalExpectedVersion(req.body);
+  if (expectedVersion === null) {
+    return res.status(400).json({ error: "expectedVersion must be a positive integer.", code: "VALIDATION", fields: { expectedVersion: "invalid" } });
+  }
 
-  res.json({ id: updated.id, itPriority: updated.itPriority });
+  const updated = await versionedTicketUpdate(ticketId, expectedVersion, { itPriority: req.body.itPriority as Priority });
+  if (!updated) return res.status(409).json(STALE_TICKET);
+
+  res.json({ id: updated.id, itPriority: updated.itPriority, version: updated.version });
 });
 
+// Status change (api-spec section 6). Check order: role -> 404 -> 400 -> 409 -> 422 transition -> 422 gate.
 router.patch("/:id/status", requireRole(Role.IT_STAFF, Role.ADMINISTRATOR), async (req, res) => {
   const ticketId = Number(req.params.id);
-  const ticket = await prisma.ticket.findUnique({ where: { id: ticketId } });
+  const ticket = Number.isInteger(ticketId) ? await prisma.ticket.findUnique({ where: { id: ticketId } }) : null;
   if (!ticket) {
-    return res.status(404).json({ error: "Ticket not found." });
+    return res.status(404).json({ error: "Ticket not found.", code: "NOT_FOUND" });
   }
 
   const validStatuses = Object.values(TicketStatus);
+  const fields: Record<string, string> = {};
   if (!validStatuses.includes(req.body.currentStatus)) {
-    return res.status(400).json({ error: `currentStatus must be one of: ${validStatuses.join(", ")}` });
+    fields.currentStatus = `must be one of: ${validStatuses.join(", ")}`;
+  }
+  const expectedVersion = parseExpectedVersion(req.body.expectedVersion);
+  if (expectedVersion === undefined) {
+    fields.expectedVersion = "required";
+  }
+  if (fields.currentStatus) {
+    return res.status(400).json({ error: `currentStatus ${fields.currentStatus}`, code: "VALIDATION", fields });
+  }
+  if (expectedVersion === undefined) {
+    return res.status(400).json({ error: "expectedVersion is required.", code: "VALIDATION", fields });
   }
 
-  const updated = await prisma.ticket.update({
-    where: { id: ticketId },
-    data: { currentStatus: req.body.currentStatus as TicketStatus },
-  });
+  if (ticket.version !== expectedVersion) return res.status(409).json(STALE_TICKET);
 
-  res.json({ id: updated.id, currentStatus: updated.currentStatus });
+  const target = req.body.currentStatus as TicketStatus;
+  if (!isTransitionAllowed(ticket.currentStatus, target)) {
+    return res.status(422).json({
+      error: `That change is not allowed from ${ticket.currentStatus}.`,
+      code: "INVALID_TRANSITION",
+      allowed: allowedTransitions(ticket.currentStatus),
+    });
+  }
+
+  if (target === TicketStatus.RESOLVED) {
+    const [completedActions, plannedActions] = await Promise.all([
+      prisma.actionTaken.count({ where: { ticketId, status: ActionStatus.COMPLETED } }),
+      prisma.actionTaken.count({ where: { ticketId, status: ActionStatus.PLANNED } }),
+    ]);
+    const reasons = resolutionGateReasons({ ticketOwnerId: ticket.ticketOwnerId, completedActions, plannedActions });
+    if (reasons.length > 0) {
+      return res.status(422).json({ error: "This Ticket cannot be resolved yet.", code: "RESOLUTION_GATE", reasons });
+    }
+  }
+
+  const updated = await versionedTicketUpdate(ticketId, expectedVersion, {
+    currentStatus: target,
+    ...(target === TicketStatus.REOPENED ? { requesterIndicatedResolved: false } : {}),
+  });
+  if (!updated) return res.status(409).json(STALE_TICKET);
+
+  res.json({
+    id: updated.id,
+    currentStatus: updated.currentStatus,
+    version: updated.version,
+    requesterIndicatedResolved: updated.requesterIndicatedResolved,
+  });
 });
 
 router.post("/:id/indicate-resolved", async (req, res) => {

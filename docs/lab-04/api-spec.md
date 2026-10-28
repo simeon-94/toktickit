@@ -116,29 +116,35 @@ optional `expectedVersion` (409 if supplied and stale), response gains `version`
   "urgent": [ { "id": 1, "ticketNumber": "...", "summary": "...", "currentStatus": "OPEN", "itPriority": "HIGH", "ticketOwnerName": null, "updatedAt": "..." } ],
   "recentlyUpdated": [ { "...same fields..." } ],
   "myActions": [ { "id": 7, "ticketId": 4, "ticketNumber": "...", "description": "...", "actionAt": "...", "status": "PLANNED" } ],
+  "followUps": [ { "...myActions fields, status COMPLETED...", "followUpNote": "...", "assigneeName": "..." } ],
   "userCounts": { "active": 6, "inactive": 1, "byRole": { "REQUESTER": 3, "IT_STAFF": 2, "ADMINISTRATOR": 1 } }
 }
 ```
-`userCounts` is present only for ADMINISTRATOR.
+`userCounts` is present only for ADMINISTRATOR; `byRole` counts all users (active and inactive).
 
 | Metric | Definition | Empty | Drill-down |
 | --- | --- | --- | --- |
 | unassignedOpen | open-set Tickets with `ticketOwnerId` null | 0 | `/staff/queue?unassigned=true&statusGroup=open` |
 | ownedByMeOpen | open-set Tickets owned by current user | 0 | `/staff/queue?ownerId=me&statusGroup=open` |
 | urgentOpen | open-set Tickets with `itPriority = HIGH` | 0 | `/staff/queue?itPriority=HIGH&statusGroup=open` |
-| openFollowUps | COMPLETED actions with `followUpRequired` on open-set Tickets | 0 | list in dashboard links to each Ticket Detail |
-| myPlannedActions | PLANNED actions where assignee = current user, on non-terminal Tickets | 0 | `myActions` list -> Ticket Detail |
+| openFollowUps | COMPLETED actions with `followUpRequired` on open-set Tickets | 0 | `GET /api/staff/actions?view=openFollowUps` (CL-02) |
+| myPlannedActions | PLANNED actions where assignee = current user, on non-terminal (not CLOSED/CANCELLED) Tickets | 0 | `GET /api/staff/actions?view=myPlanned` (CL-02) |
 | byStatus.X | all Tickets in status X (all 8 keys always present) | 0 | `/staff/queue?status=X` |
-| byItPriority.P | open-set Tickets with `itPriority = P` (null counted as requestedPriority) | 0 | `/staff/queue?itPriority=P&statusGroup=open` |
+| byItPriority.P | open-set Tickets with effective priority P = `COALESCE(itPriority, requestedPriority)` | 0 | `/staff/queue?effectivePriority=P&statusGroup=open` (CL-01) |
 | urgent list | up to 5 open-set HIGH Tickets, oldest `updatedAt` first | [] | Ticket Detail |
 | recentlyUpdated list | up to 5 Tickets by `updatedAt desc` within 7d | [] | Ticket Detail |
 | myActions list | up to 5 PLANNED actions assigned to me, `actionAt asc` | [] | Ticket Detail |
+| followUps list | up to 5 open follow-ups (same filter as openFollowUps), `actionAt desc` | [] | Ticket Detail |
 
 ## 10. Queue/List filters added for drill-down
-- `GET /api/staff/tickets`: `ownerId=me` (current user), `statusGroup=open` (L4-BR-18 set);
-  existing `status`, `unassigned`, `itPriority`, etc. unchanged; combinable. Response includes `version` per item.
+- `GET /api/staff/tickets`: `ownerId=me` (current user), `statusGroup=open` (L4-BR-18 set),
+  `effectivePriority=LOW|MEDIUM|HIGH` (matches `COALESCE(itPriority, requestedPriority)`, CL-01);
+  existing `status`, `unassigned`, `itPriority` (exact match, unchanged), etc.; combinable. Response includes `version` per item.
 - `GET /api/tickets` (My Tickets): `statusGroup=open` and `statusGroup=resolvedRecent`.
-- Invalid `statusGroup` -> 400.
+- Invalid `statusGroup`, `ownerId` or `effectivePriority` -> 400 `VALIDATION`.
+- `GET /api/staff/actions?view=myPlanned|openFollowUps&page&pageSize` (CL-02) - IT_STAFF, ADMINISTRATOR (Requester 403).
+  Same filters as the dashboard action metrics; 200 `{ items, total, page, pageSize }`; items =
+  `{ id, ticketId, ticketNumber, description, actionAt, status, followUpNote, assigneeName }`. Invalid `view` -> 400.
 
 ## 11. Unchanged from Labs 2-3
 Auth (`/api/auth/*`), categories, related systems, Ticket create/list/detail, attachments,

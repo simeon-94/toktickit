@@ -2,12 +2,22 @@
 
 Evidence is produced from real runs only. Every log starts with the command, commit hash, branch
 and UTC date, and ends with the process exit code. Screenshots are taken by Playwright at
-1280 / 768 / 320 px from the running app with fixture data (`server/scripts/e2e-lab4-fixtures.ts`);
-the spec also asserts there is no horizontal page scroll before each screenshot (RESP-01).
+1280 / 768 / 320 px from the running app with seeded data and the E2E fixtures
+(`server/scripts/e2e-lab4-fixtures.ts`); the spec also asserts there is no horizontal page scroll
+before each screenshot (RESP-01).
 
 ## Logs (`logs/`)
 | File | What | Issue |
 | --- | --- | --- |
+| logs/issue-50-server-tests.log | `npx vitest run` (server, all labs) | #50 |
+| logs/issue-50-client-tests.log | `npx vitest run` (client) | #50 |
+| logs/issue-50-server-build.log | `npm run build` (server) | #50 |
+| logs/issue-50-client-build.log | `npm run build` (client) | #50 |
+| logs/issue-51-server-tests.log | `npx vitest run` (server, all labs) | #51 |
+| logs/issue-51-client-tests.log | `npx vitest run` (client) | #51 |
+| logs/issue-51-server-build.log | `npm run build` (server) | #51 |
+| logs/issue-51-client-build.log | `npm run build` (client) | #51 |
+| logs/verify-dashboard.log | `npx tsx scripts/verify-dashboard.ts` - every dashboard metric vs raw SQL | #51 |
 | logs/issue-52-server-tests.log | `npx vitest run` (server, all labs) | #52 |
 | logs/issue-52-client-tests.log | `npx vitest run` (client) | #52 |
 | logs/issue-52-server-build.log | `npm run build` (server) | #52 |

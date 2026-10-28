@@ -1,0 +1,16 @@
+# command : (cd client && npm run build)
+# commit  : 6734924083b4d8acb4c3a8802e4251ae37c8a124 (feature/50-ticket-workflow)
+# date    : 2026-10-28T12:48:29Z (UTC)
+# host    : MINGW64_NT-10.0-26200 node v24.19.0
+
+vite v5.4.21 building for production...
+transforming...
+✓ 40 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                   0.41 kB │ gzip:  0.27 kB
+dist/assets/index-CfkJyshZ.css  231.25 kB │ gzip: 30.69 kB
+dist/assets/index-C_w6ercm.js   194.46 kB │ gzip: 55.69 kB
+✓ built in 1.13s
+
+# exit code: 0

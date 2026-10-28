@@ -37,7 +37,7 @@ export function requireAuth(req: Request, res: Response, next: NextFunction) {
 export function requireRole(...roles: Role[]) {
   return (req: Request, res: Response, next: NextFunction) => {
     if (!req.auth) return res.status(401).json({ error: "Not authenticated" });
-    if (!roles.includes(req.auth.role)) return res.status(403).json({ error: "Forbidden" });
+    if (!roles.includes(req.auth.role)) return res.status(403).json({ error: "Forbidden", code: "FORBIDDEN" });
     next();
   };
 }

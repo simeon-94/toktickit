@@ -13,8 +13,8 @@ then re-run on `main` before the final report.
 
 | Test ID | Type | Requirement / AC | What It Tests | Expected Result | Automated Test File | Final |
 | --- | --- | --- | --- | --- | --- | --- |
-| UNIT-01 | Unit | L4-BR-12 | Transition matrix helper: every (from,to) pair | Only the 20 allowed pairs return true (all other of the 64 pairs return false) | server/src/utils/ticketWorkflow.test.ts | Planned |
-| UNIT-02 | Unit | L4-BR-13 | Resolution gate helper reasons | Correct reasons array for each combination | server/src/utils/ticketWorkflow.test.ts | Planned |
+| UNIT-01 | Unit | L4-BR-12 | Transition matrix helper: every (from,to) pair | Only the 20 allowed pairs return true (all other of the 64 pairs return false) | server/src/utils/ticketWorkflow.test.ts | Pass |
+| UNIT-02 | Unit | L4-BR-13 | Resolution gate helper reasons | Correct reasons array for each combination | server/src/utils/ticketWorkflow.test.ts | Pass |
 | UNIT-03 | Unit | L4-BR-05/06 | Action input validator | Field errors for short description, missing follow-up note, over-length | server/src/utils/actionValidation.test.ts | Pass |
 | API-01 | API | AC-01 | Staff creates valid action | 201, correct ticket, performer = caller, assignee default = caller | server/tests/lab-04/actions-taken.api.test.ts | Pass |
 | API-02 | API | AC-03 | Invalid create payloads | 400 with field errors, nothing stored | server/tests/lab-04/actions-taken.api.test.ts | Pass |
@@ -26,27 +26,27 @@ then re-run on `main` before the final report.
 | API-08 | API | AC-09 | Duplicate clientRequestId | One action, second call 200 same id | server/tests/lab-04/actions-taken.api.test.ts | Pass |
 | API-09 | API | AC-02 | Requester create/edit/complete/cancel forbidden; own list readable; other's ticket 404 | 403 / 200 / 404 | server/tests/lab-04/actions-taken.api.test.ts | Pass |
 | API-10 | API | L4-BR-11 | Create on CLOSED / CANCELLED Ticket | 422 TICKET_TERMINAL | server/tests/lab-04/actions-taken.api.test.ts | Pass |
-| WF-01 | Workflow | AC-10 | Every allowed transition succeeds for staff | 200, version +1 | server/tests/lab-04/ticket-workflow.api.test.ts | Planned |
-| WF-02 | Workflow | AC-10 | Disallowed, same-status and from-CANCELLED transitions | 422 INVALID_TRANSITION with allowed list | server/tests/lab-04/ticket-workflow.api.test.ts | Planned |
-| WF-03 | Workflow | AC-10 | Requester changes status | 403 | server/tests/lab-04/ticket-workflow.api.test.ts | Planned |
-| WF-04 | Workflow | AC-11 | Resolution gate: no owner / no completed / planned pending | 422 RESOLUTION_GATE with reasons | server/tests/lab-04/ticket-workflow.api.test.ts | Planned |
-| WF-05 | Workflow | AC-11 | Gate satisfied -> RESOLVED; Requester indicator alone does not resolve | 200; status unchanged by indicate-resolved | server/tests/lab-04/ticket-workflow.api.test.ts | Planned |
-| WF-06 | Workflow | AC-12 | Reopen resets requesterIndicatedResolved | false after REOPENED | server/tests/lab-04/ticket-workflow.api.test.ts | Planned |
-| WF-07 | Workflow | AC-08 | Stale ticket status update (two users) | 409, second write rejected | server/tests/lab-04/ticket-workflow.api.test.ts | Planned |
-| WF-08 | Workflow | AC-08 | Missing expectedVersion on status | 400 | server/tests/lab-04/ticket-workflow.api.test.ts | Planned |
-| API-11 | API | AC-13 | Requester dashboard scoped to caller; zero state | Only own counts; zeros for empty user | server/tests/lab-04/requester-dashboard.api.test.ts | Planned |
-| API-12 | API | AC-13 | Role restriction on requester dashboard | 403 for staff/admin, 401 anonymous | server/tests/lab-04/requester-dashboard.api.test.ts | Planned |
-| API-13 | API | AC-16 | Requester card counts equal drill-down totals | Equal | server/tests/lab-04/requester-dashboard.api.test.ts | Planned |
-| API-14 | API | AC-14 | Staff dashboard metrics vs direct Prisma/SQL counts | Equal for every metric | server/tests/lab-04/staff-dashboard.api.test.ts | Planned |
-| API-15 | API | AC-14 | Staff dashboard zero state & recent window (7d) | Zeros / old tickets excluded | server/tests/lab-04/staff-dashboard.api.test.ts | Planned |
-| API-16 | API | AC-15 | Admin sees userCounts; staff does not; Requester 403 | As specified | server/tests/lab-04/staff-dashboard.api.test.ts | Planned |
-| API-17 | API | AC-16 | Staff card counts equal queue totals (ownerId=me, statusGroup=open, ...) | Equal | server/tests/lab-04/staff-dashboard.api.test.ts | Planned |
+| WF-01 | Workflow | AC-10 | Every allowed transition succeeds for staff | 200, version +1 | server/tests/lab-04/ticket-workflow.api.test.ts | Pass |
+| WF-02 | Workflow | AC-10 | Disallowed, same-status and from-CANCELLED transitions | 422 INVALID_TRANSITION with allowed list | server/tests/lab-04/ticket-workflow.api.test.ts | Pass |
+| WF-03 | Workflow | AC-10 | Requester changes status | 403 | server/tests/lab-04/ticket-workflow.api.test.ts | Pass |
+| WF-04 | Workflow | AC-11 | Resolution gate: no owner / no completed / planned pending | 422 RESOLUTION_GATE with reasons | server/tests/lab-04/ticket-workflow.api.test.ts | Pass |
+| WF-05 | Workflow | AC-11 | Gate satisfied -> RESOLVED; Requester indicator alone does not resolve | 200; status unchanged by indicate-resolved | server/tests/lab-04/ticket-workflow.api.test.ts | Pass |
+| WF-06 | Workflow | AC-12 | Reopen resets requesterIndicatedResolved | false after REOPENED | server/tests/lab-04/ticket-workflow.api.test.ts | Pass |
+| WF-07 | Workflow | AC-08 | Stale ticket status update (two users) | 409, second write rejected | server/tests/lab-04/ticket-workflow.api.test.ts | Pass |
+| WF-08 | Workflow | AC-08 | Missing expectedVersion on status | 400 | server/tests/lab-04/ticket-workflow.api.test.ts | Pass |
+| API-11 | API | AC-13 | Requester dashboard scoped to caller; zero state | Only own counts; zeros for empty user | server/tests/lab-04/requester-dashboard.api.test.ts | Pass |
+| API-12 | API | AC-13 | Role restriction on requester dashboard | 403 for staff/admin, 401 anonymous | server/tests/lab-04/requester-dashboard.api.test.ts | Pass |
+| API-13 | API | AC-16 | Requester card counts equal drill-down totals | Equal | server/tests/lab-04/requester-dashboard.api.test.ts | Pass |
+| API-14 | API | AC-14 | Staff dashboard metrics vs direct SQL counts, incl. open Tickets with null itPriority counted by requestedPriority (CL-01) | Equal for every metric | server/tests/lab-04/staff-dashboard.api.test.ts | Pass |
+| API-15 | API | AC-14 | Staff dashboard zero state & recent window (7d) | Zeros / old tickets excluded | server/tests/lab-04/staff-dashboard.api.test.ts | Pass |
+| API-16 | API | AC-15 | Admin sees userCounts; staff does not; Requester 403 | As specified | server/tests/lab-04/staff-dashboard.api.test.ts | Pass |
+| API-17 | API | AC-16 | Staff card counts equal drill-down totals: queue (ownerId=me, statusGroup=open, effectivePriority=P incl. null itPriority, status=X) and /api/staff/actions views (CL-01, CL-02) | Equal | server/tests/lab-04/staff-dashboard.api.test.ts | Pass |
 | MIG-01 | Migration | AC-20 | Lab 3 data preserved after migration; version = 1 | Row counts and sample rows unchanged | server/tests/lab-04/migration.test.ts | Pass |
 | MIG-02 | Migration | AC-20 | rollback.sql on scratch DB; seed run twice | Clean rollback; no duplicates | server/tests/lab-04/migration.test.ts | Pass |
 | REG-01 | Regression | AC-21 | Full Lab 1-3 server suite (with CHG edits only) | All pass | server/tests/lab-01..03 | Planned |
 | REG-02 | Regression | AC-21 | Full Lab 1-3 client suite | All pass | client/src/components/*.test.tsx | Planned |
 | REG-03 | Regression | AC-21 | Lab 2/3 E2E suites | All pass | e2e/lab-02, e2e/lab-03 | Planned |
-| PERF-01 | Performance smoke | AC-14 | Both dashboards respond < 500 ms on seeded data | Under threshold | server/tests/lab-04/staff-dashboard.api.test.ts | Planned |
+| PERF-01 | Performance smoke | AC-14 | Both dashboards respond < 500 ms on seeded data | Under threshold | server/tests/lab-04/staff-dashboard.api.test.ts | Pass |
 | UI-01 | UI component | AC-17 | Actions panel: loading, empty, list, error+retry | States render | client/src/components/lab-04/ActionsTaken.test.tsx | Pass |
 | UI-02 | UI component | AC-17 | Create form validation, follow-up note toggling, submit disabled while pending, data kept after failure | As specified | client/src/components/lab-04/ActionsTaken.test.tsx | Pass |
 | UI-03 | UI component | AC-17 | Edit / complete (result required) / cancel actions; locked rows have no buttons | As specified | client/src/components/lab-04/ActionsTaken.test.tsx | Pass |
@@ -96,6 +96,7 @@ Only edits listed as CHG-xx in specification.md section 11 (matrix-compliant sta
 
 | CHG | Test file | Change |
 | --- | --- | --- |
+| CHG-02 | server/tests/lab-03/staff-ticket-detail.api.test.ts | "a permitted status change is accepted" now sends `expectedVersion: 1` (NEW -> OPEN is already in the matrix, so no CHG-01 edit was needed) |
 | CHG-05 | client/src/components/CreateTicket.test.tsx | `fetchMock.mock.calls` -> `vi.mocked(fetchMock).mock.calls` (2 lines, type-only; assertions unchanged) |
 
 ## 5. Final Results
