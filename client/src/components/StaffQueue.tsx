@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import DrilldownChip from "./lab-04/DrilldownChip";
+import type { ListFilter } from "./lab-04/drilldown";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4000";
 
@@ -33,6 +35,9 @@ type Status = "loading" | "success" | "error";
 
 interface Props {
   onOpenTicket: (id: number) => void;
+  // Lab 4: filter from a dashboard card (ui-spec section 0); applied before the queue's own filters.
+  presetFilter?: ListFilter | null;
+  onClearPreset?: () => void;
 }
 
 const STATUS_OPTIONS = [
@@ -46,7 +51,7 @@ const STATUS_OPTIONS = [
   "CANCELLED",
 ];
 
-function StaffQueue({ onOpenTicket }: Props) {
+function StaffQueue({ onOpenTicket, presetFilter = null, onClearPreset }: Props) {
   const [categories, setCategories] = useState<Category[]>([]);
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
@@ -77,7 +82,7 @@ function StaffQueue({ onOpenTicket }: Props) {
   useEffect(() => {
     setStatus("loading");
 
-    const params = new URLSearchParams({ sort, page: String(page) });
+    const params = new URLSearchParams({ ...(presetFilter?.filters ?? {}), sort, page: String(page) });
     if (debouncedSearch) params.set("search", debouncedSearch);
     if (categoryFilter) params.set("category", categoryFilter);
     if (statusFilter) params.set("status", statusFilter);
@@ -96,10 +101,17 @@ function StaffQueue({ onOpenTicket }: Props) {
         console.error("Loading staff queue failed:", error);
         setStatus("error");
       });
-  }, [debouncedSearch, categoryFilter, statusFilter, unassignedOnly, sort, page]);
+  }, [debouncedSearch, categoryFilter, statusFilter, unassignedOnly, sort, page, presetFilter]);
 
   return (
     <div data-testid="staff-queue">
+      {presetFilter && (
+        <DrilldownChip
+          label={presetFilter.label}
+          total={status === "success" && data ? data.totalItems : null}
+          onClear={() => onClearPreset?.()}
+        />
+      )}
       <h2 className="h5 mb-3">Ticket Queue</h2>
 
       <div className="row g-2 mb-3">
