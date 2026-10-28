@@ -333,8 +333,8 @@ function ActionsTaken({ ticketId, mode, currentUser, staffUsers = [] }: Props) {
       )}
 
       {success && (
-        <div className="alert alert-success alert-dismissible py-2" role="status" data-testid="actions-success">
-          {success}
+        <div className="alert alert-success d-flex align-items-center justify-content-between gap-2 py-2" role="status" data-testid="actions-success">
+          <span>{success}</span>
           <button type="button" className="btn-close" aria-label="Dismiss" onClick={() => setSuccess("")} />
         </div>
       )}
@@ -487,98 +487,100 @@ function ActionsTaken({ ticketId, mode, currentUser, staffUsers = [] }: Props) {
       )}
 
       {loadState === "success" && items.length > 0 && (
-        <table className="l4-actions-table">
-          <thead>
-            <tr>
-              <th scope="col">Date/time</th>
-              <th scope="col">Description</th>
-              <th scope="col">Result</th>
-              <th scope="col">Performed by</th>
-              <th scope="col">Assignee</th>
-              <th scope="col">Status</th>
-              <th scope="col">Follow-up</th>
-              <th scope="col">Attachment notes</th>
-              {isStaff && <th scope="col">Actions</th>}
-            </tr>
-          </thead>
-          <tbody>
-            {items.map((a) => {
-              const badge = STATUS_BADGE[a.status];
-              const planned = a.status === "PLANNED";
-              return (
-                <tr key={a.id} data-testid="action-row">
-                  <td data-label="Date/time">{formatBangkok(a.actionAt)}</td>
-                  <td data-label="Description" style={{ whiteSpace: "pre-wrap" }}>
-                    {a.description}
-                  </td>
-                  <td data-label="Result">{a.result ?? <span className="text-muted">-</span>}</td>
-                  <td data-label="Performed by">{a.performedByName}</td>
-                  <td data-label="Assignee">{a.assigneeName}</td>
-                  <td data-label="Status">
-                    <span className={`badge ${badge.className}`} data-testid="action-status">
-                      {badge.label}
-                    </span>
-                  </td>
-                  <td data-label="Follow-up">{a.followUpRequired ? `Yes: ${a.followUpNote ?? ""}` : "No"}</td>
-                  <td data-label="Attachment notes">{a.attachmentNotes ?? <span className="text-muted">-</span>}</td>
-                  {isStaff && (
-                    <td data-label="Actions">
-                      {!planned && <span className="l4-locked">Locked</span>}
-                      {planned && completingId !== a.id && (
-                        <div className="d-flex flex-wrap gap-1">
-                          <button type="button" className="btn btn-outline-secondary btn-sm" onClick={() => openEdit(a)} disabled={rowBusy || !!editing} data-testid="action-edit-btn">
-                            Edit
-                          </button>
-                          <button
-                            type="button"
-                            className="btn btn-outline-success btn-sm"
-                            onClick={() => {
-                              resetMessages();
-                              setCompletingId(a.id);
-                              setResultText("");
-                            }}
-                            disabled={rowBusy}
-                            data-testid="action-complete-btn"
-                          >
-                            Complete
-                          </button>
-                          <button type="button" className="btn btn-outline-danger btn-sm" onClick={() => handleCancelAction(a)} disabled={rowBusy} data-testid="action-cancel-btn">
-                            Cancel action
-                          </button>
-                        </div>
-                      )}
-                      {planned && completingId === a.id && (
-                        <div>
-                          <label className="form-label small" htmlFor={`action-${ticketId}-result`}>
-                            Result <span aria-hidden="true">*</span>
-                          </label>
-                          <textarea
-                            className="form-control form-control-sm mb-1"
-                            rows={2}
-                            value={resultText}
-                            onChange={(e) => setResultText(e.target.value)}
-                            required
-                            data-testid="action-result"
-                            {...fieldProps("result")}
-                          />
-                          {fieldError("result")}
-                          <div className="d-flex flex-wrap gap-1 mt-1">
-                            <button type="button" className="btn btn-success btn-sm" onClick={() => handleComplete(a)} disabled={rowBusy} data-testid="action-complete-confirm">
-                              {rowBusy ? "Saving..." : "Confirm"}
+        <div className="l4-table-wrap">
+          <table className="l4-actions-table">
+            <thead>
+              <tr>
+                <th scope="col">Date/time</th>
+                <th scope="col">Description</th>
+                <th scope="col">Result</th>
+                <th scope="col">Performed by</th>
+                <th scope="col">Assignee</th>
+                <th scope="col">Status</th>
+                <th scope="col">Follow-up</th>
+                <th scope="col">Attachment notes</th>
+                {isStaff && <th scope="col">Actions</th>}
+              </tr>
+            </thead>
+            <tbody>
+              {items.map((a) => {
+                const badge = STATUS_BADGE[a.status];
+                const planned = a.status === "PLANNED";
+                return (
+                  <tr key={a.id} data-testid="action-row">
+                    <td data-label="Date/time">{formatBangkok(a.actionAt)}</td>
+                    <td data-label="Description" style={{ whiteSpace: "pre-wrap" }}>
+                      {a.description}
+                    </td>
+                    <td data-label="Result">{a.result ?? <span className="text-muted">-</span>}</td>
+                    <td data-label="Performed by">{a.performedByName}</td>
+                    <td data-label="Assignee">{a.assigneeName}</td>
+                    <td data-label="Status">
+                      <span className={`badge ${badge.className}`} data-testid="action-status">
+                        {badge.label}
+                      </span>
+                    </td>
+                    <td data-label="Follow-up">{a.followUpRequired ? `Yes: ${a.followUpNote ?? ""}` : "No"}</td>
+                    <td data-label="Attachment notes">{a.attachmentNotes ?? <span className="text-muted">-</span>}</td>
+                    {isStaff && (
+                      <td data-label="Actions">
+                        {!planned && <span className="l4-locked">Locked</span>}
+                        {planned && completingId !== a.id && (
+                          <div className="d-flex flex-wrap gap-1">
+                            <button type="button" className="btn btn-outline-secondary btn-sm" onClick={() => openEdit(a)} disabled={rowBusy || !!editing} data-testid="action-edit-btn">
+                              Edit
                             </button>
-                            <button type="button" className="btn btn-outline-secondary btn-sm" onClick={() => setCompletingId(null)} disabled={rowBusy}>
-                              Back
+                            <button
+                              type="button"
+                              className="btn btn-outline-success btn-sm"
+                              onClick={() => {
+                                resetMessages();
+                                setCompletingId(a.id);
+                                setResultText("");
+                              }}
+                              disabled={rowBusy}
+                              data-testid="action-complete-btn"
+                            >
+                              Complete
+                            </button>
+                            <button type="button" className="btn btn-outline-danger btn-sm" onClick={() => handleCancelAction(a)} disabled={rowBusy} data-testid="action-cancel-btn">
+                              Cancel action
                             </button>
                           </div>
-                        </div>
-                      )}
-                    </td>
-                  )}
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+                        )}
+                        {planned && completingId === a.id && (
+                          <div>
+                            <label className="form-label small" htmlFor={`action-${ticketId}-result`}>
+                              Result <span aria-hidden="true">*</span>
+                            </label>
+                            <textarea
+                              className="form-control form-control-sm mb-1"
+                              rows={2}
+                              value={resultText}
+                              onChange={(e) => setResultText(e.target.value)}
+                              required
+                              data-testid="action-result"
+                              {...fieldProps("result")}
+                            />
+                            {fieldError("result")}
+                            <div className="d-flex flex-wrap gap-1 mt-1">
+                              <button type="button" className="btn btn-success btn-sm" onClick={() => handleComplete(a)} disabled={rowBusy} data-testid="action-complete-confirm">
+                                {rowBusy ? "Saving..." : "Confirm"}
+                              </button>
+                              <button type="button" className="btn btn-outline-secondary btn-sm" onClick={() => setCompletingId(null)} disabled={rowBusy}>
+                                Back
+                              </button>
+                            </div>
+                          </div>
+                        )}
+                      </td>
+                    )}
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
       )}
     </section>
   );

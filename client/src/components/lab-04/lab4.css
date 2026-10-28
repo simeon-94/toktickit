@@ -42,7 +42,12 @@
   color: #495057;
 }
 
-/* Actions table: a table at >= 768px, stacked cards below (ui-spec section 4). */
+/* Actions table: a table at >= 992px, stacked cards below (ui-spec section 4, spec CL-03). If a long
+   unbroken word makes the table wider than the panel, only the table scrolls, never the page. */
+.l4-table-wrap {
+  overflow-x: auto;
+}
+
 .l4-actions-table {
   width: 100%;
   border-collapse: collapse;
@@ -53,7 +58,7 @@
   padding: 0.5rem;
   border-top: 1px solid #e3e8e5;
   vertical-align: top;
-  overflow-wrap: anywhere;
+  overflow-wrap: break-word;
 }
 
 .l4-actions-table th {
@@ -62,7 +67,7 @@
   font-weight: 600;
 }
 
-@media (max-width: 767.98px) {
+@media (max-width: 991.98px) {
   .l4-actions-table thead {
     display: none;
   }
