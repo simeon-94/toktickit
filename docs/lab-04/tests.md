@@ -37,10 +37,10 @@ then re-run on `main` before the final report.
 | API-11 | API | AC-13 | Requester dashboard scoped to caller; zero state | Only own counts; zeros for empty user | server/tests/lab-04/requester-dashboard.api.test.ts | Planned |
 | API-12 | API | AC-13 | Role restriction on requester dashboard | 403 for staff/admin, 401 anonymous | server/tests/lab-04/requester-dashboard.api.test.ts | Planned |
 | API-13 | API | AC-16 | Requester card counts equal drill-down totals | Equal | server/tests/lab-04/requester-dashboard.api.test.ts | Planned |
-| API-14 | API | AC-14 | Staff dashboard metrics vs direct Prisma/SQL counts | Equal for every metric | server/tests/lab-04/staff-dashboard.api.test.ts | Planned |
+| API-14 | API | AC-14 | Staff dashboard metrics vs direct SQL counts, incl. open Tickets with null itPriority counted by requestedPriority (CL-01) | Equal for every metric | server/tests/lab-04/staff-dashboard.api.test.ts | Planned |
 | API-15 | API | AC-14 | Staff dashboard zero state & recent window (7d) | Zeros / old tickets excluded | server/tests/lab-04/staff-dashboard.api.test.ts | Planned |
 | API-16 | API | AC-15 | Admin sees userCounts; staff does not; Requester 403 | As specified | server/tests/lab-04/staff-dashboard.api.test.ts | Planned |
-| API-17 | API | AC-16 | Staff card counts equal queue totals (ownerId=me, statusGroup=open, ...) | Equal | server/tests/lab-04/staff-dashboard.api.test.ts | Planned |
+| API-17 | API | AC-16 | Staff card counts equal drill-down totals: queue (ownerId=me, statusGroup=open, effectivePriority=P incl. null itPriority, status=X) and /api/staff/actions views (CL-01, CL-02) | Equal | server/tests/lab-04/staff-dashboard.api.test.ts | Planned |
 | MIG-01 | Migration | AC-20 | Lab 3 data preserved after migration; version = 1 | Row counts and sample rows unchanged | server/tests/lab-04/migration.test.ts | Pass |
 | MIG-02 | Migration | AC-20 | rollback.sql on scratch DB; seed run twice | Clean rollback; no duplicates | server/tests/lab-04/migration.test.ts | Pass |
 | REG-01 | Regression | AC-21 | Full Lab 1-3 server suite (with CHG edits only) | All pass | server/tests/lab-01..03 | Planned |

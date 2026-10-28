@@ -197,3 +197,5 @@ with "Reload" action. Full detail in ui-spec.md.
 - **CHG-04:** Lab 3 BR-16 reworded as above (documentation only).
 - **CHG-05:** Lab 2 `client/src/components/CreateTicket.test.tsx` reads the fetch mock through `vi.mocked(...)` so `npm run build` type-checks (type-only; no assertion or behaviour change).
 - Any further edit to an old test requires a new CHG-xx entry here before the PR is merged.
+- **CL-01 (clarification, #51):** `byItPriority.P` counts open-set Tickets by effective priority `COALESCE(itPriority, requestedPriority)`. Its drill-down uses a new additive queue filter `effectivePriority=P` so L4-BR-21 holds for Tickets without an IT priority. `urgentOpen` stays exact `itPriority = HIGH`; the Lab 3 `itPriority` filter is unchanged.
+- **CL-02 (clarification, #51):** the action-based cards (`openFollowUps`, `myPlannedActions`) drill down to `GET /api/staff/actions?view=openFollowUps|myPlanned`, which returns `{ items, total }` with the same filter, so L4-BR-21 holds for them too. The staff dashboard also returns a `followUps` list (max 5).
