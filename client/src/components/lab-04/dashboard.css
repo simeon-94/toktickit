@@ -81,17 +81,24 @@
 
 .l4-breakdown li {
   display: flex;
+  align-items: center;
   justify-content: space-between;
   gap: 0.5rem;
   padding: 0.35rem 0;
   border-bottom: 1px solid #e3e8e5;
 }
 
-.l4-breakdown a,
-.l4-list a {
+.l4-breakdown a {
   min-height: 40px;
+  min-width: 40px;
   display: inline-flex;
   align-items: center;
+  justify-content: flex-end;
+}
+
+/* Inline links inside wrapped text: vertical padding enlarges the tap area without breaking lines. */
+.l4-list a {
+  padding: 0.6rem 0;
 }
 
 .l4-list {
