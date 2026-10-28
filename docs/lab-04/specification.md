@@ -27,7 +27,7 @@ Requester-initiated cancel/reopen, a status-history table, deletion of Actions T
 
 ## 4. Functional Requirements
 - FR-01: IT Staff/Administrator can create an Action Taken on an accessible, non-terminal Ticket.
-- FR-02: The creator/assignee can edit an Action Taken while it is PLANNED.
+- FR-02: Any IT Staff/Administrator may edit, complete or cancel a PLANNED Action Taken.
 - FR-03: A PLANNED action can be completed (a Result is then mandatory).
 - FR-04: A PLANNED action can be cancelled.
 - FR-05: Ticket Detail lists Actions Taken in stable order; staff see create/edit controls,

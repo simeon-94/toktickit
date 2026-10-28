@@ -68,6 +68,7 @@ router.get("/tickets", async (req, res) => {
       currentStatus: t.currentStatus,
       requesterName: t.requester.name,
       ticketOwnerName: t.ticketOwner ? t.ticketOwner.name : null,
+      version: t.version,
     })),
     page,
     pageSize,

@@ -1,7 +1,6 @@
 # Lab 4 API Specification
 
-All endpoints require the session cookie (401 if missing/invalid) and `mustChangePassword=false`
-(Lab 3 behaviour). Base path `/api`. JSON in/out. Timestamps are ISO-8601 UTC.
+All endpoints require the session cookie (401 if missing/invalid). Base path `/api`. JSON in/out. Timestamps are ISO-8601 UTC.
 
 ## Conventions
 - Error body: `{ "error": "<safe message>", "code": "<MACHINE_CODE>", "fields"?: { "<field>": "<message>" } }`
@@ -41,9 +40,12 @@ All endpoints require the session cookie (401 if missing/invalid) and `mustChang
 Body: `{ description, actionAt?, assigneeId?, followUpRequired?, followUpNote?, attachmentNotes?, clientRequestId? }`
 - `performedBy` always = authenticated user; `assigneeId` default = authenticated user; status starts PLANNED; `result` is not accepted at creation.
 - 201 Action. If `clientRequestId` already exists for this Ticket -> 200 with the existing Action.
+  `clientRequestId` is unique across all Tickets: reusing it on a different Ticket -> 400 `VALIDATION`
+  with `fields.clientRequestId`.
 - 400 `VALIDATION` (fields: description, actionAt, assigneeId, followUpNote, attachmentNotes);
   400 for inactive/non-staff assignee (`fields.assigneeId`).
-- 404 Ticket missing; 422 `TICKET_TERMINAL` if Ticket is CLOSED or CANCELLED.
+- 404 Ticket missing; 422 `TICKET_TERMINAL` if Ticket is CLOSED or CANCELLED. `TICKET_TERMINAL` blocks
+  create only; edit/complete/cancel of an existing PLANNED action are not blocked by Ticket status.
 - Side effect: parent Ticket `updatedAt` touched.
 
 ## 3. Update Action Taken

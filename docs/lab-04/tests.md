@@ -6,7 +6,8 @@ written before or alongside each feature (Test DD / TDD): each Issue starts with
 then code, then green. Types: unit, API/integration, UI component, UI style, responsive,
 authorization, workflow, migration/regression, performance-smoke, E2E.
 Server tests run sequentially (`fileParallelism: false`) because they share one database.
-Final column is updated to Pass/Fail only from real runs on `main`.
+Final column is updated to Pass/Fail only from real runs: first on the Issue's feature branch,
+then re-run on `main` before the final report.
 
 ## 2. Planned Tests
 
@@ -14,17 +15,17 @@ Final column is updated to Pass/Fail only from real runs on `main`.
 | --- | --- | --- | --- | --- | --- | --- |
 | UNIT-01 | Unit | L4-BR-12 | Transition matrix helper: every (from,to) pair | Only the 20 allowed pairs return true (all other of the 64 pairs return false) | server/src/utils/ticketWorkflow.test.ts | Planned |
 | UNIT-02 | Unit | L4-BR-13 | Resolution gate helper reasons | Correct reasons array for each combination | server/src/utils/ticketWorkflow.test.ts | Planned |
-| UNIT-03 | Unit | L4-BR-05/06 | Action input validator | Field errors for short description, missing follow-up note, over-length | server/src/utils/actionValidation.test.ts | Planned |
-| API-01 | API | AC-01 | Staff creates valid action | 201, correct ticket, performer = caller, assignee default = caller | server/tests/lab-04/actions-taken.api.test.ts | Planned |
-| API-02 | API | AC-03 | Invalid create payloads | 400 with field errors, nothing stored | server/tests/lab-04/actions-taken.api.test.ts | Planned |
-| API-03 | API | AC-04 | Inactive / Requester-role assignee | 400 on assigneeId | server/tests/lab-04/actions-taken.api.test.ts | Planned |
-| API-04 | API | AC-05 | Edit PLANNED vs COMPLETED/CANCELLED | 200 / 422 ACTION_LOCKED | server/tests/lab-04/actions-taken.api.test.ts | Planned |
-| API-05 | API | AC-06 | Complete requires result; cancel; no DELETE | 400 w/o result; statuses set; DELETE not routed | server/tests/lab-04/actions-taken.api.test.ts | Planned |
-| API-06 | API | AC-07 | Different staff act on a Ticket owned by another; several actions | 201; list shows both, stable order | server/tests/lab-04/actions-taken.api.test.ts | Planned |
-| API-07 | API | AC-08 | Stale action update | 409 STALE_UPDATE, data unchanged | server/tests/lab-04/actions-taken.api.test.ts | Planned |
-| API-08 | API | AC-09 | Duplicate clientRequestId | One action, second call 200 same id | server/tests/lab-04/actions-taken.api.test.ts | Planned |
-| API-09 | API | AC-02 | Requester create/edit/complete/cancel forbidden; own list readable; other's ticket 404 | 403 / 200 / 404 | server/tests/lab-04/actions-taken.api.test.ts | Planned |
-| API-10 | API | L4-BR-11 | Create on CLOSED / CANCELLED Ticket | 422 TICKET_TERMINAL | server/tests/lab-04/actions-taken.api.test.ts | Planned |
+| UNIT-03 | Unit | L4-BR-05/06 | Action input validator | Field errors for short description, missing follow-up note, over-length | server/src/utils/actionValidation.test.ts | Pass |
+| API-01 | API | AC-01 | Staff creates valid action | 201, correct ticket, performer = caller, assignee default = caller | server/tests/lab-04/actions-taken.api.test.ts | Pass |
+| API-02 | API | AC-03 | Invalid create payloads | 400 with field errors, nothing stored | server/tests/lab-04/actions-taken.api.test.ts | Pass |
+| API-03 | API | AC-04 | Inactive / Requester-role assignee | 400 on assigneeId | server/tests/lab-04/actions-taken.api.test.ts | Pass |
+| API-04 | API | AC-05 | Edit PLANNED vs COMPLETED/CANCELLED | 200 / 422 ACTION_LOCKED | server/tests/lab-04/actions-taken.api.test.ts | Pass |
+| API-05 | API | AC-06 | Complete requires result; cancel; no DELETE | 400 w/o result; statuses set; DELETE not routed | server/tests/lab-04/actions-taken.api.test.ts | Pass |
+| API-06 | API | AC-07 | Different staff act on a Ticket owned by another; several actions | 201; list shows both, stable order | server/tests/lab-04/actions-taken.api.test.ts | Pass |
+| API-07 | API | AC-08 | Stale action update | 409 STALE_UPDATE, data unchanged | server/tests/lab-04/actions-taken.api.test.ts | Pass |
+| API-08 | API | AC-09 | Duplicate clientRequestId | One action, second call 200 same id | server/tests/lab-04/actions-taken.api.test.ts | Pass |
+| API-09 | API | AC-02 | Requester create/edit/complete/cancel forbidden; own list readable; other's ticket 404 | 403 / 200 / 404 | server/tests/lab-04/actions-taken.api.test.ts | Pass |
+| API-10 | API | L4-BR-11 | Create on CLOSED / CANCELLED Ticket | 422 TICKET_TERMINAL | server/tests/lab-04/actions-taken.api.test.ts | Pass |
 | WF-01 | Workflow | AC-10 | Every allowed transition succeeds for staff | 200, version +1 | server/tests/lab-04/ticket-workflow.api.test.ts | Planned |
 | WF-02 | Workflow | AC-10 | Disallowed, same-status and from-CANCELLED transitions | 422 INVALID_TRANSITION with allowed list | server/tests/lab-04/ticket-workflow.api.test.ts | Planned |
 | WF-03 | Workflow | AC-10 | Requester changes status | 403 | server/tests/lab-04/ticket-workflow.api.test.ts | Planned |
@@ -40,8 +41,8 @@ Final column is updated to Pass/Fail only from real runs on `main`.
 | API-15 | API | AC-14 | Staff dashboard zero state & recent window (7d) | Zeros / old tickets excluded | server/tests/lab-04/staff-dashboard.api.test.ts | Planned |
 | API-16 | API | AC-15 | Admin sees userCounts; staff does not; Requester 403 | As specified | server/tests/lab-04/staff-dashboard.api.test.ts | Planned |
 | API-17 | API | AC-16 | Staff card counts equal queue totals (ownerId=me, statusGroup=open, ...) | Equal | server/tests/lab-04/staff-dashboard.api.test.ts | Planned |
-| MIG-01 | Migration | AC-20 | Lab 3 data preserved after migration; version = 1 | Row counts and sample rows unchanged | server/tests/lab-04/migration.test.ts | Planned |
-| MIG-02 | Migration | AC-20 | rollback.sql on scratch DB; seed run twice | Clean rollback; no duplicates | server/tests/lab-04/migration.test.ts | Planned |
+| MIG-01 | Migration | AC-20 | Lab 3 data preserved after migration; version = 1 | Row counts and sample rows unchanged | server/tests/lab-04/migration.test.ts | Pass |
+| MIG-02 | Migration | AC-20 | rollback.sql on scratch DB; seed run twice | Clean rollback; no duplicates | server/tests/lab-04/migration.test.ts | Pass |
 | REG-01 | Regression | AC-21 | Full Lab 1-3 server suite (with CHG edits only) | All pass | server/tests/lab-01..03 | Planned |
 | REG-02 | Regression | AC-21 | Full Lab 1-3 client suite | All pass | client/src/components/*.test.tsx | Planned |
 | REG-03 | Regression | AC-21 | Lab 2/3 E2E suites | All pass | e2e/lab-02, e2e/lab-03 | Planned |
