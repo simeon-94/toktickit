@@ -23,6 +23,16 @@ before each screenshot (RESP-01).
 | logs/issue-52-server-build.log | `npm run build` (server) | #52 |
 | logs/issue-52-client-build.log | `npm run build` (client) | #52 |
 | logs/issue-52-e2e-actions-screens.log | `npx playwright test lab-04/actions-taken-flow.spec.ts` (screenshots) | #52 |
+| logs/batch-a-staging-migrate-deploy.log | `npx prisma migrate deploy` on lab4-staging after Batch A (#60, #61, #62) merged | Batch A |
+| logs/batch-a-staging-server-tests.log | `npx vitest run` (server) on lab4-staging after Batch A | Batch A |
+| logs/batch-a-staging-client-tests.log | `npx vitest run` (client) on lab4-staging after Batch A | Batch A |
+| logs/batch-a-staging-server-build.log | `npm run build` (server) on lab4-staging after Batch A | Batch A |
+| logs/batch-a-staging-client-build.log | `npm run build` (client) on lab4-staging after Batch A | Batch A |
+| logs/issue-53-server-tests.log | `npx vitest run` (server, all labs) | #53 |
+| logs/issue-53-client-tests.log | `npx vitest run` (client) | #53 |
+| logs/issue-53-server-build.log | `npm run build` (server) | #53 |
+| logs/issue-53-client-build.log | `npm run build` (client) | #53 |
+| logs/issue-53-e2e-workflow-screens.log | `npx playwright test lab-04/ticket-resolution.spec.ts` (screenshots) | #53 |
 
 ## Screenshots (`screenshots/`)
 | File | Screen / state | Width | Issue |
@@ -54,3 +64,21 @@ before each screenshot (RESP-01).
 | screenshots/actions-requester-readonly-1280.png | Requester Ticket Detail - read-only Actions Taken (no buttons) | 1280 | #52 |
 | screenshots/actions-requester-readonly-768.png | Requester Ticket Detail - read-only Actions Taken (no buttons) | 768 | #52 |
 | screenshots/actions-requester-readonly-320.png | Requester Ticket Detail - read-only Actions Taken (no buttons) | 320 | #52 |
+| screenshots/workflow-staff-control-1280.png | Staff Ticket Detail - status control offering only permitted transitions (submit disabled until a change) | 1280 | #53 |
+| screenshots/workflow-staff-control-768.png | Staff Ticket Detail - status control offering only permitted transitions (submit disabled until a change) | 768 | #53 |
+| screenshots/workflow-staff-control-320.png | Staff Ticket Detail - status control offering only permitted transitions (submit disabled until a change) | 320 | #53 |
+| screenshots/workflow-staff-success-1280.png | Staff - status changed: badge refreshed, success message | 1280 | #53 |
+| screenshots/workflow-staff-success-768.png | Staff - status changed: badge refreshed, success message | 768 | #53 |
+| screenshots/workflow-staff-success-320.png | Staff - status changed: badge refreshed, success message | 320 | #53 |
+| screenshots/workflow-staff-final-1280.png | Staff - CANCELLED Ticket: "No further changes" instead of a select | 1280 | #53 |
+| screenshots/workflow-staff-final-768.png | Staff - CANCELLED Ticket: "No further changes" instead of a select | 768 | #53 |
+| screenshots/workflow-staff-final-320.png | Staff - CANCELLED Ticket: "No further changes" instead of a select | 320 | #53 |
+| screenshots/workflow-staff-gate-1280.png | Staff - RESOLUTION_GATE 422: reasons in plain words, status unchanged | 1280 | #53 |
+| screenshots/workflow-staff-gate-768.png | Staff - RESOLUTION_GATE 422: reasons in plain words, status unchanged | 768 | #53 |
+| screenshots/workflow-staff-gate-320.png | Staff - RESOLUTION_GATE 422: reasons in plain words, status unchanged | 320 | #53 |
+| screenshots/workflow-staff-conflict-1280.png | Staff - 409 conflict banner with Reload after a colleague's change | 1280 | #53 |
+| screenshots/workflow-staff-conflict-768.png | Staff - 409 conflict banner with Reload after a colleague's change | 768 | #53 |
+| screenshots/workflow-staff-conflict-320.png | Staff - 409 conflict banner with Reload after a colleague's change | 320 | #53 |
+| screenshots/workflow-requester-status-1280.png | Requester Ticket Detail - read-only status badge and resolved-signal note | 1280 | #53 |
+| screenshots/workflow-requester-status-768.png | Requester Ticket Detail - read-only status badge and resolved-signal note | 768 | #53 |
+| screenshots/workflow-requester-status-320.png | Requester Ticket Detail - read-only status badge and resolved-signal note | 320 | #53 |

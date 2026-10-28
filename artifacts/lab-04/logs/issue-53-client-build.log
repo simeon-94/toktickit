@@ -1,0 +1,16 @@
+# command : (cd client && npm run build)
+# commit  : a453d6027729e111cf7a1ed19f52eb12081cbfa5 (feature/53-ticket-workflow-ui)
+# date    : 2026-10-28T15:23:34Z (UTC)
+# host    : MINGW64_NT-10.0-26200 node v24.19.0
+
+vite v5.4.21 building for production...
+transforming...
+✓ 44 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                   0.41 kB │ gzip:  0.28 kB
+dist/assets/index-NH10j1CL.css  232.71 kB │ gzip: 31.26 kB
+dist/assets/index-BPojWzAD.js   211.40 kB │ gzip: 59.95 kB
+✓ built in 3.54s
+
+# exit code: 0

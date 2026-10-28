@@ -1,0 +1,21 @@
+# command : (cd e2e && npx playwright test lab-04/ticket-resolution.spec.ts --reporter=list)
+# commit  : a453d6027729e111cf7a1ed19f52eb12081cbfa5 (feature/53-ticket-workflow-ui)
+# date    : 2026-10-28T15:23:53Z (UTC)
+# host    : MINGW64_NT-10.0-26200 node v24.19.0
+
+
+Running 9 tests using 1 worker
+
+  ok 1 lab-04\ticket-resolution.spec.ts:13:9 › Ticket workflow screens at 1280px › permitted options, success and final status (1280) (12.0s)
+  ok 2 lab-04\ticket-resolution.spec.ts:45:9 › Ticket workflow screens at 1280px › resolution gate and stale-update conflict (1280) (11.4s)
+  ok 3 lab-04\ticket-resolution.spec.ts:75:9 › Ticket workflow screens at 1280px › requester read-only status and resolved signal (1280) (9.8s)
+  ok 4 lab-04\ticket-resolution.spec.ts:13:9 › Ticket workflow screens at 768px › permitted options, success and final status (768) (11.4s)
+  ok 5 lab-04\ticket-resolution.spec.ts:45:9 › Ticket workflow screens at 768px › resolution gate and stale-update conflict (768) (10.6s)
+  ok 6 lab-04\ticket-resolution.spec.ts:75:9 › Ticket workflow screens at 768px › requester read-only status and resolved signal (768) (8.6s)
+  ok 7 lab-04\ticket-resolution.spec.ts:13:9 › Ticket workflow screens at 320px › permitted options, success and final status (320) (11.1s)
+  ok 8 lab-04\ticket-resolution.spec.ts:45:9 › Ticket workflow screens at 320px › resolution gate and stale-update conflict (320) (10.9s)
+  ok 9 lab-04\ticket-resolution.spec.ts:75:9 › Ticket workflow screens at 320px › requester read-only status and resolved signal (320) (8.7s)
+
+  9 passed (1.6m)
+
+# exit code: 0
