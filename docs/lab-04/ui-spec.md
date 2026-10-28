@@ -38,7 +38,7 @@ Layout: heading "Dashboard"; a responsive grid of metric cards, then three lists
 ## 4. Actions Taken on Staff Ticket Detail
 New card "Actions Taken" placed between Ticket summary/controls and Comments/Notes, visually distinct from
 private Internal Notes (neutral border + "Visible to Requester" label; Internal Notes keep their "Private" label).
-- **List mode** (default): table at >=768px, stacked cards at <768px. Columns: Action date/time (Asia/Bangkok), Description, Result, Performed by, Assignee, Status badge (text + colour), Follow-up (Yes/No + note), Attachment notes. Order = actionAt desc, id desc.
+- **List mode** (default): table at >=992px, stacked cards at <992px (CL-03). Columns: Action date/time (Asia/Bangkok), Description, Result, Performed by, Assignee, Status badge (text + colour), Follow-up (Yes/No + note), Attachment notes. Order = actionAt desc, id desc.
 - Row actions (staff only, PLANNED rows): Edit, Complete, Cancel. COMPLETED/CANCELLED rows are read-only (no buttons, a "Locked" text cue).
 - **Create mode**: "Add action" opens an inline form (not a modal) with: Action date/time (default now), Description*, Assignee (select of active staff, default me), Follow-up required? (checkbox), Follow-up note (shown/required only when checked), Attachment notes. Performed by is shown read-only ("Performed by: <me>"). Submit disables while pending (prevents double click); `clientRequestId` generated per form open.
 - **Edit mode**: same form pre-filled for a PLANNED action; sends `expectedVersion`.

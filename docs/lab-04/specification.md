@@ -197,3 +197,4 @@ with "Reload" action. Full detail in ui-spec.md.
 - **CHG-04:** Lab 3 BR-16 reworded as above (documentation only).
 - **CHG-05:** Lab 2 `client/src/components/CreateTicket.test.tsx` reads the fetch mock through `vi.mocked(...)` so `npm run build` type-checks (type-only; no assertion or behaviour change).
 - Any further edit to an old test requires a new CHG-xx entry here before the PR is merged.
+- **CL-03 (clarification, #52):** the Actions Taken list switches from table to stacked cards below 992px instead of 768px: at 768px its 9 columns plus row buttons clip (seen in the RESP-01 screenshots), so 768px shows the stacked layout.
