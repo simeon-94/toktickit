@@ -34,19 +34,19 @@ then re-run on `main` before the final report.
 | WF-06 | Workflow | AC-12 | Reopen resets requesterIndicatedResolved | false after REOPENED | server/tests/lab-04/ticket-workflow.api.test.ts | Planned |
 | WF-07 | Workflow | AC-08 | Stale ticket status update (two users) | 409, second write rejected | server/tests/lab-04/ticket-workflow.api.test.ts | Planned |
 | WF-08 | Workflow | AC-08 | Missing expectedVersion on status | 400 | server/tests/lab-04/ticket-workflow.api.test.ts | Planned |
-| API-11 | API | AC-13 | Requester dashboard scoped to caller; zero state | Only own counts; zeros for empty user | server/tests/lab-04/requester-dashboard.api.test.ts | Planned |
-| API-12 | API | AC-13 | Role restriction on requester dashboard | 403 for staff/admin, 401 anonymous | server/tests/lab-04/requester-dashboard.api.test.ts | Planned |
-| API-13 | API | AC-16 | Requester card counts equal drill-down totals | Equal | server/tests/lab-04/requester-dashboard.api.test.ts | Planned |
-| API-14 | API | AC-14 | Staff dashboard metrics vs direct SQL counts, incl. open Tickets with null itPriority counted by requestedPriority (CL-01) | Equal for every metric | server/tests/lab-04/staff-dashboard.api.test.ts | Planned |
-| API-15 | API | AC-14 | Staff dashboard zero state & recent window (7d) | Zeros / old tickets excluded | server/tests/lab-04/staff-dashboard.api.test.ts | Planned |
-| API-16 | API | AC-15 | Admin sees userCounts; staff does not; Requester 403 | As specified | server/tests/lab-04/staff-dashboard.api.test.ts | Planned |
-| API-17 | API | AC-16 | Staff card counts equal drill-down totals: queue (ownerId=me, statusGroup=open, effectivePriority=P incl. null itPriority, status=X) and /api/staff/actions views (CL-01, CL-02) | Equal | server/tests/lab-04/staff-dashboard.api.test.ts | Planned |
+| API-11 | API | AC-13 | Requester dashboard scoped to caller; zero state | Only own counts; zeros for empty user | server/tests/lab-04/requester-dashboard.api.test.ts | Pass |
+| API-12 | API | AC-13 | Role restriction on requester dashboard | 403 for staff/admin, 401 anonymous | server/tests/lab-04/requester-dashboard.api.test.ts | Pass |
+| API-13 | API | AC-16 | Requester card counts equal drill-down totals | Equal | server/tests/lab-04/requester-dashboard.api.test.ts | Pass |
+| API-14 | API | AC-14 | Staff dashboard metrics vs direct SQL counts, incl. open Tickets with null itPriority counted by requestedPriority (CL-01) | Equal for every metric | server/tests/lab-04/staff-dashboard.api.test.ts | Pass |
+| API-15 | API | AC-14 | Staff dashboard zero state & recent window (7d) | Zeros / old tickets excluded | server/tests/lab-04/staff-dashboard.api.test.ts | Pass |
+| API-16 | API | AC-15 | Admin sees userCounts; staff does not; Requester 403 | As specified | server/tests/lab-04/staff-dashboard.api.test.ts | Pass |
+| API-17 | API | AC-16 | Staff card counts equal drill-down totals: queue (ownerId=me, statusGroup=open, effectivePriority=P incl. null itPriority, status=X) and /api/staff/actions views (CL-01, CL-02) | Equal | server/tests/lab-04/staff-dashboard.api.test.ts | Pass |
 | MIG-01 | Migration | AC-20 | Lab 3 data preserved after migration; version = 1 | Row counts and sample rows unchanged | server/tests/lab-04/migration.test.ts | Pass |
 | MIG-02 | Migration | AC-20 | rollback.sql on scratch DB; seed run twice | Clean rollback; no duplicates | server/tests/lab-04/migration.test.ts | Pass |
 | REG-01 | Regression | AC-21 | Full Lab 1-3 server suite (with CHG edits only) | All pass | server/tests/lab-01..03 | Planned |
 | REG-02 | Regression | AC-21 | Full Lab 1-3 client suite | All pass | client/src/components/*.test.tsx | Planned |
 | REG-03 | Regression | AC-21 | Lab 2/3 E2E suites | All pass | e2e/lab-02, e2e/lab-03 | Planned |
-| PERF-01 | Performance smoke | AC-14 | Both dashboards respond < 500 ms on seeded data | Under threshold | server/tests/lab-04/staff-dashboard.api.test.ts | Planned |
+| PERF-01 | Performance smoke | AC-14 | Both dashboards respond < 500 ms on seeded data | Under threshold | server/tests/lab-04/staff-dashboard.api.test.ts | Pass |
 | UI-01 | UI component | AC-17 | Actions panel: loading, empty, list, error+retry | States render | client/src/components/lab-04/ActionsTaken.test.tsx | Planned |
 | UI-02 | UI component | AC-17 | Create form validation, follow-up note toggling, submit disabled while pending, data kept after failure | As specified | client/src/components/lab-04/ActionsTaken.test.tsx | Planned |
 | UI-03 | UI component | AC-17 | Edit / complete (result required) / cancel actions; locked rows have no buttons | As specified | client/src/components/lab-04/ActionsTaken.test.tsx | Planned |
