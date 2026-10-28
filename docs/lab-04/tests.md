@@ -53,8 +53,8 @@ then re-run on `main` before the final report.
 | UI-04 | UI component | AC-17, AC-02 | Requester view is read-only | No buttons/forms | client/src/components/lab-04/ActionsTaken.test.tsx | Pass |
 | UI-05 | UI component | AC-18 | Only permitted transitions offered; success refreshes badge | As specified | client/src/components/lab-04/TicketWorkflow.test.tsx | Planned |
 | UI-06 | UI component | AC-18 | Gate / invalid-transition / 409 messages displayed | Messages and banner shown | client/src/components/lab-04/TicketWorkflow.test.tsx | Planned |
-| UI-07 | UI component | AC-19 | Staff dashboard: cards, links, lists, loading, empty, forbidden, failure+retry, admin users card | As specified | client/src/components/lab-04/StaffDashboard.test.tsx | Planned |
-| UI-08 | UI component | AC-19 | Requester dashboard: cards, links, lists, empty, forbidden, failure | As specified | client/src/components/lab-04/RequesterDashboard.test.tsx | Planned |
+| UI-07 | UI component | AC-19 | Staff dashboard: cards, links, lists, loading, empty, forbidden, failure+retry, admin users card | As specified | client/src/components/lab-04/StaffDashboard.test.tsx | Pass |
+| UI-08 | UI component | AC-19 | Requester dashboard: cards, links, lists, empty, forbidden, failure | As specified | client/src/components/lab-04/RequesterDashboard.test.tsx | Pass |
 | STYLE-01 | UI style | AC-22 | Status/priority badges include text; focus-visible styles present; aria attributes on errors | Assertions pass | client/src/components/lab-04/ActionsTaken.test.tsx | Pass |
 | E2E-01 | E2E | AC-01, AC-07, AC-17 | Staff A and B add different actions on one Ticket; Requester sees them read-only | Pass | e2e/lab-04/actions-taken-flow.spec.ts | Planned |
 | E2E-02 | E2E | AC-11, AC-18 | Gate blocks RESOLVED; complete action; resolve; close; reopen | Pass | e2e/lab-04/ticket-resolution.spec.ts | Planned |
