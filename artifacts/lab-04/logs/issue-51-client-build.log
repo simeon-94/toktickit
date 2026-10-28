@@ -1,0 +1,16 @@
+# command : (cd client && npm run build)
+# commit  : 87c43346a23329cded573230c94940cbc48573a3 (feature/51-dashboards-backend)
+# date    : 2026-10-28T13:00:09Z (UTC)
+# host    : MINGW64_NT-10.0-26200 node v24.19.0
+
+vite v5.4.21 building for production...
+transforming...
+✓ 40 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                   0.41 kB │ gzip:  0.27 kB
+dist/assets/index-CfkJyshZ.css  231.25 kB │ gzip: 30.69 kB
+dist/assets/index-BYxBI6kT.js   194.42 kB │ gzip: 55.67 kB
+✓ built in 1.06s
+
+# exit code: 0
