@@ -1,0 +1,15 @@
+# command : (cd server && npx prisma migrate deploy)
+# commit  : 8f869d0f6cac20de51a66621f28f98666d3bc090 (lab4-staging)
+# date    : 2026-10-28T15:04:52Z (UTC)
+# host    : MINGW64_NT-10.0-26200 node v24.19.0
+
+Environment variables loaded from .env
+Prisma schema loaded from prisma\schema.prisma
+Datasource "db": PostgreSQL database "toktickit", schema "public" at "localhost:5432"
+
+5 migrations found in prisma/migrations
+
+
+No pending migrations to apply.
+
+# exit code: 0

@@ -38,6 +38,9 @@ async function main() {
   const tickets = [
     { ticketNumber: "E2E-L4-ACTIONS", summary: "VPN drops every hour (E2E)", currentStatus: TicketStatus.IN_PROGRESS, ticketOwnerId: staff, itPriority: Priority.HIGH },
     { ticketNumber: "E2E-L4-EMPTY", summary: "New printer request (E2E)", currentStatus: TicketStatus.NEW, ticketOwnerId: null, itPriority: null },
+    // Fails the resolution gate twice: no owner and no completed action.
+    { ticketNumber: "E2E-L4-GATE", summary: "Shared drive mapping lost (E2E)", currentStatus: TicketStatus.IN_PROGRESS, ticketOwnerId: null, itPriority: Priority.MEDIUM },
+    { ticketNumber: "E2E-L4-CANCELLED", summary: "Duplicate request (E2E)", currentStatus: TicketStatus.CANCELLED, ticketOwnerId: staff, itPriority: Priority.LOW },
   ];
   const ticketIds: Record<string, number> = {};
   for (const t of tickets) {

@@ -18,7 +18,9 @@
 
 .l4-panel button,
 .l4-panel .form-control,
-.l4-panel .form-select {
+.l4-panel .form-select,
+.l4-controls button,
+.l4-controls .form-select {
   min-height: 40px;
 }
 
@@ -31,7 +33,9 @@
 .l4-panel button:focus-visible,
 .l4-panel input:focus-visible,
 .l4-panel select:focus-visible,
-.l4-panel textarea:focus-visible {
+.l4-panel textarea:focus-visible,
+.l4-controls button:focus-visible,
+.l4-controls select:focus-visible {
   outline: 3px solid #1e7a46;
   outline-offset: 2px;
   box-shadow: none;
