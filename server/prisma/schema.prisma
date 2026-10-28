@@ -30,10 +30,12 @@ model User {
   mustChangePassword Boolean  @default(false)
   createdAt          DateTime @default(now())
 
-  ticketsCreated Ticket[]        @relation("RequesterTickets")
-  ticketsOwned   Ticket[]        @relation("OwnerTickets")
-  comments       PublicComment[]
-  notes          InternalNote[]
+  ticketsCreated   Ticket[]        @relation("RequesterTickets")
+  ticketsOwned     Ticket[]        @relation("OwnerTickets")
+  comments         PublicComment[]
+  notes            InternalNote[]
+  actionsPerformed ActionTaken[]   @relation("ActionPerformer")
+  actionsAssigned  ActionTaken[]   @relation("ActionAssignee")
 }
 
 model RelatedSystem {
@@ -62,32 +64,35 @@ enum TicketStatus {
 }
 
 model Ticket {
-  id                         Int          @id @default(autoincrement())
-  ticketNumber                String       @unique
-  requesterId                 Int
-  requester                   User         @relation("RequesterTickets", fields: [requesterId], references: [id])
-  ticketOwnerId                Int?
-  ticketOwner                  User?        @relation("OwnerTickets", fields: [ticketOwnerId], references: [id])
-  categoryId                  Int
-  category                    Category     @relation(fields: [categoryId], references: [id])
-  relatedSystemId              Int
-  relatedSystem                RelatedSystem @relation(fields: [relatedSystemId], references: [id])
-  summary                      String
-  description                  String
-  requestedPriority            Priority
-  itPriority                   Priority?
-  currentStatus                 TicketStatus @default(NEW)
-  requesterIndicatedResolved   Boolean      @default(false)
-  createdAt                    DateTime     @default(now())
-  updatedAt                    DateTime     @updatedAt
-  attachments                  Attachment[]
-  publicComments                PublicComment[]
-  internalNotes                  InternalNote[]
+  id                         Int             @id @default(autoincrement())
+  ticketNumber               String          @unique
+  requesterId                Int
+  requester                  User            @relation("RequesterTickets", fields: [requesterId], references: [id])
+  ticketOwnerId              Int?
+  ticketOwner                User?           @relation("OwnerTickets", fields: [ticketOwnerId], references: [id])
+  categoryId                 Int
+  category                   Category        @relation(fields: [categoryId], references: [id])
+  relatedSystemId            Int
+  relatedSystem              RelatedSystem   @relation(fields: [relatedSystemId], references: [id])
+  summary                    String
+  description                String
+  requestedPriority          Priority
+  itPriority                 Priority?
+  currentStatus              TicketStatus    @default(NEW)
+  requesterIndicatedResolved Boolean         @default(false)
+  version                    Int             @default(1)
+  createdAt                  DateTime        @default(now())
+  updatedAt                  DateTime        @updatedAt
+  attachments                Attachment[]
+  publicComments             PublicComment[]
+  internalNotes              InternalNote[]
+  actionsTaken               ActionTaken[]
 
   @@index([requesterId])
   @@index([ticketOwnerId])
   @@index([currentStatus])
   @@index([categoryId])
+  @@index([currentStatus, updatedAt])
 }
 
 model PublicComment {
@@ -127,4 +132,35 @@ model Attachment {
   uploadedAt     DateTime  @default(now())
 
   @@index([ticketId])
+}
+
+enum ActionStatus {
+  PLANNED
+  COMPLETED
+  CANCELLED
+}
+
+model ActionTaken {
+  id               Int          @id @default(autoincrement())
+  ticketId         Int
+  ticket           Ticket       @relation(fields: [ticketId], references: [id])
+  actionAt         DateTime
+  description      String
+  result           String?
+  status           ActionStatus @default(PLANNED)
+  performedById    Int
+  performedBy      User         @relation("ActionPerformer", fields: [performedById], references: [id])
+  assigneeId       Int
+  assignee         User         @relation("ActionAssignee", fields: [assigneeId], references: [id])
+  followUpRequired Boolean      @default(false)
+  followUpNote     String?
+  attachmentNotes  String?
+  clientRequestId  String?      @unique
+  version          Int          @default(1)
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+
+  @@index([ticketId, actionAt])
+  @@index([assigneeId, status])
+  @@index([status])
 }
