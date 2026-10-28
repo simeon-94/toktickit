@@ -6,3 +6,6 @@ build/
 *.log
 coverage/
 .vite/
+
+# Local curl cookie jars
+*cookies.txt
