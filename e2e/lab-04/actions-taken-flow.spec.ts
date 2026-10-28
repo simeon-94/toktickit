@@ -170,10 +170,13 @@ test.describe("Actions Taken flows (#55)", () => {
 
     await page.getByTestId("action-add-btn").focus();
     await page.keyboard.press("Enter");
+    // Chromium gives each segment of a datetime-local input its own Tab stop, so record the
+    // sequence of distinct focused elements rather than one entry per key press.
     const focusOrder: string[] = [];
     await page.getByTestId("action-at").focus();
-    for (let i = 0; i < 6; i++) {
-      focusOrder.push((await page.evaluate(() => document.activeElement?.getAttribute("data-testid"))) ?? "");
+    for (let i = 0; i < 20 && focusOrder.length < 6; i++) {
+      const current = (await page.evaluate(() => document.activeElement?.getAttribute("data-testid"))) ?? "";
+      if (focusOrder[focusOrder.length - 1] !== current) focusOrder.push(current);
       await page.keyboard.press("Tab");
     }
     expect(focusOrder).toEqual(["action-at", "action-assignee", "action-description", "action-followup-required", "action-attachment-notes", "action-submit"]);
