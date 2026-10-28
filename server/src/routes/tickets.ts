@@ -5,6 +5,7 @@ import path from "path";
 import crypto from "crypto";
 import { generateTicketNumber } from "../utils/ticketNumber";
 import { requireAuth, requireRole } from "../middleware/auth";
+import { isStatusGroup, statusGroupWhere } from "../utils/statusGroups";
 
 const router = Router();
 const prisma = new PrismaClient();
@@ -106,6 +107,19 @@ router.get("/", async (req, res) => {
   if (categoryId) where.categoryId = categoryId;
   if (priority) where.requestedPriority = priority;
   if (status) where.currentStatus = status;
+
+  // Lab 4 drill-down filter from the Requester dashboard (api-spec.md section 10).
+  const statusGroup = req.query.statusGroup;
+  if (statusGroup !== undefined) {
+    if (!isStatusGroup(statusGroup)) {
+      return res.status(400).json({
+        error: "statusGroup must be open or resolvedRecent.",
+        code: "VALIDATION",
+        fields: { statusGroup: "invalid" },
+      });
+    }
+    where.AND = [statusGroupWhere(statusGroup)];
+  }
 
   const orderBy = ORDER_BY_MAP[sort] || ORDER_BY_MAP.createdAt_desc;
 
