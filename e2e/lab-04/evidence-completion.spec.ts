@@ -212,8 +212,13 @@ for (const width of WIDTHS) {
       // Requester: My Tickets with a filter, then Create Ticket with an attachment.
       await login(page, "e2e.requester@example.com");
       await page.getByTestId("nav-my-tickets").click();
-      await page.getByTestId("my-tickets-filter-status").selectOption("New");
-      await expect(page.getByTestId("my-tickets-row").or(page.getByTestId("my-tickets-card")).filter({ visible: true }).first()).toContainText("New");
+      await page.getByTestId("my-tickets-filter-status").selectOption({ label: "New" });
+      // #69: the filter sends status=NEW. Combined with a search, only the NEW fixture Ticket is listed.
+      await page.getByTestId("my-tickets-search").fill("E2E-L4");
+      const listed = page.getByTestId("my-tickets-row").or(page.getByTestId("my-tickets-card")).filter({ visible: true });
+      await expect(listed.filter({ hasText: "E2E-L4-EMPTY" })).toHaveCount(1);
+      for (const text of await listed.allTextContents()) expect(text).toMatch(/NEW/);
+      await expect(listed.filter({ hasText: "E2E-L4-ACTIONS" })).toHaveCount(0);
       await capture(page, errors, "regression-my-tickets", width);
 
       await page.getByTestId("nav-create-ticket").click();
