@@ -1,0 +1,25 @@
+# command : (cd server && npx prisma migrate deploy)
+# commit  : 7a0cb17bbe8c9d0d5ad2b1f171b3a7343e367bd8 (lab4-staging)
+# date    : 2026-10-29T02:32:56Z (UTC)
+# host    : MINGW64_NT-10.0-26200 node v24.19.0
+
+Environment variables loaded from .env
+Prisma schema loaded from prisma\schema.prisma
+Datasource "db": PostgreSQL database "toktickit", schema "public" at "localhost:5432"
+
+5 migrations found in prisma/migrations
+
+
+No pending migrations to apply.
+┌─────────────────────────────────────────────────────────┐
+│  Update available 5.22.0 -> 8.0.0-rc.28                 │
+│                                                         │
+│  This is a major update - please follow the guide at    │
+│  https://pris.ly/d/major-version-upgrade                │
+│                                                         │
+│  Run the following to update                            │
+│    npm i --save-dev prisma@latest                       │
+│    npm i @prisma/client@latest                          │
+└─────────────────────────────────────────────────────────┘
+
+# exit code: 0
