@@ -55,6 +55,21 @@ Git history of #52-#54 were taken on the shared dev database that also held auto
 | logs/issue-55-client-tests.log | `npx vitest run` (client) | #55 |
 | logs/issue-55-server-build.log | `npm run build` (server) | #55 |
 | logs/issue-55-client-build.log | `npm run build` (client) | #55 |
+| logs/release-staging-migrate-deploy.log | `npx prisma migrate deploy` on lab4-staging `7a0cb17` before the release PR | Release |
+| logs/release-staging-server-tests.log | `npx vitest run` (server) on lab4-staging `7a0cb17` before the release PR | Release |
+| logs/release-staging-client-tests.log | `npx vitest run` (client) on lab4-staging `7a0cb17` before the release PR | Release |
+| logs/release-staging-server-build.log | `npm run build` (server) on lab4-staging `7a0cb17` before the release PR | Release |
+| logs/release-staging-client-build.log | `npm run build` (client) on lab4-staging `7a0cb17` before the release PR | Release |
+| logs/release-staging-e2e-all.log | `npx playwright test` (Lab 2, 3, 4) on lab4-staging `7a0cb17` before the release PR | Release |
+| logs/final-main-migrate-deploy.log | `npx prisma migrate deploy` on main `b83e85b` after the release merge | Final |
+| logs/final-main-server-tests.log | `npx vitest run --reporter=verbose` (server, every test named) on main `b83e85b` after the release merge | Final |
+| logs/final-main-client-tests.log | `npx vitest run --reporter=verbose` (client, every test named) on main `b83e85b` after the release merge | Final |
+| logs/final-main-server-build.log | `npm run build` (server) on main `b83e85b` after the release merge | Final |
+| logs/final-main-client-build.log | `npm run build` (client) on main `b83e85b` after the release merge | Final |
+| logs/final-main-e2e-all.log | `npx playwright test` (Lab 2, 3, 4) on main `b83e85b` after the release merge | Final |
+
+## Repository history
+`git-graph.txt` - `git log --graph --oneline --decorate --all` after the release merge.
 
 ## Screenshots (`screenshots/`)
 | File | Screen / state | Width | Issue |

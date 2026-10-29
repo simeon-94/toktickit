@@ -109,4 +109,17 @@ Only edits listed as CHG-xx in specification.md section 11 (matrix-compliant sta
 | CHG-07 | e2e/lab-03/auth-role-flow.spec.ts | the 3 `login(...)` calls use `e2e.requester` / `e2e.staff` / `e2e.admin` with the fixture password; assertions unchanged |
 
 ## 5. Final Results
-Filled at the end from real runs on `main` (server, client, E2E output pasted in the report).
+Real runs on `main` at `b83e85b` (the merge commit of the release PR #66), 2026-10-29 (UTC). Logs:
+`artifacts/lab-04/logs/final-main-*.log`, each with command, commit, date and exit code.
+
+| Run | Result |
+| --- | --- |
+| `npx prisma migrate deploy` | No pending migrations (5 found), exit 0 |
+| Server `npx vitest run --reporter=verbose` (own `toktickit_test` database) | **109 / 109** passed, 22 files, exit 0 |
+| Client `npx vitest run --reporter=verbose` | **77 / 77** passed, 15 files, exit 0 |
+| Server `npm run build` / client `npm run build` | exit 0 / exit 0 |
+| `npx playwright test` (Lab 2 = 1, Lab 3 = 4, Lab 4 = 41) | **46 / 46** passed, exit 0 |
+
+All 54 test IDs in section 2 are Pass. 50 are named in the verbose test output of these logs; the four suite-level rows were
+checked by their suites: REG-01 = 46/46 Lab 1-3 server tests, REG-02 = 36/36 Lab 2/3 client component tests,
+REG-03 = 5/5 Lab 2/3 E2E tests, RESP-01 = 36/36 screenshot tests (12 per width, no horizontal scroll asserted).
