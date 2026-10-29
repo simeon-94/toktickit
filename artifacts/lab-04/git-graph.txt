@@ -1,0 +1,234 @@
+# command : git log --graph --oneline --decorate --all
+# commit  : b83e85b98334bde9a54492f570b3a5d327df03ef (docs/lab4-final-evidence, branched from main after the release merge)
+# date    : 2026-10-29T04:58:01Z (UTC)
+
+*   b83e85b (HEAD -> docs/lab4-final-evidence, origin/main, origin/HEAD, main) Merge pull request #66 from simeon-94/lab4-staging
+|\  
+| *   7a0cb17 (origin/lab4-staging, lab4-staging) Merge pull request #65 from simeon-94/feature/55-final-hardening
+| |\  
+| | * b837a1a (origin/feature/55-final-hardening, feature/55-final-hardening) docs: retake all 78 screenshots on a clean database; add #55, Batch B and verify-dashboard logs
+| | * 89a1c76 docs: complete ai-use.md rows (8) and add a reflection draft for the author to edit
+| | * 991afbb docs: record CHG-07 and CL-06, add HARD-02..05 and A11Y-02, fill the ui-spec checklist and Final results
+| | * 8435274 docs: rewrite README for Lab 4 (setup, demo accounts, test database, E2E, verification, rollback)
+| | * 2324e44 feat: role-aware verify:dashboard script and npm scripts for verification and E2E fixtures
+| | * 7577efa test: record distinct focused elements in A11Y-01 (datetime-local has per-segment tab stops)
+| | * 2279005 test: add E2E-01/02/03, A11Y-01 and HARD-01 flows; create fixtures before every E2E run
+| | * 943427a test: run Lab 2/3 E2E on the E2E fixture accounts instead of personal dev accounts (CHG-07)
+| | * a99cc0a test: type the fetch mock in the session check test so the client build passes
+| | * 8f314d0 fix: open Ticket Queue and My Tickets rows with Enter/Space (keyboard access)
+| | * 7737f18 test: add failing keyboard access test for queue and My Tickets rows (A11Y-02)
+| | * 3df937f fix: use the optional session check at start-up so logged-out pages log no 401
+| | * d77ea9d test: add failing client test for the optional session check (HARD-05)
+| | * 41e0c37 test: run the server suite on its own freshly migrated and seeded test database
+| | * 70ff67b feat: validate JWT_SECRET and JWT_EXPIRES_IN at startup
+| | * fc9f417 fix: answer a concurrent clientRequestId reuse across Tickets with 400 VALIDATION, not 500
+| | * 0ca208a feat: enforce pending password change and deactivation on every API request
+| | * 9273b42 test: add failing hardening tests (HARD-02..05)
+| |/  
+| *   71f004c Merge pull request #64 from simeon-94/feature/54-dashboards-ui
+| |\  
+| | *   04d6d9c (origin/feature/54-dashboards-ui, feature/54-dashboards-ui) Merge lab4-staging into feature/54-dashboards-ui
+| | |\  
+| | |/  
+| |/|   
+| * |   f648b0f Merge pull request #63 from simeon-94/feature/53-ticket-workflow-ui
+| |\ \  
+| | * | eda0744 (origin/feature/53-ticket-workflow-ui, feature/53-ticket-workflow-ui) docs: add #53 screenshots (18), evidence logs and INDEX rows; mark UI-05/06 as Pass
+| | * | a453d60 test: add workflow fixtures and responsive screenshot spec for the status control
+| | * | 65f6161 fix: keep the status select inside its column at 768px
+| | * | 6a23158 docs: record CL-04 status select test id on Staff Ticket Detail
+| | * | c784b1e feat: use the workflow control on Staff Ticket Detail and clarify the Requester resolved signal
+| | * | ea57b46 feat: add status control offering only permitted transitions with gate, 422 and 409 feedback
+| | * | 84cf127 test: add failing ticket workflow UI tests (UI-05, UI-06)
+| | * | 34d30c4 docs: add lab4-staging verification logs after Batch A merge
+| | * | 5b9dd9b docs: log Yanis's reviews of #56, #57, #59, #60, #61, #62 in reviewer.md
+| |/ /  
+| | * 751e97a docs: add #54 screenshots (33), evidence logs and INDEX rows; mark UI-07/08 as Pass
+| | * 90498bc test: add dashboard responsive screenshot spec with card = drill-down total checks
+| | * 57b602c fix: keep dashboard list links inline and centre breakdown counts
+| | * 9125661 docs: record CHG-06 (navigation step in Lab 1/3 tests) and CL-05 (Check System nav kept)
+| | * e42b77f test: add a navigation step to Lab 1/3 tests that assumed the old landing page (CHG-06)
+| | * eb44514 feat: land on the Dashboard and add role navigation with active-page cue and Change Password
+| | * 360f425 feat: open queue, My Tickets and actions list with the dashboard card's filter and total
+| | * f3754e9 feat: add IT Staff and Requester dashboards with accessible drill-down cards
+| | * 8384d29 test: add failing dashboard and navigation UI tests (UI-07, UI-08)
+| |/  
+| *   8f869d0 Merge pull request #62 from simeon-94/feature/52-actions-taken-ui
+| |\  
+| | *   5869a92 (origin/feature/52-actions-taken-ui, feature/52-actions-taken-ui) Merge lab4-staging into feature/52-actions-taken-ui
+| | |\  
+| | |/  
+| |/|   
+| * |   da92bdd Merge pull request #60 from simeon-94/feature/50-ticket-workflow
+| |\ \  
+| | * \   0fe21ea (origin/feature/50-ticket-workflow, feature/50-ticket-workflow) Merge lab4-staging into feature/50-ticket-workflow
+| | |\ \  
+| | |/ /  
+| |/| |   
+| * | |   4d3e571 Merge pull request #61 from simeon-94/feature/51-dashboards-backend
+| |\ \ \  
+| | * | | 1dc8596 (origin/feature/51-dashboards-backend, feature/51-dashboards-backend) docs: add #51 evidence logs and verify-dashboard output, mark API-11..17 and PERF-01 as Pass
+| | * | | f33d038 chore: allow committing evidence logs under artifacts/
+| | * | | 87c4334 docs: record CL-01 effectivePriority and CL-02 actions drill-down in the contract
+| | * | | b153612 feat: add dashboard raw-SQL verification script
+| | * | | 2406006 feat: add GET /api/staff/actions drill-down for action-based dashboard cards (CL-02)
+| | * | | f38020a feat: add requester and IT Staff dashboard APIs computed from the database
+| | * | | 0f319b1 feat: add statusGroup, ownerId=me and effectivePriority drill-down filters (CL-01)
+| | * | | 465a663 test: add failing Lab 4 dashboard tests (API-11..17, PERF-01)
+| |/ / /  
+| | * | 83f9235 docs: add #50 evidence logs, mark UNIT-01/02 and WF-01..08 as Pass, ai-use row
+| | * | d046747 chore: allow committing evidence logs under artifacts/
+| | * | 6734924 fix: send expectedVersion from Staff Ticket Detail status change (CHG-02)
+| | * | 3be083a test: send expectedVersion in Lab 3 status test (CHG-02)
+| | * | 09619af feat: enforce transition matrix, resolution gate and expectedVersion on ticket workflow
+| | * | 2879a09 feat: add ticket transition matrix and resolution gate helpers
+| | * | 0f17119 test: add failing Lab 4 ticket workflow tests (UNIT-01/02, WF-01..08)
+| |/ /  
+| | * fb7c2e6 docs: add #52 screenshots (27), evidence logs and INDEX; mark UI-01..04 and STYLE-01 as Pass
+| | * 0532462 chore: allow committing evidence logs under artifacts/
+| | * e47da3c test: add Lab 4 E2E fixtures and Actions Taken responsive screenshot spec
+| | * 5bdc8d4 docs: record CL-03 Actions Taken table breakpoint (992px)
+| | * 11de379 fix: stack Actions Taken below 992px, keep words intact and align the success alert
+| | * 0127cb2 feat: show Actions Taken on Staff (editable) and Requester (read-only) Ticket Detail
+| | * 2c13da9 feat: add Actions Taken panel with create, edit, complete, cancel and conflict handling
+| | * a647108 test: add failing Actions Taken UI tests (UI-01..04, STYLE-01)
+| |/  
+| *   d811c67 Merge pull request #57 from simeon-94/feature/49-actions-taken-foundation
+| |\  
+| | * 56b0182 (origin/feature/49-actions-taken-foundation, feature/49-actions-taken-foundation) docs: drop mustChangePassword requirement from api-spec conventions for now
+| | * b233d21 docs: Final results come from feature-branch runs, re-run on main before the report
+| | * 7e03f44 docs: clarify TICKET_TERMINAL blocks action create only
+| | * c5b607c docs: state clientRequestId is unique across all Tickets in api-spec section 2
+| | * b47a372 docs: reword FR-02 so any IT Staff/Administrator may change a PLANNED action
+| | * bdd18ce docs: mark UNIT-03, API-01..10, MIG-01/02 as Pass in tests.md
+| | * 50784fd test: match only DELETE FROM statements in additive-migration check
+| | * 84aba4a feat: seed Lab 4 Actions Taken idempotently
+| | * 8c570e8 feat: expose Ticket version on ticket detail and staff queue items
+| | * b8e3ff1 feat: add Actions Taken API with shared validation, idempotent create and version checks
+| | * bcd699e feat: add ActionTaken model, Ticket.version and lab4_actions_taken migration
+| | * 186cc67 test: add failing Lab 4 Actions Taken API, validation and migration tests
+| * |   5237770 Merge pull request #59 from simeon-94/feature/58-fix-build-errors
+| |\ \  
+| | |/  
+| |/|   
+| | * 932922e (origin/feature/58-fix-build-errors, feature/58-fix-build-errors) test: read CreateTicket fetch mock via vi.mocked so the client build passes (CHG-05)
+| | * 4c65d80 fix: type jsonwebtoken expiresIn option so the server build passes
+| |/  
+| * 482f4cf Merge pull request #56 from simeon-94/feature/48-lab4-specs
+|/| 
+| * 0fef1de (origin/feature/48-lab4-specs, feature/48-lab4-specs) docs: add Lab 4 engineering contract
+| * 51aeef5 chore: stop tracking local cookie files
+|/  
+*   8061474 Merge pull request #47 from simeon-94/fix/13-lab3-client-tests
+|\  
+| * fd32397 (origin/fix/13-lab3-client-tests, fix/13-lab3-client-tests) test: add Lab 3 client component tests for Login, ChangePassword, StaffQueue, StaffTicketDetail, AdminUsers
+|/  
+*   d1a8814 Merge pull request #46 from simeon-94/fix/12-lab3-staff-tests
+|\  
+| * e72d597 (origin/fix/12-lab3-staff-tests, fix/12-lab3-staff-tests) test: add Lab 3 staff-queue, staff-ticket-detail, and comments-notes API tests; disable file parallelism to prevent shared-DB race conditions
+|/  
+*   7b16852 Merge pull request #45 from simeon-94/fix/11-lab3-automated-tests
+|\  
+| * ca5054d (origin/fix/11-lab3-automated-tests, fix/11-lab3-automated-tests) test: add Lab 3 automated API tests for auth, authorization, and admin user rules
+|/  
+*   e94e605 Merge pull request #44 from simeon-94/fix/10-indicate-resolved
+|\  
+| * cc62c78 (origin/fix/10-indicate-resolved, fix/10-indicate-resolved) feat(requester): add Problem Appears Resolved action (FR-08, BR-05)
+|/  
+*   3ac17d8 Merge pull request #43 from simeon-94/fix/9-admin-last-admin-protection
+|\  
+| * 6f91bd7 (origin/fix/9-admin-last-admin-protection, fix/9-admin-last-admin-protection) fix(admin): prevent self-deactivation and removal of last active Administrator
+|/  
+*   9099e55 Merge pull request #42 from simeon-94/lab3-staging
+|\  
+| *   bd5f4e5 (origin/lab3-staging) Merge pull request #41 from simeon-94/feature/8-responsive-e2e
+| |\  
+| | * c33630b (origin/feature/8-responsive-e2e, feature/8-responsive-e2e) test(e2e+server): add Lab 3 auth/role E2E tests, migrate Lab 2 server tests to JWT auth, fix attachments route still using pre-JWT requesterId query param
+| |/  
+| *   d53028f (lab3-staging) Merge pull request #39 from simeon-94/feature/7-admin-users
+| |\  
+| | * 971991e (origin/feature/7-admin-users, feature/7-admin-users) feat(admin): Administrator User Management — list/create/edit users, reset password
+| |/  
+| *   749d0a2 Merge pull request #37 from simeon-94/feature/6-staff-ticket-detail
+| |\  
+| | * a1b1a86 (origin/feature/6-staff-ticket-detail, feature/6-staff-ticket-detail) feat(staff): IT Staff Ticket Detail — assign owner, IT priority, status, Internal Notes, Public Comments
+| |/  
+| *   21c4468 Merge pull request #35 from simeon-94/feature/5-staff-queue
+| |\  
+| | * 65b78ad (origin/feature/5-staff-queue, feature/5-staff-queue) feat(staff): IT Staff Ticket Queue with search/filter/sort/pagination, restricted to IT_STAFF/ADMINISTRATOR
+| |/  
+| *   07a648c Merge pull request #33 from simeon-94/feature/4-requester-regression
+| |\  
+| | * 64ddd67 (origin/feature/4-requester-regression, feature/4-requester-regression) feat: migrate CreateTicket/MyTickets/TicketDetail off RequesterContext onto cookie auth, add Public Comments, fix tests
+| |/  
+| *   94388e0 Merge pull request #31 from simeon-94/feature/3-login-screens
+| |\  
+| | * 28f01f3 (origin/feature/3-login-screens, feature/3-login-screens) feat(auth): Login and Change Password screens, AuthContext replacing session persistence via /api/auth/me
+| |/  
+| *   cb592c0 Merge pull request #29 from simeon-94/feature/2-lab3-auth
+| |\  
+| | * 8568d07 (origin/feature/2-lab3-auth, feature/2-lab3-auth) feat(auth): protect tickets/attachments routes with JWT, remove dead devRequesters route
+| * | 7dacbcc Merge pull request #28 from simeon-94/feature/2-lab3-auth
+| |\| 
+| | * fe54031 feat(auth): JWT login/logout/me/change-password with httpOnly cookie, User seed with roles
+| |/  
+| * ce1e402 Merge pull request #26 from simeon-94/feature/1-lab3-specs
+|/| 
+| * 5cd2efe (origin/feature/1-lab3-specs, feature/1-lab3-specs) docs: add lab 3 specification, tests, ui-spec, and api-spec
+|/  
+* af97e31 Update README with Lab 2 setup and E2E test instructions
+*   df99540 Merge pull request #23 from simeon-94/lab2-staging
+|\  
+| * a1a279f (origin/lab2-staging, lab2-staging) Add ai-use.md
+| * 4476959 Fill in final test results in tests.md
+| *   11c014f Merge pull request #12 from simeon-94/feature/1-lab2-specs
+| |\  
+| | * 840b1cc (origin/feature/1-lab2-specs, feature/1-lab2-specs) docs: add lab 2 specification, tests, ui-spec, and api-spec
+| |/  
+|/|   
+| *   366e9e9 Merge pull request #22 from simeon-94/feature/6-responsive-e2e
+| |\  
+| | * a21af2a (origin/feature/6-responsive-e2e, feature/6-responsive-e2e) Fix My Tickets mobile layout and add Playwright E2E tests
+| |/  
+| *   47cf578 Merge pull request #20 from simeon-94/feature/5-ticket-detail
+| |\  
+| | * 5faa471 (origin/feature/5-ticket-detail, feature/5-ticket-detail) Add Ticket Detail screen with attachment management
+| |/  
+| *   e404a36 Merge pull request #18 from simeon-94/feature/4-my-tickets
+| |\  
+| | * 3b392d4 (origin/feature/4-my-tickets, feature/4-my-tickets) Add My Tickets list with search, filters, sort, and pagination
+| |/  
+| *   e26a488 Merge pull request #16 from simeon-94/feature/3-create-ticket
+| |\  
+| | * 6dd5f8b (origin/feature/3-create-ticket, feature/3-create-ticket) Add create ticket form with attachment upload
+| |/  
+| * ce70889 Merge pull request #14 from simeon-94/feature/2-requester-context
+|/| 
+| * 4b605cf (origin/feature/2-requester-context, feature/2-requester-context) Add Development Requester context and selection screen
+|/  
+* c8131b3 Update ai_use.md
+* b088aa0 Update reviewer.md
+*   cf19f39 Merge pull request #10 from simeon-94/lab1-staging
+|\  
+| *   99885b2 (origin/lab1-staging, lab1-staging) Merge pull request #9 from simeon-94/fix/loading-state-test
+| |\  
+| | * f6fb12c (origin/fix/loading-state-test, fix/loading-state-test) fix: use fireEvent.click to reliably assert loading state in test
+| |/  
+| *   c1a3145 Merge pull request #8 from simeon-94/feature/4-category-list
+| |\  
+| | * af2b5a6 (origin/feature/4-category-list, feature/4-category-list) feat: display category list with loading/error states (closes #4)
+| |/  
+| *   ff6cca4 Merge pull request #7 from simeon-94/feature/3-category-seed
+| |\  
+| | * 8139406 (origin/feature/3-category-seed, feature/3-category-seed) feat: add Category model and idempotent seed (closes #3)
+| * |   8609b75 Merge pull request #6 from simeon-94/feature/2-health-check
+| |\ \  
+| | |/  
+| |/|   
+| | * ab04952 (origin/feature/2-health-check, feature/2-health-check) feat: add /api/health endpoint and Check System status UI (closes #2)
+| |/  
+| * c7ffef8 Merge pull request #5 from simeon-94/feature/1-project-foundation
+|/| 
+| * 851f13b (origin/feature/1-project-foundation, feature/1-project-foundation) feat: project foundation setup (closes #1)
+|/  
+* 1e3c570 Initial commit
