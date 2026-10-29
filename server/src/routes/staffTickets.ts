@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { Prisma, PrismaClient, Role } from "@prisma/client";
 import { requireAuth, requireRole } from "../middleware/auth";
-import { effectivePriorityWhere, isPriority, statusGroupWhere } from "../utils/statusGroups";
+import { effectivePriorityWhere, invalidEnumFilters, isPriority, statusGroupWhere } from "../utils/statusGroups";
 
 const router = Router();
 const prisma = new PrismaClient();
@@ -29,6 +29,19 @@ router.get("/tickets", async (req, res) => {
   if (!Number.isInteger(page) || page < 1) page = 1;
   let pageSize = Number(req.query.pageSize);
   if (!Number.isInteger(pageSize) || pageSize < 1) pageSize = 10;
+
+  const invalidFields = invalidEnumFilters({
+    status: status || undefined,
+    requestedPriority: requestedPriority || undefined,
+    itPriority: itPriority || undefined,
+  });
+  if (Object.keys(invalidFields).length > 0) {
+    return res.status(400).json({
+      error: "status must be a ticket status; requestedPriority and itPriority must be LOW, MEDIUM, or HIGH.",
+      code: "VALIDATION",
+      fields: invalidFields,
+    });
+  }
 
   const where: any = {};
   if (search) {

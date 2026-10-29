@@ -180,7 +180,7 @@ function MyTickets({ onCreateTicket, onOpenTicket, presetFilter = null, onClearP
             data-testid="my-tickets-filter-status"
           >
             <option value="">All statuses</option>
-            <option value="New">New</option>
+            <option value="NEW">New</option>
           </select>
         </div>
         <div className="col-6 col-md-2">

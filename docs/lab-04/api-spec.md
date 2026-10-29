@@ -12,6 +12,9 @@ While `mustChangePassword` is true, every endpoint except `GET /api/auth/me` and
   422 business-rule violation. 500 returns `{ error: "Something went wrong.", code: "INTERNAL" }` with no stack trace.
 - Codes: `VALIDATION`, `FORBIDDEN`, `NOT_FOUND`, `STALE_UPDATE`, `INVALID_TRANSITION`,
   `RESOLUTION_GATE`, `ACTION_LOCKED`, `TICKET_TERMINAL`.
+- Ticket list filters (#69, CL-07): `GET /api/tickets?status=&priority=` and `GET /api/staff/tickets?status=&requestedPriority=&itPriority=`
+  accept only enum values (`NEW`... / `LOW|MEDIUM|HIGH`); anything else is 400 `VALIDATION` with `fields.<param>: "invalid"`.
+  A rejected async handler is answered with the 500 `INTERNAL` body above and never stops the API process.
 - Ticket `version` is returned by `GET /api/tickets/:id` and `GET /api/staff/tickets` items.
 
 ## Action object
