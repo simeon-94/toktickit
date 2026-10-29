@@ -67,6 +67,10 @@ then re-run on `main` before the final report.
 | HARD-04 | Hardening | AC-23 | Startup validation of JWT_SECRET / JWT_EXPIRES_IN | Invalid values rejected with a message | server/src/config.test.ts | Pass |
 | HARD-05 | Hardening | AC-23 | Logged-out session check `/api/auth/me?optional=1` returns 200 null (no console 401); client uses it | As specified | server/tests/lab-04/hardening.api.test.ts, client/src/components/lab-04/AuthSession.test.tsx | Pass |
 | A11Y-02 | Accessibility | AC-22 | Ticket Queue / My Tickets rows and cards open with Enter or Space | As specified | client/src/components/lab-04/KeyboardRows.test.tsx | Pass |
+| HARD-06 | Hardening | AC-21, AC-23 | `GET /api/tickets` with an unknown `status` (`New`, `bogus`) or `priority` (`urgent`, `High`); valid `status=NEW&priority=HIGH` still filters (#69, CL-07) | 400 VALIDATION with `fields`, API still answers; valid filter returns only matching Tickets | server/tests/lab-04/filter-validation.api.test.ts | Pass |
+| HARD-07 | Hardening | AC-21, AC-23 | `GET /api/staff/tickets` with an unknown `status`, `requestedPriority` or `itPriority` (#69, CL-07) | 400 VALIDATION with `fields`; valid values 200 | server/tests/lab-04/filter-validation.api.test.ts | Pass |
+| HARD-08 | Hardening | AC-23 | A rejected async route handler (#69, CL-07) | 500 `{ error: "Something went wrong.", code: "INTERNAL" }`, no internal detail, process keeps running | server/tests/lab-04/filter-validation.api.test.ts | Pass |
+| HARD-09 | Hardening | AC-21 | My Tickets status filter "New" (#69, CL-07) | Option value `NEW`; request sends `status=NEW`, never `status=New` | client/src/components/lab-04/MyTicketsFilter.test.tsx | Pass |
 
 ## 3. Acceptance Criteria Traceability
 | AC | Tests |
@@ -91,9 +95,9 @@ then re-run on `main` before the final report.
 | AC-18 | UI-05, UI-06, E2E-02 |
 | AC-19 | UI-07, UI-08, E2E-03 |
 | AC-20 | MIG-01, MIG-02 |
-| AC-21 | REG-01..03 |
+| AC-21 | REG-01..03, HARD-06, HARD-07, HARD-09 |
 | AC-22 | RESP-01, A11Y-01, A11Y-02, STYLE-01 |
-| AC-23 | HARD-01, HARD-02, HARD-04, HARD-05 |
+| AC-23 | HARD-01, HARD-02, HARD-04, HARD-05, HARD-06, HARD-07, HARD-08 |
 
 ## 4. Allowed Changes to Earlier Tests
 Only edits listed as CHG-xx in specification.md section 11 (matrix-compliant status jumps,

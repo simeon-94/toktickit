@@ -1,0 +1,144 @@
+# command : (cd server && npx vitest run tests/lab-04/filter-validation.api.test.ts --reporter=verbose)
+# commit  : deac387c5bd288770962dfb19ef262b9329b3d41 (feature/69-ticket-filter-validation)
+# date    : 2026-10-29T06:33:09Z (UTC)
+# host    : MINGW64_NT-10.0-26200 node v24.19.0
+
+The CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.
+
+ RUN  v2.1.9 C:/dev/toktickit/server
+
+[test setup] using fresh test database "toktickit_test" (migrated and seeded)
+stderr | tests/lab-04/filter-validation.api.test.ts > Lab 4 — ticket list filter validation (#69) > HARD-06: GET /api/tickets rejects an unknown status or priority with 400 VALIDATION
+Unhandled route error: PrismaClientValidationError: 
+Invalid `prisma.ticket.count()` invocation in
+C:\dev\toktickit\server\src\routes\tickets.ts:136:19
+
+  133   take: pageSize,
+  134   include: { category: true, relatedSystem: true },
+  135 }),
+→ 136 prisma.ticket.count({
+        select: {
+          _count: {
+            select: {
+              _all: true
+            }
+          }
+        },
+        where: {
+          requesterId: 11,
+          currentStatus: "New"
+                         ~~~~~
+        }
+      })
+
+Invalid value for argument `currentStatus`. Expected TicketStatus.
+    at wn (C:\dev\toktickit\server\node_modules\@prisma\client\runtime\library.js:29:1363)
+    at $n.handleRequestError (C:\dev\toktickit\server\node_modules\@prisma\client\runtime\library.js:121:6958)
+    at $n.handleAndLogRequestError (C:\dev\toktickit\server\node_modules\@prisma\client\runtime\library.js:121:6623)
+    at $n.request (C:\dev\toktickit\server\node_modules\@prisma\client\runtime\library.js:121:6307)
+    at l (C:\dev\toktickit\server\node_modules\@prisma\client\runtime\library.js:130:9633)
+    at async Promise.all (index 1)
+    at C:\dev\toktickit\server\src\routes\tickets.ts:128:31 {
+  clientVersion: '5.22.0'
+}
+
+ × tests/lab-04/filter-validation.api.test.ts > Lab 4 — ticket list filter validation (#69) > HARD-06: GET /api/tickets rejects an unknown status or priority with 400 VALIDATION 860ms
+   → status=New: expected 500 to be 400 // Object.is equality
+ ✓ tests/lab-04/filter-validation.api.test.ts > Lab 4 — ticket list filter validation (#69) > HARD-06: GET /api/tickets still filters by a valid status and priority 787ms
+stderr | tests/lab-04/filter-validation.api.test.ts > Lab 4 — ticket list filter validation (#69) > HARD-07: GET /api/staff/tickets rejects an unknown status, requestedPriority or itPriority with 400 VALIDATION
+Unhandled route error: PrismaClientValidationError: 
+Invalid `prisma.ticket.count()` invocation in
+C:\dev\toktickit\server\src\routes\staffTickets.ts:86:19
+
+  83   take: pageSize,
+  84   include: { category: true, requester: true, ticketOwner: true },
+  85 }),
+→ 86 prisma.ticket.count({
+       select: {
+         _count: {
+           select: {
+             _all: true
+           }
+         }
+       },
+       where: {
+         currentStatus: "New"
+                        ~~~~~
+       }
+     })
+
+Invalid value for argument `currentStatus`. Expected TicketStatus.
+    at wn (C:\dev\toktickit\server\node_modules\@prisma\client\runtime\library.js:29:1363)
+    at $n.handleRequestError (C:\dev\toktickit\server\node_modules\@prisma\client\runtime\library.js:121:6958)
+    at $n.handleAndLogRequestError (C:\dev\toktickit\server\node_modules\@prisma\client\runtime\library.js:121:6623)
+    at $n.request (C:\dev\toktickit\server\node_modules\@prisma\client\runtime\library.js:121:6307)
+    at l (C:\dev\toktickit\server\node_modules\@prisma\client\runtime\library.js:130:9633)
+    at async Promise.all (index 1)
+    at C:\dev\toktickit\server\src\routes\staffTickets.ts:78:31 {
+  clientVersion: '5.22.0'
+}
+
+ × tests/lab-04/filter-validation.api.test.ts > Lab 4 — ticket list filter validation (#69) > HARD-07: GET /api/staff/tickets rejects an unknown status, requestedPriority or itPriority with 400 VALIDATION 603ms
+   → status=New: expected 500 to be 400 // Object.is equality
+stderr | tests/lab-04/filter-validation.api.test.ts > Lab 4 — ticket list filter validation (#69) > HARD-08: a rejected async route handler returns the safe 500 INTERNAL instead of crashing
+Unhandled route error: Error: database exploded: secret detail
+    at C:\dev\toktickit\server\tests\lab-04\filter-validation.api.test.ts:94:13
+    at asyncSafe (C:\dev\toktickit\server\src\middleware\errors.ts:15:28)
+    at Layer.handle [as handle_request] (C:\dev\toktickit\server\node_modules\express\lib\router\layer.js:95:5)
+    at next (C:\dev\toktickit\server\node_modules\express\lib\router\route.js:149:13)
+    at Route.dispatch (C:\dev\toktickit\server\node_modules\express\lib\router\route.js:119:3)
+    at Layer.handle [as handle_request] (C:\dev\toktickit\server\node_modules\express\lib\router\layer.js:95:5)
+    at C:\dev\toktickit\server\node_modules\express\lib\router\index.js:284:15
+    at router.process_params (C:\dev\toktickit\server\node_modules\express\lib\router\index.js:346:12)
+    at next (C:\dev\toktickit\server\node_modules\express\lib\router\index.js:280:10)
+    at router.handle (C:\dev\toktickit\server\node_modules\express\lib\router\index.js:175:3)
+
+ ✓ tests/lab-04/filter-validation.api.test.ts > Lab 4 — ticket list filter validation (#69) > HARD-08: a rejected async route handler returns the safe 500 INTERNAL instead of crashing
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/lab-04/filter-validation.api.test.ts > Lab 4 — ticket list filter validation (#69) > HARD-06: GET /api/tickets rejects an unknown status or priority with 400 VALIDATION
+AssertionError: status=New: expected 500 to be 400 // Object.is equality
+
+- Expected
++ Received
+
+- 400
++ 500
+
+ ❯ tests/lab-04/filter-validation.api.test.ts:50:33
+     48|     ]) {
+     49|       const res = await agent.get(`/api/tickets?${query}`).timeout(TIM…
+     50|       expect(res.status, query).toBe(400);
+       |                                 ^
+     51|       expect(res.body.code, query).toBe("VALIDATION");
+     52|       expect(res.body.fields, query).toHaveProperty(field);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  tests/lab-04/filter-validation.api.test.ts > Lab 4 — ticket list filter validation (#69) > HARD-07: GET /api/staff/tickets rejects an unknown status, requestedPriority or itPriority with 400 VALIDATION
+AssertionError: status=New: expected 500 to be 400 // Object.is equality
+
+- Expected
++ Received
+
+- 400
++ 500
+
+ ❯ tests/lab-04/filter-validation.api.test.ts:81:33
+     79|     ]) {
+     80|       const res = await agent.get(`/api/staff/tickets?${query}`).timeo…
+     81|       expect(res.status, query).toBe(400);
+       |                                 ^
+     82|       expect(res.body.code, query).toBe("VALIDATION");
+     83|       expect(res.body.fields, query).toHaveProperty(field);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+ Test Files  1 failed (1)
+      Tests  2 failed | 2 passed (4)
+   Start at  13:33:13
+   Duration  13.67s (transform 739ms, setup 0ms, collect 1.85s, tests 2.31s, environment 1ms, prepare 209ms)
+
+
+# exit code: 1

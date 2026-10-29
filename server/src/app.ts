@@ -1,3 +1,5 @@
+// Must stay the first import: it patches express.Router before the route modules create routers (#69).
+import { errorHandler } from "./middleware/errors";
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
@@ -33,5 +35,6 @@ app.use("/api/staff", staffTicketsRouter);
 app.use("/api/admin/users", adminUsersRouter);
 app.use("/api/attachments", attachmentsRouter);
 app.use("/api/auth", authRouter);
+app.use(errorHandler);
 
 export default app;

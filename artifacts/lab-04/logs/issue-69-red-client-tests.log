@@ -1,0 +1,71 @@
+# command : (cd client && npx vitest run src/components/lab-04/MyTicketsFilter.test.tsx --reporter=verbose)
+# commit  : deac387c5bd288770962dfb19ef262b9329b3d41 (feature/69-ticket-filter-validation)
+# date    : 2026-10-29T06:31:49Z (UTC)
+# host    : MINGW64_NT-10.0-26200 node v24.19.0
+
+
+ RUN  v2.1.9 C:/dev/toktickit/client
+
+stderr | src/components/lab-04/MyTicketsFilter.test.tsx > My Tickets status filter (#69) > HARD-09: choosing 'New' requests status=NEW, keeps the 'New' label and shows the list
+Warning: An update to MyTickets inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MyTickets (C:\dev\toktickit\client\src\components\MyTickets.tsx:16:22)
+Warning: An update to MyTickets inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MyTickets (C:\dev\toktickit\client\src\components\MyTickets.tsx:16:22)
+Warning: An update to MyTickets inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at MyTickets (C:\dev\toktickit\client\src\components\MyTickets.tsx:16:22)
+
+ × src/components/lab-04/MyTicketsFilter.test.tsx > My Tickets status filter (#69) > HARD-09: choosing 'New' requests status=NEW, keeps the 'New' label and shows the list
+   → expected 'New' to be 'NEW' // Object.is equality
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/components/lab-04/MyTicketsFilter.test.tsx > My Tickets status filter (#69) > HARD-09: choosing 'New' requests status=NEW, keeps the 'New' label and shows the list
+AssertionError: expected 'New' to be 'NEW' // Object.is equality
+
+Expected: "NEW"
+Received: "New"
+
+ ❯ src/components/lab-04/MyTicketsFilter.test.tsx:24:27
+     22|     const select = screen.getByTestId("my-tickets-filter-status") as H…
+     23|     const option = Array.from(select.options).find((o) => o.textConten…
+     24|     expect(option?.value).toBe("NEW");
+       |                           ^
+     25| 
+     26|     fireEvent.change(select, { target: { value: "NEW" } });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+ Test Files  1 failed (1)
+      Tests  1 failed (1)
+   Start at  13:31:55
+   Duration  36.45s (transform 215ms, setup 5.29s, collect 3.63s, tests 53ms, environment 26.39s, prepare 591ms)
+
+
+# exit code: 1
