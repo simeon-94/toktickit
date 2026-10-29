@@ -59,6 +59,7 @@ then re-run on `main` before the final report.
 | E2E-01 | E2E | AC-01, AC-07, AC-17 | Staff A and B add different actions on one Ticket; Requester sees them read-only | Pass | e2e/lab-04/actions-taken-flow.spec.ts | Pass |
 | E2E-02 | E2E | AC-11, AC-18 | Gate blocks RESOLVED; complete action; resolve; close; reopen | Pass | e2e/lab-04/ticket-resolution.spec.ts | Pass |
 | E2E-03 | E2E | AC-13..16, AC-19 | Dashboards by role, drill-down totals match | Pass | e2e/lab-04/dashboards.spec.ts | Pass |
+| E2E-04 | E2E | AC-17 | Actions Taken edit / cancel / assign (#68): PLANNED action edit form pre-filled, then saved; assignee list holds only active IT Staff / Administrators (inactive Mark Diaz absent); inactive assignee rejected (real API 400 `VALIDATION` `fields.assigneeId` shown in the form; typed data kept); cancel -> Cancelled + Locked; follow-up note required, then shown | Pass; 7 screenshots per width, no horizontal scroll, no console errors | e2e/lab-04/evidence-completion.spec.ts (+ logs/inactive-assignee-api.log) | Pass |
 | RESP-01 | Responsive | AC-22 | Screenshots 1280/768/320 of dashboards and actions; asserts no horizontal scroll | Pass; images saved | e2e/lab-04/dashboards.spec.ts, e2e/lab-04/actions-taken-flow.spec.ts | Pass |
 | A11Y-01 | Accessibility | AC-22 | Keyboard-only create-action flow; labels and focus order | Pass | e2e/lab-04/actions-taken-flow.spec.ts | Pass |
 | HARD-01 | Hardening | AC-23 | No console errors during E2E; README steps verified manually | Pass | e2e/lab-04/dashboards.spec.ts + manual checklist | Pass |
@@ -72,6 +73,7 @@ then re-run on `main` before the final report.
 | HARD-08 | Hardening | AC-23 | A rejected async route handler (#69, CL-07) | 500 `{ error: "Something went wrong.", code: "INTERNAL" }`, no internal detail, process keeps running | server/tests/lab-04/filter-validation.api.test.ts | Pass |
 | HARD-09 | Hardening | AC-21 | My Tickets status filter "New" (#69, CL-07) | Option value `NEW`; request sends `status=NEW`, never `status=New` | client/src/components/lab-04/MyTicketsFilter.test.tsx | Pass |
 | RESP-02 | Responsive | AC-21, AC-22 | Lab 3 Admin Users at 1280/768/320 (#71, CL-08): table in a scroll container; Active column reachable; list and edit panel | No page-level horizontal scroll | e2e/lab-04/admin-users-responsive.spec.ts | Pass |
+| REG-04 | Regression | AC-21 | Lab 1-3 UI regression screens at 1280/768/320 (#68) on the clean seeded database: login + wrong password, forced password change on first login, My Tickets with the New filter, Create Ticket with an attachment, requester Ticket Detail (attachment, public comments, no internal note), Staff Queue, Staff Ticket Detail (owner, IT priority, public comment, internal note), Admin Users list + self-deactivation protection | Pass; 11 screenshots per width, no horizontal scroll, no console errors except the expected 401/409 of the error screens | e2e/lab-04/evidence-completion.spec.ts | Pass |
 
 ## 3. Acceptance Criteria Traceability
 | AC | Tests |
@@ -92,11 +94,11 @@ then re-run on `main` before the final report.
 | AC-14 | API-14, API-15, PERF-01 |
 | AC-15 | API-16 |
 | AC-16 | API-13, API-17, E2E-03 |
-| AC-17 | UI-01..04, E2E-01 |
+| AC-17 | UI-01..04, E2E-01, E2E-04 |
 | AC-18 | UI-05, UI-06, E2E-02 |
 | AC-19 | UI-07, UI-08, E2E-03 |
 | AC-20 | MIG-01, MIG-02 |
-| AC-21 | REG-01..03, HARD-06, HARD-07, HARD-09, RESP-02 |
+| AC-21 | REG-01..04, HARD-06, HARD-07, HARD-09, RESP-02 |
 | AC-22 | RESP-01, RESP-02, A11Y-01, A11Y-02, STYLE-01 |
 | AC-23 | HARD-01, HARD-02, HARD-04, HARD-05, HARD-06, HARD-07, HARD-08 |
 

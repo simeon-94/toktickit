@@ -5,6 +5,8 @@ and UTC date, and ends with the process exit code. Screenshots are taken by Play
 1280 / 768 / 320 px from the running app; the specs assert there is no horizontal page scroll before
 each screenshot (RESP-01).
 
+**#68 adds 54 screenshots (18 screens x 3 widths, table at the end: E2E-04 and REG-04), so the folder holds 132.**
+
 **All 78 screenshots were retaken in #55 on a clean database** (migrations + seed + E2E fixtures from
 `server/scripts/e2e-lab4-fixtures.ts`), so the dashboard counts are demo-sized. Earlier versions in the
 Git history of #52-#54 were taken on the shared dev database that also held automated-test rows.
@@ -69,6 +71,12 @@ Git history of #52-#54 were taken on the shared dev database that also held auto
 | logs/issue-71-server-build.log | `npm run build` (server) | #71 |
 | logs/issue-71-client-build.log | `npm run build` (client) | #71 |
 | logs/issue-71-e2e-all.log | `npx playwright test` (Lab 2, 3 and 4) including RESP-02 | #71 |
+| logs/inactive-assignee-api.log | `e2e/lab-04/inactive-assignee-api.sh`: real POST of an action assigned to the inactive IT Staff user Mark Diaz -> 400 `VALIDATION` `fields.assigneeId`, nothing stored | #68 |
+| logs/evidence-server-tests.log | `npx vitest run --reporter=verbose` (server, all labs, own test database) | #68 |
+| logs/evidence-client-tests.log | `npx vitest run --reporter=verbose` (client) | #68 |
+| logs/evidence-server-build.log | `npm run build` (server) | #68 |
+| logs/evidence-client-build.log | `npm run build` (client) | #68 |
+| logs/evidence-e2e-all.log | `npx playwright test` (Lab 2, 3, 4) incl. `evidence-completion.spec.ts` (E2E-04, REG-04); produces the #68 screenshots | #68 |
 | logs/release-staging-migrate-deploy.log | `npx prisma migrate deploy` on lab4-staging `7a0cb17` before the release PR | Release |
 | logs/release-staging-server-tests.log | `npx vitest run` (server) on lab4-staging `7a0cb17` before the release PR | Release |
 | logs/release-staging-client-tests.log | `npx vitest run` (client) on lab4-staging `7a0cb17` before the release PR | Release |
@@ -166,3 +174,61 @@ Git history of #52-#54 were taken on the shared dev database that also held auto
 | screenshots/dashboard-requester-empty-1280.png | Requester with no tickets: zeros, Nothing to show, Create a ticket | 1280 | #54 |
 | screenshots/dashboard-requester-empty-768.png | Requester with no tickets: zeros, Nothing to show, Create a ticket | 768 | #54 |
 | screenshots/dashboard-requester-empty-320.png | Requester with no tickets: zeros, Nothing to show, Create a ticket | 320 | #54 |
+
+### Evidence completion (#68)
+| File | Screen | State | Width | Issue | AC (test) |
+| --- | --- | --- | --- | --- | --- |
+| screenshots/actions-staff-edit-1280.png | Staff Ticket Detail - Actions Taken | PLANNED action in edit mode, form pre-filled (description, assignee Sam Second) | 1280 | #68 | AC-17 (E2E-04) |
+| screenshots/actions-staff-edit-768.png | Staff Ticket Detail - Actions Taken | PLANNED action in edit mode, form pre-filled (description, assignee Sam Second) | 768 | #68 | AC-17 (E2E-04) |
+| screenshots/actions-staff-edit-320.png | Staff Ticket Detail - Actions Taken | PLANNED action in edit mode, form pre-filled (description, assignee Sam Second) | 320 | #68 | AC-17 (E2E-04) |
+| screenshots/actions-staff-edit-saved-1280.png | Staff Ticket Detail - Actions Taken | After saving the edit: "Action updated.", new description and attachment notes, still Planned | 1280 | #68 | AC-17 (E2E-04) |
+| screenshots/actions-staff-edit-saved-768.png | Staff Ticket Detail - Actions Taken | After saving the edit: "Action updated.", new description and attachment notes, still Planned | 768 | #68 | AC-17 (E2E-04) |
+| screenshots/actions-staff-edit-saved-320.png | Staff Ticket Detail - Actions Taken | After saving the edit: "Action updated.", new description and attachment notes, still Planned | 320 | #68 | AC-17 (E2E-04) |
+| screenshots/actions-staff-assign-1280.png | Staff Ticket Detail - Actions Taken | Create form, Assignee options shown as an open list (size attribute set by the test; a native popup is not captured headless): only active IT Staff/Administrators, inactive Mark Diaz absent | 1280 | #68 | AC-17, AC-04 (E2E-04) |
+| screenshots/actions-staff-assign-768.png | Staff Ticket Detail - Actions Taken | Create form, Assignee options shown as an open list (size attribute set by the test; a native popup is not captured headless): only active IT Staff/Administrators, inactive Mark Diaz absent | 768 | #68 | AC-17, AC-04 (E2E-04) |
+| screenshots/actions-staff-assign-320.png | Staff Ticket Detail - Actions Taken | Create form, Assignee options shown as an open list (size attribute set by the test; a native popup is not captured headless): only active IT Staff/Administrators, inactive Mark Diaz absent | 320 | #68 | AC-17, AC-04 (E2E-04) |
+| screenshots/actions-staff-inactive-assignee-1280.png | Staff Ticket Detail - Actions Taken | Real API 400 VALIDATION for an inactive assignee shown under Assignee + form banner; typed description kept (the test rewrote only assigneeId in the request, since the UI never offers inactive users; see logs/inactive-assignee-api.log) | 1280 | #68 | AC-17, AC-04 (E2E-04) |
+| screenshots/actions-staff-inactive-assignee-768.png | Staff Ticket Detail - Actions Taken | Real API 400 VALIDATION for an inactive assignee shown under Assignee + form banner; typed description kept (the test rewrote only assigneeId in the request, since the UI never offers inactive users; see logs/inactive-assignee-api.log) | 768 | #68 | AC-17, AC-04 (E2E-04) |
+| screenshots/actions-staff-inactive-assignee-320.png | Staff Ticket Detail - Actions Taken | Real API 400 VALIDATION for an inactive assignee shown under Assignee + form banner; typed description kept (the test rewrote only assigneeId in the request, since the UI never offers inactive users; see logs/inactive-assignee-api.log) | 320 | #68 | AC-17, AC-04 (E2E-04) |
+| screenshots/actions-staff-cancelled-1280.png | Staff Ticket Detail - Actions Taken | PLANNED action cancelled (the UI has no confirmation dialog): "Action cancelled.", status Cancelled, Locked, no row buttons | 1280 | #68 | AC-17, AC-06 (E2E-04) |
+| screenshots/actions-staff-cancelled-768.png | Staff Ticket Detail - Actions Taken | PLANNED action cancelled (the UI has no confirmation dialog): "Action cancelled.", status Cancelled, Locked, no row buttons | 768 | #68 | AC-17, AC-06 (E2E-04) |
+| screenshots/actions-staff-cancelled-320.png | Staff Ticket Detail - Actions Taken | PLANNED action cancelled (the UI has no confirmation dialog): "Action cancelled.", status Cancelled, Locked, no row buttons | 320 | #68 | AC-17, AC-06 (E2E-04) |
+| screenshots/actions-staff-followup-error-1280.png | Staff Ticket Detail - Actions Taken | Follow-up required without a note: "Follow-up note is required (3-500 characters).", aria-invalid | 1280 | #68 | AC-17, AC-03 (E2E-04) |
+| screenshots/actions-staff-followup-error-768.png | Staff Ticket Detail - Actions Taken | Follow-up required without a note: "Follow-up note is required (3-500 characters).", aria-invalid | 768 | #68 | AC-17, AC-03 (E2E-04) |
+| screenshots/actions-staff-followup-error-320.png | Staff Ticket Detail - Actions Taken | Follow-up required without a note: "Follow-up note is required (3-500 characters).", aria-invalid | 320 | #68 | AC-17, AC-03 (E2E-04) |
+| screenshots/actions-staff-followup-1280.png | Staff Ticket Detail - Actions Taken | Saved action with follow-up: "Yes: Install the cartridge when it arrives on Friday" | 1280 | #68 | AC-17 (E2E-04) |
+| screenshots/actions-staff-followup-768.png | Staff Ticket Detail - Actions Taken | Saved action with follow-up: "Yes: Install the cartridge when it arrives on Friday" | 768 | #68 | AC-17 (E2E-04) |
+| screenshots/actions-staff-followup-320.png | Staff Ticket Detail - Actions Taken | Saved action with follow-up: "Yes: Install the cartridge when it arrives on Friday" | 320 | #68 | AC-17 (E2E-04) |
+| screenshots/regression-login-1280.png | Login (Lab 3) | Empty login form | 1280 | #68 | AC-21 (REG-04) |
+| screenshots/regression-login-768.png | Login (Lab 3) | Empty login form | 768 | #68 | AC-21 (REG-04) |
+| screenshots/regression-login-320.png | Login (Lab 3) | Empty login form | 320 | #68 | AC-21 (REG-04) |
+| screenshots/regression-login-error-1280.png | Login (Lab 3) | Wrong password: error message, not signed in | 1280 | #68 | AC-21 (REG-04) |
+| screenshots/regression-login-error-768.png | Login (Lab 3) | Wrong password: error message, not signed in | 768 | #68 | AC-21 (REG-04) |
+| screenshots/regression-login-error-320.png | Login (Lab 3) | Wrong password: error message, not signed in | 320 | #68 | AC-21 (REG-04) |
+| screenshots/regression-change-password-forced-1280.png | Change Password (Lab 3) | First login of an Administrator-created user: forced change form, no navigation | 1280 | #68 | AC-21 (REG-04) |
+| screenshots/regression-change-password-forced-768.png | Change Password (Lab 3) | First login of an Administrator-created user: forced change form, no navigation | 768 | #68 | AC-21 (REG-04) |
+| screenshots/regression-change-password-forced-320.png | Change Password (Lab 3) | First login of an Administrator-created user: forced change form, no navigation | 320 | #68 | AC-21 (REG-04) |
+| screenshots/regression-my-tickets-1280.png | My Tickets (Lab 2) | List with filters: search "E2E-L4" + status New (works since #69) | 1280 | #68 | AC-21 (REG-04) |
+| screenshots/regression-my-tickets-768.png | My Tickets (Lab 2) | List with filters: search "E2E-L4" + status New (works since #69) | 768 | #68 | AC-21 (REG-04) |
+| screenshots/regression-my-tickets-320.png | My Tickets (Lab 2) | List with filters: search "E2E-L4" + status New (works since #69) | 320 | #68 | AC-21 (REG-04) |
+| screenshots/regression-create-ticket-1280.png | Create Ticket (Lab 2) | Form filled with category, system, priority and a PNG attachment selected | 1280 | #68 | AC-21 (REG-04) |
+| screenshots/regression-create-ticket-768.png | Create Ticket (Lab 2) | Form filled with category, system, priority and a PNG attachment selected | 768 | #68 | AC-21 (REG-04) |
+| screenshots/regression-create-ticket-320.png | Create Ticket (Lab 2) | Form filled with category, system, priority and a PNG attachment selected | 320 | #68 | AC-21 (REG-04) |
+| screenshots/regression-create-ticket-success-1280.png | Create Ticket (Lab 2) | Ticket created: success message | 1280 | #68 | AC-21 (REG-04) |
+| screenshots/regression-create-ticket-success-768.png | Create Ticket (Lab 2) | Ticket created: success message | 768 | #68 | AC-21 (REG-04) |
+| screenshots/regression-create-ticket-success-320.png | Create Ticket (Lab 2) | Ticket created: success message | 320 | #68 | AC-21 (REG-04) |
+| screenshots/regression-staff-queue-1280.png | Ticket Queue (Lab 3) | Staff queue list | 1280 | #68 | AC-21 (REG-04) |
+| screenshots/regression-staff-queue-768.png | Ticket Queue (Lab 3) | Staff queue list | 768 | #68 | AC-21 (REG-04) |
+| screenshots/regression-staff-queue-320.png | Ticket Queue (Lab 3) | Staff queue list | 320 | #68 | AC-21 (REG-04) |
+| screenshots/regression-staff-ticket-detail-1280.png | Staff Ticket Detail (Lab 3) | Owner Erin Staff, IT priority High, attachment, public comment and internal note (staff only) | 1280 | #68 | AC-21 (REG-04) |
+| screenshots/regression-staff-ticket-detail-768.png | Staff Ticket Detail (Lab 3) | Owner Erin Staff, IT priority High, attachment, public comment and internal note (staff only) | 768 | #68 | AC-21 (REG-04) |
+| screenshots/regression-staff-ticket-detail-320.png | Staff Ticket Detail (Lab 3) | Owner Erin Staff, IT priority High, attachment, public comment and internal note (staff only) | 320 | #68 | AC-21 (REG-04) |
+| screenshots/regression-ticket-detail-requester-1280.png | Ticket Detail (Lab 2/3, Requester) | Attachment, staff and requester public comments; the internal note is not shown | 1280 | #68 | AC-21 (REG-04) |
+| screenshots/regression-ticket-detail-requester-768.png | Ticket Detail (Lab 2/3, Requester) | Attachment, staff and requester public comments; the internal note is not shown | 768 | #68 | AC-21 (REG-04) |
+| screenshots/regression-ticket-detail-requester-320.png | Ticket Detail (Lab 2/3, Requester) | Attachment, staff and requester public comments; the internal note is not shown | 320 | #68 | AC-21 (REG-04) |
+| screenshots/regression-admin-users-1280.png | User Management (Lab 3) | User list incl. inactive users (the table scrolls inside its box at 320px since #71) | 1280 | #68 | AC-21 (REG-04) |
+| screenshots/regression-admin-users-768.png | User Management (Lab 3) | User list incl. inactive users (the table scrolls inside its box at 320px since #71) | 768 | #68 | AC-21 (REG-04) |
+| screenshots/regression-admin-users-320.png | User Management (Lab 3) | User list incl. inactive users (the table scrolls inside its box at 320px since #71) | 320 | #68 | AC-21 (REG-04) |
+| screenshots/regression-admin-users-self-protect-1280.png | User Management (Lab 3) | Admin tries to deactivate their own account: "You cannot deactivate your own account." (the last-Administrator message is not reachable without deactivating the seeded admin Olivia Grant, so it is not captured) | 1280 | #68 | AC-21 (REG-04) |
+| screenshots/regression-admin-users-self-protect-768.png | User Management (Lab 3) | Admin tries to deactivate their own account: "You cannot deactivate your own account." (the last-Administrator message is not reachable without deactivating the seeded admin Olivia Grant, so it is not captured) | 768 | #68 | AC-21 (REG-04) |
+| screenshots/regression-admin-users-self-protect-320.png | User Management (Lab 3) | Admin tries to deactivate their own account: "You cannot deactivate your own account." (the last-Administrator message is not reachable without deactivating the seeded admin Olivia Grant, so it is not captured) | 320 | #68 | AC-21 (REG-04) |
