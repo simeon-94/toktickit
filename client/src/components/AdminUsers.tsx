@@ -164,39 +164,42 @@ function AdminUsers() {
             </div>
           )}
           {status === "success" && (
-            <table className="table table-sm" data-testid="admin-users-table">
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Email</th>
-                  <th>Role</th>
-                  <th>Active</th>
-                </tr>
-              </thead>
-              <tbody>
-                {users.map((u) => (
-                  <tr
-                    key={u.id}
-                    data-testid="admin-users-row"
-                    onClick={() => selectUser(u)}
-                    style={{ cursor: "pointer", backgroundColor: u.id === selectedId ? "#eaf6ef" : undefined }}
-                  >
-                    <td>{u.name}</td>
-                    <td>{u.email}</td>
-                    <td>
-                      <span className="badge bg-secondary">{u.role}</span>
-                    </td>
-                    <td>
-                      {u.isActive ? (
-                        <span className="badge bg-success">Active</span>
-                      ) : (
-                        <span className="badge bg-secondary">Inactive</span>
-                      )}
-                    </td>
+            // Lab 4 #71 (CL-08): only the table scrolls on narrow screens, never the page.
+            <div className="table-responsive">
+              <table className="table table-sm" data-testid="admin-users-table">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Active</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {users.map((u) => (
+                    <tr
+                      key={u.id}
+                      data-testid="admin-users-row"
+                      onClick={() => selectUser(u)}
+                      style={{ cursor: "pointer", backgroundColor: u.id === selectedId ? "#eaf6ef" : undefined }}
+                    >
+                      <td>{u.name}</td>
+                      <td>{u.email}</td>
+                      <td>
+                        <span className="badge bg-secondary">{u.role}</span>
+                      </td>
+                      <td>
+                        {u.isActive ? (
+                          <span className="badge bg-success">Active</span>
+                        ) : (
+                          <span className="badge bg-secondary">Inactive</span>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           )}
         </div>
 
