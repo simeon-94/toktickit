@@ -1,7 +1,7 @@
 import { Router } from "express";
 import bcrypt from "bcryptjs";
 import { PrismaClient } from "@prisma/client";
-import { signToken, requireAuth } from "../middleware/auth";
+import { signToken, requireSession, verifySessionToken } from "../middleware/auth";
 
 const prisma = new PrismaClient();
 const router = Router();
@@ -45,7 +45,12 @@ router.post("/logout", (_req, res) => {
   res.status(204).send();
 });
 
-router.get("/me", requireAuth, async (req, res) => {
+// The client's start-up check calls /me?optional=1: when logged out it gets 200 null instead of a
+// 401 that browsers log as a console error (Lab 4 HARD-05). Plain /me keeps its Lab 3 401.
+router.get("/me", (req, res, next) => {
+  if (req.query.optional === "1" && !verifySessionToken(req.cookies?.token)) return res.json(null);
+  next();
+}, requireSession, async (req, res) => {
   const user = await prisma.user.findUnique({ where: { id: req.auth!.userId } });
   if (!user || !user.isActive) return res.status(401).json({ error: "Not authenticated" });
   res.json({
@@ -57,7 +62,7 @@ router.get("/me", requireAuth, async (req, res) => {
   });
 });
 
-router.post("/change-password", requireAuth, async (req, res) => {
+router.post("/change-password", requireSession, async (req, res) => {
   const { currentPassword, newPassword } = req.body || {};
   if (!currentPassword || !newPassword) {
     return res.status(400).json({ error: "Current and new password are required" });

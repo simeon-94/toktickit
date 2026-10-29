@@ -1,17 +1,8 @@
 import { useEffect, useState, type FormEvent } from "react";
+import ActionsTaken from "./lab-04/ActionsTaken";
+import TicketWorkflow from "./lab-04/TicketWorkflow";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4000";
-
-const STATUS_OPTIONS = [
-  "NEW",
-  "OPEN",
-  "IN_PROGRESS",
-  "WAITING_FOR_REQUESTER",
-  "RESOLVED",
-  "CLOSED",
-  "REOPENED",
-  "CANCELLED",
-];
 
 interface TicketDetailData {
   id: number;
@@ -27,6 +18,7 @@ interface TicketDetailData {
   ticketOwnerId: number | null;
   ticketOwnerName: string | null;
   requesterIndicatedResolved: boolean;
+  version: number;
   createdAt: string;
   updatedAt: string;
 }
@@ -65,9 +57,10 @@ type LoadStatus = "loading" | "success" | "error";
 interface Props {
   ticketId: number;
   onBack: () => void;
+  currentUser?: { id: number; name: string };
 }
 
-function StaffTicketDetail({ ticketId, onBack }: Props) {
+function StaffTicketDetail({ ticketId, onBack, currentUser }: Props) {
   const [status, setStatus] = useState<LoadStatus>("loading");
   const [ticket, setTicket] = useState<TicketDetailData | null>(null);
   const [attachments, setAttachments] = useState<AttachmentItem[]>([]);
@@ -77,7 +70,6 @@ function StaffTicketDetail({ ticketId, onBack }: Props) {
 
   const [savingOwner, setSavingOwner] = useState(false);
   const [savingPriority, setSavingPriority] = useState(false);
-  const [savingStatus, setSavingStatus] = useState(false);
   const [actionError, setActionError] = useState("");
 
   const [newComment, setNewComment] = useState("");
@@ -160,26 +152,6 @@ function StaffTicketDetail({ ticketId, onBack }: Props) {
       .finally(() => setSavingPriority(false));
   }
 
-  function handleStatusChange(value: string) {
-    setActionError("");
-    setSavingStatus(true);
-    fetch(`${API_URL}/api/tickets/${ticketId}/status`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-      body: JSON.stringify({ currentStatus: value }),
-    })
-      .then(async (res) => {
-        if (!res.ok) {
-          const body = await res.json().catch(() => ({}));
-          throw new Error(body.error || "Unable to update status.");
-        }
-        loadAll();
-      })
-      .catch((error) => setActionError(error.message))
-      .finally(() => setSavingStatus(false));
-  }
-
   function handlePostComment(event: FormEvent) {
     event.preventDefault();
     const content = newComment.trim();
@@ -258,7 +230,10 @@ function StaffTicketDetail({ ticketId, onBack }: Props) {
       </button>
 
       <h2 className="h5">
-        {ticket.ticketNumber} — <span className="badge bg-success">{ticket.currentStatus}</span>
+        {ticket.ticketNumber} —{" "}
+        <span className="badge bg-success" data-testid="ticket-status-badge">
+          {ticket.currentStatus}
+        </span>
         {ticket.requesterIndicatedResolved && (
           <span className="badge bg-info ms-2">Requester marked resolved</span>
         )}
@@ -327,7 +302,7 @@ function StaffTicketDetail({ ticketId, onBack }: Props) {
             ))}
           </select>
         </div>
-        <div className="col-6 col-md-4">
+        <div className="col-12 col-md-4">
           <label className="form-label small">IT Priority</label>
           <select
             className="form-select form-select-sm"
@@ -342,23 +317,19 @@ function StaffTicketDetail({ ticketId, onBack }: Props) {
             <option value="HIGH">High</option>
           </select>
         </div>
-        <div className="col-6 col-md-4">
-          <label className="form-label small">Current Status</label>
-          <select
-            className="form-select form-select-sm"
-            value={ticket.currentStatus}
-            onChange={(e) => handleStatusChange(e.target.value)}
-            disabled={savingStatus}
-            data-testid="staff-status-select"
-          >
-            {STATUS_OPTIONS.map((s) => (
-              <option key={s} value={s}>
-                {s}
-              </option>
-            ))}
-          </select>
+        <div className="col-12 col-md-4">
+          <TicketWorkflow
+            ticketId={ticket.id}
+            currentStatus={ticket.currentStatus}
+            version={ticket.version}
+            selectTestId="staff-status-select"
+            onUpdated={(update) => setTicket((prev) => (prev ? { ...prev, ...update } : prev))}
+            onReload={loadAll}
+          />
         </div>
       </div>
+
+      <ActionsTaken ticketId={ticket.id} mode="staff" currentUser={currentUser} staffUsers={staffUsers} />
 
       <h3 className="h6">Attachments</h3>
       {attachments.length === 0 && <p className="text-muted small">No attachments.</p>}

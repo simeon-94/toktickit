@@ -1,0 +1,104 @@
+# command : (cd e2e && npx playwright test lab-02 lab-03 --reporter=list)
+# commit  : 90498bc4a12c25a0e5d3a39649b421eb5723cb84 (feature/54-dashboards-ui)
+# date    : 2026-10-28T17:34:32Z (UTC)
+# host    : MINGW64_NT-10.0-26200 node v24.19.0
+
+
+Running 5 tests using 1 worker
+
+  x  1 lab-02\responsive.spec.ts:6:7 › Responsive check › My Tickets has no horizontal scroll on a mobile viewport (30.1s)
+  ok 2 lab-03\auth-role-flow.spec.ts:12:7 › Authentication and role-based access › unauthenticated user is shown the Login screen (309ms)
+  x  3 lab-03\auth-role-flow.spec.ts:17:7 › Authentication and role-based access › requester can log in, create a ticket, and find it in My Tickets (5.4s)
+  ok 4 lab-03\auth-role-flow.spec.ts:47:7 › Authentication and role-based access › IT staff sees the Ticket Queue but not Requester screens, and can open a ticket (944ms)
+  x  5 lab-03\auth-role-flow.spec.ts:64:7 › Authentication and role-based access › administrator sees User Management and can create a new user (5.5s)
+
+
+  1) lab-02\responsive.spec.ts:6:7 › Responsive check › My Tickets has no horizontal scroll on a mobile viewport 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for getByTestId('nav-my-tickets')
+
+
+      11 |     await page.getByTestId("login-submit").click();
+      12 |
+    > 13 |     await page.getByTestId("nav-my-tickets").click();
+         |                                              ^
+      14 |     await page.getByTestId("my-tickets-cards").waitFor();
+      15 |
+      16 |     const hasHorizontalScroll = await page.evaluate(() => {
+        at C:\dev\toktickit\e2e\lab-02\responsive.spec.ts:13:46
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\lab-02-responsive-Responsi-829c6-scroll-on-a-mobile-viewport\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\lab-02-responsive-Responsi-829c6-scroll-on-a-mobile-viewport\error-context.md
+
+  2) lab-03\auth-role-flow.spec.ts:17:7 › Authentication and role-based access › requester can log in, create a ticket, and find it in My Tickets 
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: getByTestId('current-user')
+    Expected substring: "REQUESTER"
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toContainText" getByTestId('current-user') with timeout 5000ms
+      - waiting for getByTestId('current-user')
+
+
+      20 |     await login(page, "jennifer.anderson@example.com", "JenniferSecure2026!");
+      21 |
+    > 22 |     await expect(page.getByTestId("current-user")).toContainText("REQUESTER");
+         |                                                    ^
+      23 |     await expect(page.getByTestId("nav-staff-queue")).not.toBeVisible();
+      24 |
+      25 |     await page.getByTestId("nav-create-ticket").click();
+        at C:\dev\toktickit\e2e\lab-03\auth-role-flow.spec.ts:22:52
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\lab-03-auth-role-flow-Auth-41fdb-t-and-find-it-in-My-Tickets\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\lab-03-auth-role-flow-Auth-41fdb-t-and-find-it-in-My-Tickets\error-context.md
+
+  3) lab-03\auth-role-flow.spec.ts:64:7 › Authentication and role-based access › administrator sees User Management and can create a new user 
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: getByTestId('current-user')
+    Expected substring: "ADMINISTRATOR"
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toContainText" getByTestId('current-user') with timeout 5000ms
+      - waiting for getByTestId('current-user')
+
+
+      67 |     await login(page, "olivia.grant@example.com", "OliviaSecure2026!");
+      68 |
+    > 69 |     await expect(page.getByTestId("current-user")).toContainText("ADMINISTRATOR");
+         |                                                    ^
+      70 |     await expect(page.getByTestId("nav-admin-users")).toBeVisible();
+      71 |
+      72 |     await page.getByTestId("nav-admin-users").click();
+        at C:\dev\toktickit\e2e\lab-03\auth-role-flow.spec.ts:69:52
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\lab-03-auth-role-flow-Auth-79817-t-and-can-create-a-new-user\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\lab-03-auth-role-flow-Auth-79817-t-and-can-create-a-new-user\error-context.md
+
+  3 failed
+    lab-02\responsive.spec.ts:6:7 › Responsive check › My Tickets has no horizontal scroll on a mobile viewport 
+    lab-03\auth-role-flow.spec.ts:17:7 › Authentication and role-based access › requester can log in, create a ticket, and find it in My Tickets 
+    lab-03\auth-role-flow.spec.ts:64:7 › Authentication and role-based access › administrator sees User Management and can create a new user 
+  2 passed (45.7s)
+
+# exit code: 1

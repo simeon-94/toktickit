@@ -1,0 +1,24 @@
+# command : (cd e2e && npx playwright test lab-04/actions-taken-flow.spec.ts --reporter=list)
+# commit  : e47da3c55f7ea2435615ac1f813a36327abf7e40 (feature/52-actions-taken-ui)
+# date    : 2026-10-28T13:29:14Z (UTC)
+# host    : MINGW64_NT-10.0-26200 node v24.19.0
+
+
+Running 12 tests using 1 worker
+
+  ok  1 lab-04\actions-taken-flow.spec.ts:21:9 › Actions Taken screens at 1280px › staff list, empty, loading and error states (1280) (7.3s)
+  ok  2 lab-04\actions-taken-flow.spec.ts:63:9 › Actions Taken screens at 1280px › staff create form: validation, then success (1280) (4.8s)
+  ok  3 lab-04\actions-taken-flow.spec.ts:85:9 › Actions Taken screens at 1280px › staff complete form and stale-update conflict (1280) (4.7s)
+  ok  4 lab-04\actions-taken-flow.spec.ts:117:9 › Actions Taken screens at 1280px › requester read-only list (1280) (3.1s)
+  ok  5 lab-04\actions-taken-flow.spec.ts:21:9 › Actions Taken screens at 768px › staff list, empty, loading and error states (768) (7.3s)
+  ok  6 lab-04\actions-taken-flow.spec.ts:63:9 › Actions Taken screens at 768px › staff create form: validation, then success (768) (4.5s)
+  ok  7 lab-04\actions-taken-flow.spec.ts:85:9 › Actions Taken screens at 768px › staff complete form and stale-update conflict (768) (4.4s)
+  ok  8 lab-04\actions-taken-flow.spec.ts:117:9 › Actions Taken screens at 768px › requester read-only list (768) (3.2s)
+  ok  9 lab-04\actions-taken-flow.spec.ts:21:9 › Actions Taken screens at 320px › staff list, empty, loading and error states (320) (7.3s)
+  ok 10 lab-04\actions-taken-flow.spec.ts:63:9 › Actions Taken screens at 320px › staff create form: validation, then success (320) (4.4s)
+  ok 11 lab-04\actions-taken-flow.spec.ts:85:9 › Actions Taken screens at 320px › staff complete form and stale-update conflict (320) (4.7s)
+  ok 12 lab-04\actions-taken-flow.spec.ts:117:9 › Actions Taken screens at 320px › requester read-only list (320) (3.4s)
+
+  12 passed (60.0s)
+
+# exit code: 0

@@ -1,0 +1,151 @@
+/* Lab 4 dashboards (ui-spec sections 1-3), on top of the Zen Green Bootstrap theme. */
+
+.l4-card-grid {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+}
+
+@media (max-width: 991.98px) {
+  .l4-card-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 575.98px) {
+  .l4-card-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.l4-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-height: 112px;
+  padding: 0.75rem 1rem;
+  border: 1px solid #cfd8d3;
+  border-left: 4px solid #198754;
+  border-radius: 0.5rem;
+  background: #ffffff;
+  color: #212529;
+  text-decoration: none;
+}
+
+.l4-card:hover {
+  background: #f3faf6;
+  color: #212529;
+}
+
+.l4-card-label {
+  font-size: 0.85rem;
+  color: #495057;
+}
+
+.l4-card-value {
+  font-size: 1.9rem;
+  font-weight: 700;
+  line-height: 1.1;
+  color: #145c32;
+}
+
+.l4-card-view {
+  margin-top: auto;
+  font-size: 0.8rem;
+  text-decoration: underline;
+  color: #145c32;
+}
+
+.l4-card:focus-visible,
+.l4-dash a:focus-visible,
+.l4-dash button:focus-visible,
+.l4-nav button:focus-visible,
+.l4-drilldown button:focus-visible {
+  outline: 3px solid #1e7a46;
+  outline-offset: 2px;
+  box-shadow: none;
+}
+
+.l4-dash-section {
+  margin-top: 1.5rem;
+}
+
+.l4-breakdown {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 0.25rem 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+}
+
+.l4-breakdown li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.35rem 0;
+  border-bottom: 1px solid #e3e8e5;
+}
+
+.l4-breakdown a {
+  min-height: 40px;
+  min-width: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+/* Inline links inside wrapped text: vertical padding enlarges the tap area without breaking lines. */
+.l4-list a {
+  padding: 0.6rem 0;
+}
+
+.l4-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.l4-list li {
+  padding: 0.4rem 0;
+  border-bottom: 1px solid #e3e8e5;
+  overflow-wrap: break-word;
+}
+
+.l4-list a {
+  font-weight: 600;
+}
+
+/* Main navigation: the active page is shown by aria-current plus bold + underline (not colour alone). */
+.l4-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.l4-nav button {
+  min-height: 40px;
+}
+
+.l4-nav-active {
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.l4-drilldown {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  margin-bottom: 0.75rem;
+  border: 1px solid #bfe3cc;
+  border-radius: 0.5rem;
+  background: #eaf6ef;
+}
+
+.l4-drilldown button {
+  min-height: 40px;
+}

@@ -6,3 +6,9 @@ build/
 *.log
 coverage/
 .vite/
+
+# Local curl cookie jars
+*cookies.txt
+
+# Lab 4 evidence logs are committed on purpose
+!artifacts/**/*.log

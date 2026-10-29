@@ -16,7 +16,9 @@
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
     "prisma:seed": "tsx prisma/seed.ts",
-    "prisma:studio": "prisma studio"
+    "prisma:studio": "prisma studio",
+    "verify:dashboard": "tsx scripts/verify-dashboard.ts",
+    "e2e:fixtures": "tsx scripts/e2e-lab4-fixtures.ts"
   },
   "dependencies": {
     "@prisma/client": "^5.20.0",

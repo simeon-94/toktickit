@@ -1,4 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type KeyboardEvent } from "react";
+import DrilldownChip from "./lab-04/DrilldownChip";
+import type { ListFilter } from "./lab-04/drilldown";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4000";
 
@@ -32,10 +34,24 @@ type Status = "loading" | "success" | "error";
 interface Props {
   onCreateTicket: () => void;
   onOpenTicket: (id: number) => void;
+  // Lab 4: filter from a Requester dashboard card (ui-spec section 0).
+  presetFilter?: ListFilter | null;
+  onClearPreset?: () => void;
 }
 
-function MyTickets({ onCreateTicket, onOpenTicket }: Props) {
+// Lab 4 A11Y-02: clickable rows/cards also open with Enter/Space for keyboard users.
+function keyOpener(onOpenTicket: (id: number) => void) {
+  return (event: KeyboardEvent, id: number) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      onOpenTicket(id);
+    }
+  };
+}
+
+function MyTickets({ onCreateTicket, onOpenTicket, presetFilter = null, onClearPreset }: Props) {
   const [categories, setCategories] = useState<Category[]>([]);
+  const openOnKey = keyOpener(onOpenTicket);
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("");
@@ -66,6 +82,7 @@ function MyTickets({ onCreateTicket, onOpenTicket }: Props) {
     setStatus("loading");
 
     const params = new URLSearchParams({
+      ...(presetFilter?.filters ?? {}),
       sort,
       page: String(page),
     });
@@ -87,12 +104,19 @@ function MyTickets({ onCreateTicket, onOpenTicket }: Props) {
         console.error("Loading tickets failed:", error);
         setStatus("error");
       });
-  }, [debouncedSearch, categoryFilter, priorityFilter, statusFilter, sort, page]);
+  }, [debouncedSearch, categoryFilter, priorityFilter, statusFilter, sort, page, presetFilter]);
 
   const hasActiveFilters = Boolean(debouncedSearch || categoryFilter || priorityFilter || statusFilter);
 
   return (
     <div data-testid="my-tickets">
+      {presetFilter && (
+        <DrilldownChip
+          label={presetFilter.label}
+          total={status === "success" && data ? data.totalItems : null}
+          onClear={() => onClearPreset?.()}
+        />
+      )}
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h2 className="h5 mb-0">My Tickets</h2>
         <button className="btn btn-success btn-sm" onClick={onCreateTicket} data-testid="my-tickets-create-btn">
@@ -217,6 +241,8 @@ function MyTickets({ onCreateTicket, onOpenTicket }: Props) {
                     key={t.id}
                     data-testid="my-tickets-row"
                     onClick={() => onOpenTicket(t.id)}
+                    tabIndex={0}
+                    onKeyDown={(e) => openOnKey(e, t.id)}
                     style={{ cursor: "pointer" }}
                   >
                     <td>{t.ticketNumber}</td>
@@ -241,6 +267,8 @@ function MyTickets({ onCreateTicket, onOpenTicket }: Props) {
                 key={t.id}
                 className="card mb-2"
                 onClick={() => onOpenTicket(t.id)}
+                tabIndex={0}
+                onKeyDown={(e) => openOnKey(e, t.id)}
                 style={{ cursor: "pointer" }}
                 data-testid="my-tickets-card"
               >

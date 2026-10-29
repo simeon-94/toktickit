@@ -73,6 +73,7 @@ describe("App", () => {
       return undefined;
     });
 
+    fireEvent.click(await screen.findByTestId("nav-check-system")); // CHG-06: Lab 4 lands on the Dashboard
     await screen.findByTestId("check-system-btn");
     fireEvent.click(screen.getByTestId("check-system-btn"));
 
@@ -97,6 +98,7 @@ describe("App", () => {
     });
 
     const user = userEvent.setup();
+    await user.click(await screen.findByTestId("nav-check-system")); // CHG-06: Lab 4 lands on the Dashboard
     await screen.findByTestId("check-system-btn");
     await user.click(screen.getByTestId("check-system-btn"));
 

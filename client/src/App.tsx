@@ -8,9 +8,17 @@ import TicketDetail from "./components/TicketDetail";
 import StaffQueue from "./components/StaffQueue";
 import StaffTicketDetail from "./components/StaffTicketDetail";
 import AdminUsers from "./components/AdminUsers";
+import StaffDashboard from "./components/lab-04/StaffDashboard";
+import RequesterDashboard from "./components/lab-04/RequesterDashboard";
+import StaffActionsList from "./components/lab-04/StaffActionsList";
+import type { ActionView, DrillDown, ListFilter } from "./components/lab-04/drilldown";
+import "./components/lab-04/dashboard.css";
 
 type Status = "idle" | "loading" | "success" | "error";
 type View =
+  | "dashboard"
+  | "staffActions"
+  | "changePassword"
   | "checkSystem"
   | "createTicket"
   | "myTickets"
@@ -36,9 +44,12 @@ function App() {
   const isStaff = user?.role === "IT_STAFF" || user?.role === "ADMINISTRATOR";
   const isAdmin = user?.role === "ADMINISTRATOR";
 
-  const [view, setView] = useState<View>("checkSystem");
+  const [view, setView] = useState<View>("dashboard");
   const [hasSetDefaultView, setHasSetDefaultView] = useState(false);
   const [selectedTicketId, setSelectedTicketId] = useState<number | null>(null);
+  const [queueFilter, setQueueFilter] = useState<ListFilter | null>(null);
+  const [myTicketsFilter, setMyTicketsFilter] = useState<ListFilter | null>(null);
+  const [actionsTarget, setActionsTarget] = useState<{ actionView: ActionView; label: string } | null>(null);
   const [status, setStatus] = useState<Status>("idle");
   const [health, setHealth] = useState<HealthResponse | null>(null);
   const [categories, setCategories] = useState<Category[]>([]);
@@ -46,7 +57,7 @@ function App() {
 
   useEffect(() => {
     if (user && !hasSetDefaultView) {
-      setView(isStaff ? "staffQueue" : "checkSystem");
+      setView("dashboard");
       setHasSetDefaultView(true);
     }
   }, [user, isStaff, hasSetDefaultView]);
@@ -84,6 +95,37 @@ function App() {
     setView("staffTicketDetail");
   }
 
+  // Dashboard drill-downs (ui-spec section 0): switch view and pass the card's filter.
+  function handleDrillDown(target: DrillDown) {
+    if (target.view === "staffQueue") {
+      setQueueFilter({ filters: target.filters, label: target.label });
+      setView("staffQueue");
+    } else if (target.view === "staffActions") {
+      setActionsTarget({ actionView: target.actionView, label: target.label });
+      setView("staffActions");
+    } else if (target.view === "myTickets") {
+      setMyTicketsFilter(target.filters && target.label ? { filters: target.filters, label: target.label } : null);
+      setView("myTickets");
+    } else {
+      setView(target.view);
+    }
+  }
+
+  // Main navigation entry: the active page gets aria-current plus a bold/underlined label.
+  function navButton(testId: string, label: string, active: boolean, onClick: () => void) {
+    return (
+      <button
+        type="button"
+        className={`btn btn-sm ${active ? "btn-success l4-nav-active" : "btn-outline-success"}`}
+        data-testid={testId}
+        aria-current={active ? "page" : undefined}
+        onClick={onClick}
+      >
+        {label}
+      </button>
+    );
+  }
+
   if (loading) {
     return <div className="container py-5">Loading...</div>;
   }
@@ -114,55 +156,56 @@ function App() {
         </div>
       </div>
 
-      <nav className="mb-4">
+      <nav className="mb-4 l4-nav" aria-label="Main">
+        {navButton("nav-dashboard", "Dashboard", view === "dashboard" || view === "staffActions", () => setView("dashboard"))}
         {isStaff ? (
-          <button
-            className={`btn btn-sm me-2 ${view === "staffQueue" || view === "staffTicketDetail" ? "btn-success" : "btn-outline-success"}`}
-            data-testid="nav-staff-queue"
-            onClick={() => setView("staffQueue")}
-          >
-            Ticket Queue
-          </button>
+          navButton("nav-staff-queue", "Ticket Queue", view === "staffQueue" || view === "staffTicketDetail", () => {
+            setQueueFilter(null);
+            setView("staffQueue");
+          })
         ) : (
           <>
-            <button
-              className={`btn btn-sm me-2 ${view === "createTicket" ? "btn-success" : "btn-outline-success"}`}
-              data-testid="nav-create-ticket"
-              onClick={() => setView("createTicket")}
-            >
-              Create Ticket
-            </button>
-            <button
-              className={`btn btn-sm me-2 ${view === "myTickets" || view === "ticketDetail" ? "btn-success" : "btn-outline-success"}`}
-              data-testid="nav-my-tickets"
-              onClick={() => setView("myTickets")}
-            >
-              My Tickets
-            </button>
+            {navButton("nav-my-tickets", "My Tickets", view === "myTickets" || view === "ticketDetail", () => {
+              setMyTicketsFilter(null);
+              setView("myTickets");
+            })}
+            {navButton("nav-create-ticket", "Create Ticket", view === "createTicket", () => setView("createTicket"))}
           </>
         )}
-        {isAdmin && (
-          <button
-            className={`btn btn-sm me-2 ${view === "adminUsers" ? "btn-success" : "btn-outline-success"}`}
-            data-testid="nav-admin-users"
-            onClick={() => setView("adminUsers")}
-          >
-            User Management
-          </button>
-        )}
-        <button
-          className={`btn btn-sm ${view === "checkSystem" ? "btn-success" : "btn-outline-success"}`}
-          data-testid="nav-check-system"
-          onClick={() => setView("checkSystem")}
-        >
-          Check System
-        </button>
+        {isAdmin && navButton("nav-admin-users", "Users", view === "adminUsers", () => setView("adminUsers"))}
+        {navButton("nav-change-password", "Change Password", view === "changePassword", () => setView("changePassword"))}
+        {navButton("nav-check-system", "Check System", view === "checkSystem", () => setView("checkSystem"))}
       </nav>
 
-      {view === "staffQueue" && isStaff && <StaffQueue onOpenTicket={openStaffTicket} />}
+      {view === "dashboard" && isStaff && (
+        <StaffDashboard onNavigate={handleDrillDown} onOpenTicket={openStaffTicket} onGoHome={() => setView("dashboard")} />
+      )}
+
+      {view === "dashboard" && !isStaff && (
+        <RequesterDashboard onNavigate={handleDrillDown} onOpenTicket={openTicket} onGoHome={() => setView("dashboard")} />
+      )}
+
+      {view === "staffActions" && isStaff && actionsTarget && (
+        <StaffActionsList
+          actionView={actionsTarget.actionView}
+          label={actionsTarget.label}
+          onOpenTicket={openStaffTicket}
+          onBack={() => setView("dashboard")}
+        />
+      )}
+
+      {view === "changePassword" && <ChangePassword mode="voluntary" />}
+
+      {view === "staffQueue" && isStaff && (
+        <StaffQueue onOpenTicket={openStaffTicket} presetFilter={queueFilter} onClearPreset={() => setQueueFilter(null)} />
+      )}
 
       {view === "staffTicketDetail" && isStaff && selectedTicketId !== null && (
-        <StaffTicketDetail ticketId={selectedTicketId} onBack={() => setView("staffQueue")} />
+        <StaffTicketDetail
+          ticketId={selectedTicketId}
+          onBack={() => setView("staffQueue")}
+          currentUser={user ? { id: user.id, name: user.name } : undefined}
+        />
       )}
 
       {view === "adminUsers" && isAdmin && <AdminUsers />}
@@ -170,7 +213,12 @@ function App() {
       {view === "createTicket" && !isStaff && <CreateTicket />}
 
       {view === "myTickets" && !isStaff && (
-        <MyTickets onCreateTicket={() => setView("createTicket")} onOpenTicket={openTicket} />
+        <MyTickets
+          onCreateTicket={() => setView("createTicket")}
+          onOpenTicket={openTicket}
+          presetFilter={myTicketsFilter}
+          onClearPreset={() => setMyTicketsFilter(null)}
+        />
       )}
 
       {view === "ticketDetail" && !isStaff && selectedTicketId !== null && (
