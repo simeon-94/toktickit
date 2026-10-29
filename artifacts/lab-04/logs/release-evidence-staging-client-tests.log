@@ -1,0 +1,145 @@
+# command : (cd client && npx vitest run --reporter=verbose)
+# commit  : aa741211fd5b9c14982c4c2a6a2cd725e676c8f2 (lab4-staging)
+# date    : 2026-10-29T07:47:31Z (UTC)
+# host    : MINGW64_NT-10.0-26200 node v24.19.0
+
+
+ RUN  v2.1.9 C:/dev/toktickit/client
+
+ ✓ src/components/ChangePassword.test.tsx > ChangePassword > renders the current/new/confirm password fields
+ ✓ src/components/AdminUsers.test.tsx > AdminUsers > renders the user list with Name, Email, Role, and Status
+ ✓ src/components/Login.test.tsx > Login > renders the login form with email and password fields
+ ✓ src/components/StaffQueue.test.tsx > StaffQueue > shows an empty state when there are zero tickets
+stderr | src/components/StaffQueue.test.tsx > StaffQueue > shows a safe failure message when the queue fails to load
+Loading staff queue failed: Error: Failed to load tickets
+    at C:\dev\toktickit\client\src\components\StaffQueue.tsx:104:28
+
+ ✓ src/components/ChangePassword.test.tsx > ChangePassword > rejects a new password shorter than 8 characters without calling the API
+ ✓ src/components/Login.test.tsx > Login > AC-02: shows a generic error message on invalid credentials, without exposing account details
+ ✓ src/components/AdminUsers.test.tsx > AdminUsers > AC-13: creating a user with a duplicate email shows an inline error
+ ✓ src/components/ChangePassword.test.tsx > ChangePassword > rejects a confirm password that does not match the new password
+ ✓ src/components/Login.test.tsx > Login > shows a busy state on the submit button while the request is in flight
+ ✓ src/components/Login.test.tsx > Login > a successful login clears any previous error
+ ✓ src/components/StaffQueue.test.tsx > StaffQueue > shows a safe failure message when the queue fails to load
+ ✓ src/components/ChangePassword.test.tsx > ChangePassword > AC-04: a valid new password submits successfully and clears any previous error
+ ✓ src/components/lab-04/ActionsTaken.test.tsx > ActionsTaken > UI-01: shows a loading state, then the list in the order received with text status badges
+ ✓ src/components/StaffQueue.test.tsx > StaffQueue > renders queue rows with ownership, status, and priority badges
+ ✓ src/components/lab-04/ActionsTaken.test.tsx > ActionsTaken > UI-01: shows the empty state
+ ✓ src/components/StaffQueue.test.tsx > StaffQueue > clicking a row opens that Ticket's detail
+ ✓ src/components/ChangePassword.test.tsx > ChangePassword > shows the server's error when the current password is wrong
+ ✓ src/components/AdminUsers.test.tsx > AdminUsers > selecting a user and saving changes updates the list
+ ✓ src/components/StaffTicketDetail.test.tsx > StaffTicketDetail > BR-04: Public Comments and Internal Notes render as visually distinct panels
+ ✓ src/components/StaffQueue.test.tsx > StaffQueue > checking Unassigned only re-fetches with unassigned=true
+ ✓ src/components/AdminUsers.test.tsx > AdminUsers > AC-14: a blocked self-deactivation surfaces the server's error message
+ ✓ src/components/StaffTicketDetail.test.tsx > StaffTicketDetail > AC-08: claiming a ticket updates the Ticket Owner select
+ ✓ src/components/lab-04/TicketWorkflow.test.tsx > TicketWorkflow > UI-05: offers only the current status (disabled) plus the permitted next statuses
+ ✓ src/components/AdminUsers.test.tsx > AdminUsers > AC-15: resetting a password shows the new temporary password
+stderr | src/components/AdminUsers.test.tsx > AdminUsers > shows a safe failure message when the user list fails to load
+Loading users failed: Error: Failed to load users
+    at C:\dev\toktickit\client\src\components\AdminUsers.tsx:41:28
+
+ ✓ src/components/AdminUsers.test.tsx > AdminUsers > shows a safe failure message when the user list fails to load
+ ✓ src/components/StaffTicketDetail.test.tsx > StaffTicketDetail > IT Priority can be changed independently of Requested Priority
+ ✓ src/components/lab-04/ActionsTaken.test.tsx > ActionsTaken > UI-01: shows a safe error with Retry, and Retry reloads the list
+ ✓ src/components/StaffTicketDetail.test.tsx > StaffTicketDetail > a permitted status change updates the Current Status badge
+stderr | src/components/StaffTicketDetail.test.tsx > StaffTicketDetail > posting a Public Comment shows it in the Public Comments panel
+Warning: Encountered two children with the same key, `1`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at div
+    at div
+    at div
+    at div
+    at StaffTicketDetail (C:\dev\toktickit\client\src\components\StaffTicketDetail.tsx:10:30)
+Warning: Encountered two children with the same key, `1`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at div
+    at div
+    at div
+    at div
+    at StaffTicketDetail (C:\dev\toktickit\client\src\components\StaffTicketDetail.tsx:10:30)
+
+ ✓ src/components/StaffTicketDetail.test.tsx > StaffTicketDetail > posting a Public Comment shows it in the Public Comments panel
+ ✓ src/components/lab-04/TicketWorkflow.test.tsx > TicketWorkflow > UI-05: sends the chosen status with expectedVersion and reports the result
+stderr | src/components/StaffTicketDetail.test.tsx > StaffTicketDetail > posting an Internal Note appears only in the Internal Notes panel, never in Public Comments
+Warning: Encountered two children with the same key, `1`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at div
+    at div
+    at div
+    at div
+    at StaffTicketDetail (C:\dev\toktickit\client\src\components\StaffTicketDetail.tsx:10:30)
+Warning: Encountered two children with the same key, `1`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at div
+    at div
+    at div
+    at div
+    at StaffTicketDetail (C:\dev\toktickit\client\src\components\StaffTicketDetail.tsx:10:30)
+
+ ✓ src/components/StaffTicketDetail.test.tsx > StaffTicketDetail > posting an Internal Note appears only in the Internal Notes panel, never in Public Comments
+ ✓ src/App.test.tsx > App > renders the TokTickIT heading
+stderr | src/components/StaffTicketDetail.test.tsx > StaffTicketDetail > shows a safe failure message when the ticket fails to load
+Loading staff ticket detail failed: Error: Failed to load ticket
+    at C:\dev\toktickit\client\src\components\StaffTicketDetail.tsx:94:17
+    at runNextTicks (node:internal/process/task_queues:65:5)
+    at listOnTimeout (node:internal/timers:597:9)
+    at processTimers (node:internal/timers:571:7)
+
+ ✓ src/components/StaffTicketDetail.test.tsx > StaffTicketDetail > shows a safe failure message when the ticket fails to load
+ ✓ src/components/lab-04/RequesterDashboard.test.tsx > RequesterDashboard > UI-08: loading, then three cards that link to My Tickets with the matching filter 379ms
+ ✓ src/App.test.tsx > App > shows a loading state, then the system status and category list on success
+ ✓ src/components/lab-04/ActionsTaken.test.tsx > ActionsTaken > UI-02: the create form defaults to me, toggles the follow-up note and validates inline with aria links 403ms
+ ✓ src/components/lab-04/StaffDashboard.test.tsx > StaffDashboard > UI-07: shows a loading state, then cards that are accessible links with their drill-down 516ms
+ ✓ src/components/lab-04/TicketWorkflow.test.tsx > TicketWorkflow > UI-05: on Staff Ticket Detail the status badge and version refresh immediately after a change 358ms
+stderr | src/App.test.tsx > App > shows a useful error message when the API is unavailable
+Check System failed: Error: Health check failed
+    at handleCheckSystem (C:\dev\toktickit\client\src\App.tsx:71:32)
+
+ ✓ src/App.test.tsx > App > shows a useful error message when the API is unavailable
+ ✓ src/components/lab-04/RequesterDashboard.test.tsx > RequesterDashboard > UI-08: lists link to Ticket Detail and there is a View all tickets link (no full table)
+ ✓ src/components/lab-04/RequesterDashboard.test.tsx > RequesterDashboard > UI-08: a Requester with no tickets sees zeros, 'No tickets yet' and a Create a ticket button
+ ✓ src/components/lab-04/TicketWorkflow.test.tsx > TicketWorkflow > UI-06: a RESOLUTION_GATE 422 lists the reasons in plain words
+ ✓ src/components/lab-04/StaffDashboard.test.tsx > StaffDashboard > UI-07: status and IT priority breakdowns use text labels and drill down
+ ✓ src/components/lab-04/RequesterDashboard.test.tsx > RequesterDashboard > UI-08: forbidden and failure states
+ ✓ src/components/CreateTicket.test.tsx > CreateTicket > shows a field error and does not call the API when summary is empty 1102ms
+ ✓ src/components/lab-04/RequesterDashboard.test.tsx > Requester navigation (ui-spec section 1) > UI-08: Requesters land on the Dashboard with Dashboard, My Tickets, Create Ticket, Change Password in the nav
+ ✓ src/components/lab-04/TicketWorkflow.test.tsx > TicketWorkflow > UI-06: INVALID_TRANSITION shows which status the change is not allowed from
+ ✓ src/components/lab-04/StaffDashboard.test.tsx > StaffDashboard > UI-07: list rows open the Ticket Detail
+ ✓ src/components/lab-04/StaffDashboard.test.tsx > StaffDashboard > UI-07: empty state shows zeros and 'Nothing to show'
+ ✓ src/components/lab-04/RequesterDashboard.test.tsx > Requester navigation (ui-spec section 1) > UI-08 (AC-16): the Open tickets card opens My Tickets filtered by statusGroup=open with its total
+ ✓ src/components/lab-04/StaffDashboard.test.tsx > StaffDashboard > UI-07: forbidden shows the access message with a link to the user's own dashboard
+ ✓ src/components/lab-04/TicketWorkflow.test.tsx > TicketWorkflow > UI-06: a 409 shows the conflict banner and Reload asks the page to refetch
+ ✓ src/components/lab-04/ActionsTaken.test.tsx > ActionsTaken > UI-02: submit is disabled while pending (single request) and a new action appears after success 652ms
+ ✓ src/components/lab-04/StaffDashboard.test.tsx > StaffDashboard > UI-07: failure shows a safe message and Retry reloads
+ ✓ src/components/lab-04/TicketWorkflow.test.tsx > TicketWorkflow > UI-06: other failures show a safe generic message without server internals
+ ✓ src/components/lab-04/StaffDashboard.test.tsx > StaffDashboard > UI-07: administrators see a Users card linking to user management; staff do not
+ ✓ src/components/lab-04/StaffDashboard.test.tsx > Staff navigation (ui-spec section 1) > UI-07: staff land on the Dashboard; the active nav item has aria-current and a non-colour cue
+ ✓ src/components/lab-04/StaffDashboard.test.tsx > Staff navigation (ui-spec section 1) > UI-07: administrators also get Users in the nav
+ ✓ src/components/lab-04/StaffDashboard.test.tsx > Staff navigation (ui-spec section 1) > UI-07 (AC-16): a card drills down to the queue with its filter and shows the list total
+ ✓ src/components/lab-04/StaffDashboard.test.tsx > Staff navigation (ui-spec section 1) > UI-07 (AC-16): action cards drill down to the actions list with its total
+ ✓ src/components/lab-04/ActionsTaken.test.tsx > ActionsTaken > UI-02: keeps typed data after a failure, maps server field errors, and retries with the same clientRequestId 608ms
+ ✓ src/components/lab-04/RequesterDashboard.test.tsx > Requester navigation (ui-spec section 1) > ui-spec section 1: Change Password is reachable from the nav and confirms success 836ms
+ ✓ src/components/lab-04/ActionsTaken.test.tsx > ActionsTaken > UI-03: edit is pre-filled and sends expectedVersion 325ms
+ ✓ src/components/CreateTicket.test.tsx > CreateTicket > shows the ticket number on successful submit 1312ms
+ ✓ src/components/lab-04/ActionsTaken.test.tsx > ActionsTaken > UI-03: complete requires a result; cancel sends expectedVersion; locked rows have no buttons 683ms
+ ✓ src/components/MyTickets.test.tsx > MyTickets > shows the empty state with a Create Ticket button when there are zero tickets
+ ✓ src/components/TicketDetail.test.tsx > TicketDetail > shows a removed attachment with its download button disabled
+ ✓ src/components/lab-04/MyTicketsFilter.test.tsx > My Tickets status filter (#69) > HARD-09: choosing 'New' requests status=NEW, keeps the 'New' label and shows the list
+ ✓ src/components/lab-04/AuthSession.test.tsx > AuthProvider start-up session check (HARD-05) > asks /api/auth/me?optional=1 and treats a 200 null as logged out (no 401 in the console)
+ ✓ src/components/lab-04/AuthSession.test.tsx > AuthProvider start-up session check (HARD-05) > restores a signed-in user from the same call
+ ✓ src/components/lab-04/KeyboardRows.test.tsx > A11Y-02 (#55): list rows open with the keyboard > Ticket Queue rows are focusable and open on Enter
+ ✓ src/components/MyTickets.test.tsx > MyTickets > shows a no-results state (not the empty state) when a search matches nothing 337ms
+ ✓ src/components/lab-04/KeyboardRows.test.tsx > A11Y-02 (#55): list rows open with the keyboard > My Tickets rows and cards are focusable and open on Enter or Space
+ ✓ src/components/lab-04/ActionsTaken.test.tsx > ActionsTaken > UI-03: a 409 shows the conflict banner; Reload refetches and keeps the draft 454ms
+stderr | src/components/CreateTicket.test.tsx > CreateTicket > shows a safe error message and keeps form values when the API is down
+Create ticket failed: Error: Ticket creation failed
+    at handleSubmit (C:\dev\toktickit\client\src\components\CreateTicket.tsx:153:15)
+
+ ✓ src/components/CreateTicket.test.tsx > CreateTicket > shows a safe error message and keeps form values when the API is down 1338ms
+ ✓ src/components/lab-04/ActionsTaken.test.tsx > ActionsTaken > UI-03: a 403 shows a forbidden message 327ms
+ ✓ src/components/lab-04/ActionsTaken.test.tsx > ActionsTaken > UI-04 (AC-02): the Requester view is read-only
+ ✓ src/components/lab-04/ActionsTaken.test.tsx > ActionsTaken > STYLE-01: badges carry text, times show in Asia/Bangkok, and focus-visible styles exist
+
+ Test Files  16 passed (16)
+      Tests  78 passed (78)
+   Start at  14:47:36
+   Duration  9.51s (transform 2.08s, setup 6.28s, collect 13.16s, tests 15.96s, environment 43.61s, prepare 5.28s)
+
+
+# exit code: 0

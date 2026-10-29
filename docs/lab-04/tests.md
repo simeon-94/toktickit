@@ -116,6 +116,22 @@ Only edits listed as CHG-xx in specification.md section 11 (matrix-compliant sta
 | CHG-07 | e2e/lab-03/auth-role-flow.spec.ts | the 3 `login(...)` calls use `e2e.requester` / `e2e.staff` / `e2e.admin` with the fixture password; assertions unchanged |
 
 ## 5. Final Results
+### 5.1 After the evidence release (#74)
+Real runs on `main` at `ca4f614` (the merge commit of release PR #74), 2026-10-29 (UTC). Logs:
+`artifacts/lab-04/logs/final-main-evidence-*.log`, each with command, commit, date and exit code.
+
+| Run | Result |
+| --- | --- |
+| `npx prisma migrate deploy` | No pending migrations, exit 0 |
+| Server `npx vitest run --reporter=verbose` (own `toktickit_test` database) | **113 / 113** passed, 23 files, exit 0 |
+| Client `npx vitest run --reporter=verbose` | **78 / 78** passed, 16 files, exit 0 |
+| Server `npm run build` / client `npm run build` | exit 0 / exit 0 |
+| `npx playwright test` (Lab 2 = 1, Lab 3 = 4, Lab 4 = 65) | **70 / 70** passed, exit 0 |
+| `npm run verify:dashboard` (3 account pairs) | 24/24, 19/19, 19/19 metrics match raw SQL, exit 0 |
+
+All 61 test IDs in section 2 are Pass (the 54 below plus HARD-06..09, RESP-02, E2E-04 and REG-04 from #68, #69 and #71).
+
+### 5.2 After the first release (#66)
 Real runs on `main` at `b83e85b` (the merge commit of the release PR #66), 2026-10-29 (UTC). Logs:
 `artifacts/lab-04/logs/final-main-*.log`, each with command, commit, date and exit code.
 
