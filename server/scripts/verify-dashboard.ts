@@ -1,8 +1,9 @@
 // Verifies every dashboard metric against an independent raw SQL query (spec section 10 DoD, AC-14).
-// Usage (from server/): npx tsx scripts/verify-dashboard.ts [staffEmail] [requesterEmail]
-// Defaults use seeded users. Exits 1 if any metric differs.
+// Usage (from server/): npm run verify:dashboard -- [staffOrAdminEmail] [requesterEmail]
+// Defaults use seeded users. The staff dashboard is computed with the account's real role, so an
+// Administrator also checks userCounts. Exits 1 if any metric differs.
 import "dotenv/config";
-import { PrismaClient, Role } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 import { requesterDashboard, staffDashboard } from "../src/services/dashboard";
 
 const prisma = new PrismaClient();
@@ -29,7 +30,7 @@ async function main() {
   const rows: Array<[string, number, number]> = [];
   const check = (name: string, api: number, raw: number) => rows.push([name, api, raw]);
 
-  const s: any = await staffDashboard(prisma, staff.id, Role.ADMINISTRATOR);
+  const s: any = await staffDashboard(prisma, staff.id, staff.role);
   check("staff.unassignedOpen", s.counts.unassignedOpen, await sql(`"Ticket" WHERE "currentStatus"::text IN ${OPEN_SET} AND "ticketOwnerId" IS NULL`));
   check("staff.ownedByMeOpen", s.counts.ownedByMeOpen, await sql(`"Ticket" WHERE "currentStatus"::text IN ${OPEN_SET} AND "ticketOwnerId" = $1`, staff.id));
   check("staff.urgentOpen", s.counts.urgentOpen, await sql(`"Ticket" WHERE "currentStatus"::text IN ${OPEN_SET} AND "itPriority" = 'HIGH'`));
@@ -52,10 +53,12 @@ async function main() {
   for (const [p, n] of Object.entries<number>(s.counts.byItPriority)) {
     check(`staff.byItPriority.${p}`, n, await sql(`"Ticket" WHERE "currentStatus"::text IN ${OPEN_SET} AND COALESCE("itPriority", "requestedPriority")::text = $1`, p));
   }
-  check("admin.userCounts.active", s.userCounts.active, await sql(`"User" WHERE "isActive"`));
-  check("admin.userCounts.inactive", s.userCounts.inactive, await sql(`"User" WHERE NOT "isActive"`));
-  for (const [role, n] of Object.entries<number>(s.userCounts.byRole)) {
-    check(`admin.userCounts.byRole.${role}`, n, await sql(`"User" WHERE "role"::text = $1`, role));
+  if (s.userCounts) {
+    check("admin.userCounts.active", s.userCounts.active, await sql(`"User" WHERE "isActive"`));
+    check("admin.userCounts.inactive", s.userCounts.inactive, await sql(`"User" WHERE NOT "isActive"`));
+    for (const [role, n] of Object.entries<number>(s.userCounts.byRole)) {
+      check(`admin.userCounts.byRole.${role}`, n, await sql(`"User" WHERE "role"::text = $1`, role));
+    }
   }
 
   const r = await requesterDashboard(prisma, requester.id);
@@ -67,7 +70,7 @@ async function main() {
     await sql(`"Ticket" WHERE "requesterId" = $1 AND "currentStatus"::text IN ('RESOLVED','CLOSED') AND "updatedAt" >= ${RECENT}`, requester.id)
   );
 
-  console.log(`Dashboard verification - staff: ${staffEmail}, requester: ${requesterEmail}, at ${new Date().toISOString()}`);
+  console.log(`Dashboard verification - staff dashboard as ${staffEmail} (${staff.role}), requester: ${requesterEmail}, at ${new Date().toISOString()}`);
   console.log(`${"metric".padEnd(36)} ${"api".padStart(6)} ${"sql".padStart(6)}  result`);
   let failures = 0;
   for (const [name, api, raw] of rows) {

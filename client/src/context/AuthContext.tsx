@@ -27,7 +27,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`${API_URL}/api/auth/me`, { credentials: "include" })
+    // ?optional=1: when logged out the API answers 200 null instead of a 401 the browser would log.
+    fetch(`${API_URL}/api/auth/me?optional=1`, { credentials: "include" })
       .then((res) => (res.ok ? res.json() : null))
       .then((data) => setUser(data))
       .catch(() => setUser(null))

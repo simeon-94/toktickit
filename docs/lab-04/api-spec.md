@@ -1,6 +1,8 @@
 # Lab 4 API Specification
 
-All endpoints require the session cookie (401 if missing/invalid). Base path `/api`. JSON in/out. Timestamps are ISO-8601 UTC.
+All endpoints require the session cookie (401 if missing/invalid, or if the account was deactivated after login). Base path `/api`. JSON in/out. Timestamps are ISO-8601 UTC.
+While `mustChangePassword` is true, every endpoint except `GET /api/auth/me` and `POST /api/auth/change-password` returns 403 `PASSWORD_CHANGE_REQUIRED` (#55).
+`GET /api/auth/me?optional=1` returns 200 `null` when logged out (plain `/api/auth/me` keeps its 401), so the client's start-up check logs no console error.
 
 ## Conventions
 - Error body: `{ "error": "<safe message>", "code": "<MACHINE_CODE>", "fields"?: { "<field>": "<message>" } }`

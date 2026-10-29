@@ -1,0 +1,35 @@
+# command : (cd server && npm run verify:dashboard -- olivia.grant@example.com michael.brown@example.com)
+# commit  : 7577efa178f73f426e9bbf33fc578d5012a60068 (feature/55-final-hardening)
+# date    : 2026-10-28T18:30:58Z (UTC)
+# host    : MINGW64_NT-10.0-26200 node v24.19.0
+
+Dashboard verification - staff dashboard as olivia.grant@example.com (ADMINISTRATOR), requester: michael.brown@example.com, at 2026-10-28T18:31:00.413Z
+metric                                  api    sql  result
+staff.unassignedOpen                      6      6  OK
+staff.ownedByMeOpen                       0      0  OK
+staff.urgentOpen                          3      3  OK
+staff.openFollowUps                       2      2  OK
+staff.myPlannedActions                    0      0  OK
+staff.byStatus.NEW                        4      4  OK
+staff.byStatus.OPEN                       1      1  OK
+staff.byStatus.IN_PROGRESS                2      2  OK
+staff.byStatus.WAITING_FOR_REQUESTER      1      1  OK
+staff.byStatus.RESOLVED                   1      1  OK
+staff.byStatus.CLOSED                     1      1  OK
+staff.byStatus.REOPENED                   2      2  OK
+staff.byStatus.CANCELLED                  2      2  OK
+staff.byItPriority.LOW                    2      2  OK
+staff.byItPriority.MEDIUM                 5      5  OK
+staff.byItPriority.HIGH                   3      3  OK
+admin.userCounts.active                  15     15  OK
+admin.userCounts.inactive                 2      2  OK
+admin.userCounts.byRole.REQUESTER         9      9  OK
+admin.userCounts.byRole.IT_STAFF          6      6  OK
+admin.userCounts.byRole.ADMINISTRATOR      2      2  OK
+requester.openTickets                     1      1  OK
+requester.waitingForRequester             0      0  OK
+requester.recentlyResolved                1      1  OK
+
+24/24 metrics match raw SQL.
+
+# exit code: 0

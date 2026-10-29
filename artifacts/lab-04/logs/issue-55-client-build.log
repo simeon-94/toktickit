@@ -1,0 +1,16 @@
+# command : (cd client && npm run build)
+# commit  : 89a1c76ab925447602c38b4d5ee2bcf6999e8408 (feature/55-final-hardening)
+# date    : 2026-10-28T18:35:02Z (UTC)
+# host    : MINGW64_NT-10.0-26200 node v24.19.0
+
+vite v5.4.21 building for production...
+transforming...
+✓ 50 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                   0.41 kB │ gzip:  0.28 kB
+dist/assets/index-CWKeYfLL.css  234.63 kB │ gzip: 31.70 kB
+dist/assets/index-fOqJTsKB.js   224.72 kB │ gzip: 62.81 kB
+✓ built in 945ms
+
+# exit code: 0

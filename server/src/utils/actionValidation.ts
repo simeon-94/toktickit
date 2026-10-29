@@ -110,3 +110,14 @@ export function validateClientRequestId(clientRequestId: unknown): string | unde
 export function parseExpectedVersion(value: unknown): number | undefined {
   return typeof value === "number" && Number.isInteger(value) && value >= 1 ? value : undefined;
 }
+
+// What a create request whose clientRequestId already exists should get (L4-BR-17, api-spec section 2):
+// the stored action when it belongs to the same Ticket, a 400 when it belongs to another one. Used by
+// both the pre-check and the unique-constraint (P2002) path so a concurrent reuse answers the same way.
+export function clientRequestConflictOutcome(
+  existingTicketId: number | null,
+  requestTicketId: number
+): "existing" | "otherTicket" | "unknown" {
+  if (existingTicketId === null) return "unknown";
+  return existingTicketId === requestTicketId ? "existing" : "otherTicket";
+}

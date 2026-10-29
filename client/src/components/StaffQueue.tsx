@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type KeyboardEvent } from "react";
 import DrilldownChip from "./lab-04/DrilldownChip";
 import type { ListFilter } from "./lab-04/drilldown";
 
@@ -51,8 +51,19 @@ const STATUS_OPTIONS = [
   "CANCELLED",
 ];
 
+// Lab 4 A11Y-02: clickable rows also open with Enter/Space for keyboard users.
+function keyOpener(onOpenTicket: (id: number) => void) {
+  return (event: KeyboardEvent, id: number) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      onOpenTicket(id);
+    }
+  };
+}
+
 function StaffQueue({ onOpenTicket, presetFilter = null, onClearPreset }: Props) {
   const [categories, setCategories] = useState<Category[]>([]);
+  const openOnKey = keyOpener(onOpenTicket);
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("");
@@ -232,6 +243,8 @@ function StaffQueue({ onOpenTicket, presetFilter = null, onClearPreset }: Props)
                     key={t.id}
                     data-testid="staff-queue-row"
                     onClick={() => onOpenTicket(t.id)}
+                    tabIndex={0}
+                    onKeyDown={(e) => openOnKey(e, t.id)}
                     style={{ cursor: "pointer" }}
                   >
                     <td>{t.ticketNumber}</td>

@@ -62,3 +62,8 @@ export function collectConsoleErrors(page: Page) {
   page.on("pageerror", (err) => errors.push(err.message));
   return errors;
 }
+
+export async function logout(page: Page) {
+  await page.getByTestId("logout-btn").click();
+  await expect(page.getByTestId("login-form")).toBeVisible();
+}

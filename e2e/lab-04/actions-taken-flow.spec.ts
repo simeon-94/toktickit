@@ -3,6 +3,7 @@ import {
   WIDTHS,
   collectConsoleErrors,
   login,
+  logout,
   openRequesterTicket,
   openStaffTicket,
   resetFixtures,
@@ -127,3 +128,72 @@ for (const width of WIDTHS) {
     });
   });
 }
+
+test.describe("Actions Taken flows (#55)", () => {
+  test.beforeEach(() => resetFixtures());
+
+  test("E2E-01 (AC-01, AC-07, AC-17): two staff members add actions on one Ticket; the Requester sees them read-only", async ({ page }) => {
+    await login(page, "e2e.staff@example.com");
+    await openStaffTicket(page, "E2E-L4-ACTIONS");
+    await page.getByTestId("action-add-btn").click();
+    await page.getByTestId("action-description").fill("Erin: reset the VPN token");
+    await page.getByTestId("action-submit").click();
+    await expect(page.getByTestId("actions-success")).toBeVisible();
+    await logout(page);
+
+    await login(page, "e2e.staff2@example.com");
+    await openStaffTicket(page, "E2E-L4-ACTIONS");
+    await page.getByTestId("action-add-btn").click();
+    await expect(page.getByTestId("action-form")).toContainText("Performed by: Sam Second");
+    await page.getByTestId("action-description").fill("Sam: replaced the docking cable");
+    await page.getByTestId("action-submit").click();
+    await expect(page.getByTestId("action-row")).toHaveCount(5);
+    await logout(page);
+
+    await login(page, "e2e.requester@example.com");
+    await openRequesterTicket(page, "E2E-L4-ACTIONS");
+    const rows = page.getByTestId("actions-panel").getByTestId("action-row");
+    await expect(rows).toHaveCount(5);
+    await expect(rows.filter({ hasText: "Erin: reset the VPN token" })).toContainText("Erin Staff");
+    await expect(rows.filter({ hasText: "Sam: replaced the docking cable" })).toContainText("Sam Second");
+    await expect(page.getByTestId("actions-panel").locator("button")).toHaveCount(0);
+  });
+
+  test("A11Y-01 (AC-22): open a Ticket and add an action with the keyboard only; labels and focus order", async ({ page }) => {
+    await login(page, "e2e.staff@example.com");
+    await page.getByTestId("nav-staff-queue").click();
+    await page.getByTestId("staff-queue-search").fill("E2E-L4-EMPTY");
+    const row = page.getByTestId("staff-queue-row").filter({ hasText: "E2E-L4-EMPTY" });
+    await row.focus();
+    await page.keyboard.press("Enter");
+    await expect(page.getByTestId("staff-ticket-detail")).toBeVisible();
+
+    await page.getByTestId("action-add-btn").focus();
+    await page.keyboard.press("Enter");
+    // Chromium gives each segment of a datetime-local input its own Tab stop, so record the
+    // sequence of distinct focused elements rather than one entry per key press.
+    const focusOrder: string[] = [];
+    await page.getByTestId("action-at").focus();
+    for (let i = 0; i < 20 && focusOrder.length < 6; i++) {
+      const current = (await page.evaluate(() => document.activeElement?.getAttribute("data-testid"))) ?? "";
+      if (focusOrder[focusOrder.length - 1] !== current) focusOrder.push(current);
+      await page.keyboard.press("Tab");
+    }
+    expect(focusOrder).toEqual(["action-at", "action-assignee", "action-description", "action-followup-required", "action-attachment-notes", "action-submit"]);
+
+    // Every form field has a label bound to it.
+    for (const id of ["action-at", "action-assignee", "action-description", "action-followup-required", "action-attachment-notes"]) {
+      const labelled = await page.getByTestId(id).evaluate((el) => (el as HTMLInputElement).labels?.length ?? 0);
+      expect(labelled, id).toBeGreaterThan(0);
+    }
+
+    await page.getByTestId("action-description").focus();
+    await page.keyboard.type("Checked the printer queue from the keyboard");
+    const outline = await page.getByTestId("action-description").evaluate((el) => getComputedStyle(el).outlineStyle);
+    expect(outline).not.toBe("none");
+    await page.getByTestId("action-submit").focus();
+    await page.keyboard.press("Enter");
+    await expect(page.getByTestId("actions-success")).toBeVisible();
+    await expect(page.getByTestId("action-row")).toHaveCount(1);
+  });
+});

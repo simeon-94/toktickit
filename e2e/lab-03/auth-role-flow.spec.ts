@@ -17,7 +17,7 @@ test.describe("Authentication and role-based access", () => {
   test("requester can log in, create a ticket, and find it in My Tickets", async ({ page }) => {
     const uniqueSummary = `E2E test ticket ${Date.now()}`;
 
-    await login(page, "jennifer.anderson@example.com", "JenniferSecure2026!");
+    await login(page, "e2e.requester@example.com", "TestPass123!"); // CHG-07: E2E fixture account
 
     await expect(page.getByTestId("current-user")).toContainText("REQUESTER");
     await expect(page.getByTestId("nav-staff-queue")).not.toBeVisible();
@@ -45,7 +45,7 @@ test.describe("Authentication and role-based access", () => {
   });
 
   test("IT staff sees the Ticket Queue but not Requester screens, and can open a ticket", async ({ page }) => {
-    await login(page, "priya.nair@example.com", "12345678");
+    await login(page, "e2e.staff@example.com", "TestPass123!"); // CHG-07: E2E fixture account
 
     await expect(page.getByTestId("current-user")).toContainText("IT_STAFF");
     await expect(page.getByTestId("nav-staff-queue")).toBeVisible();
@@ -64,7 +64,7 @@ test.describe("Authentication and role-based access", () => {
   test("administrator sees User Management and can create a new user", async ({ page }) => {
     const uniqueEmail = `e2e.user.${Date.now()}@example.com`;
 
-    await login(page, "olivia.grant@example.com", "OliviaSecure2026!");
+    await login(page, "e2e.admin@example.com", "TestPass123!"); // CHG-07: E2E fixture account
 
     await expect(page.getByTestId("current-user")).toContainText("ADMINISTRATOR");
     await expect(page.getByTestId("nav-admin-users")).toBeVisible();

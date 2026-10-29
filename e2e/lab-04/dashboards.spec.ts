@@ -1,5 +1,5 @@
 import { test, expect, type Page } from "@playwright/test";
-import { WIDTHS, collectConsoleErrors, login, resetFixtures, shot } from "./helpers";
+import { WIDTHS, collectConsoleErrors, login, logout, openRequesterTicket, openStaffTicket, resetFixtures, shot } from "./helpers";
 
 // RESP-01 evidence for the dashboards and navigation (#54): every state at 1280 / 768 / 320 px.
 // Screenshots go to artifacts/lab-04/screenshots/dashboard-<state>-<width>.png.
@@ -115,3 +115,81 @@ for (const width of WIDTHS) {
     });
   });
 }
+
+test.describe("Dashboards by role and console hygiene (#55)", () => {
+  test.beforeEach(() => resetFixtures());
+
+  test("E2E-03 (AC-13..16, AC-19): every card value equals its drill-down total, for each role", async ({ page }) => {
+    await login(page, "e2e.staff@example.com");
+    const staffCards: Array<[string, string]> = [
+      ["dash-card-unassigned", "staff-queue"],
+      ["dash-card-owned", "staff-queue"],
+      ["dash-card-urgent", "staff-queue"],
+      ["dash-card-planned-actions", "staff-actions-list"],
+      ["dash-card-followups", "staff-actions-list"],
+    ];
+    for (const [card, list] of staffCards) {
+      await page.getByTestId("nav-dashboard").click();
+      const value = await cardValue(page, card);
+      await page.getByTestId(card).click();
+      await expect(page.getByTestId(list)).toBeVisible();
+      await expect(page.getByTestId("drilldown-total"), card).toHaveText(String(value));
+    }
+    for (const status of ["NEW", "IN_PROGRESS", "CANCELLED"]) {
+      await page.getByTestId("nav-dashboard").click();
+      const row = page.getByTestId(`dash-status-row-${status}`);
+      const value = (await row.getByRole("link").textContent())?.trim();
+      await row.getByRole("link").click();
+      await expect(page.getByTestId("drilldown-total"), status).toHaveText(String(value));
+    }
+    await expect(page.getByTestId("dash-users-card")).toHaveCount(0);
+    await logout(page);
+
+    await login(page, "e2e.admin@example.com");
+    await expect(page.getByTestId("dash-users-card")).toBeVisible();
+    await logout(page);
+
+    await login(page, "e2e.requester@example.com");
+    for (const card of ["req-card-open", "req-card-waiting", "req-card-resolved"]) {
+      await page.getByTestId("nav-dashboard").click();
+      const value = await cardValue(page, card);
+      await page.getByTestId(card).click();
+      await expect(page.getByTestId("my-tickets")).toBeVisible();
+      await expect(page.getByTestId("drilldown-total"), card).toHaveText(String(value));
+    }
+  });
+
+  test("HARD-01 (AC-23): no console errors on the login page or any main screen, for every role", async ({ page }) => {
+    const consoleErrors = collectConsoleErrors(page);
+    await page.goto("/");
+    await expect(page.getByTestId("login-form")).toBeVisible();
+
+    await login(page, "e2e.requester@example.com");
+    await expect(page.getByTestId("req-dashboard")).toBeVisible();
+    await page.getByTestId("nav-create-ticket").click();
+    await expect(page.getByTestId("create-ticket-form")).toBeVisible();
+    await openRequesterTicket(page, "E2E-L4-ACTIONS");
+    await expect(page.getByTestId("action-row").first()).toBeVisible();
+    await page.getByTestId("nav-change-password").click();
+    await page.getByTestId("nav-check-system").click();
+    await page.getByTestId("check-system-btn").click();
+    await expect(page.getByTestId("success-state")).toBeVisible();
+    await logout(page);
+
+    await login(page, "e2e.staff@example.com");
+    await expect(page.getByTestId("staff-dashboard")).toBeVisible();
+    await openStaffTicket(page, "E2E-L4-ACTIONS");
+    await expect(page.getByTestId("action-row").first()).toBeVisible();
+    await page.getByTestId("nav-dashboard").click();
+    await page.getByTestId("dash-card-followups").click();
+    await expect(page.getByTestId("staff-actions-list")).toBeVisible();
+    await logout(page);
+
+    await login(page, "e2e.admin@example.com");
+    await page.getByTestId("nav-admin-users").click();
+    await expect(page.getByTestId("admin-users-table")).toBeVisible();
+    await logout(page);
+
+    expect(consoleErrors).toEqual([]);
+  });
+});

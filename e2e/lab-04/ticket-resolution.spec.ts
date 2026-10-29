@@ -85,3 +85,36 @@ for (const width of WIDTHS) {
     });
   });
 }
+
+test.describe("Ticket resolution flow (#55)", () => {
+  test.beforeEach(() => resetFixtures());
+
+  test("E2E-02 (AC-11, AC-18): the gate blocks RESOLVED; complete the planned action; resolve; close; reopen", async ({ page }) => {
+    await login(page, "e2e.staff@example.com");
+    await openStaffTicket(page, "E2E-L4-ACTIONS");
+    const select = page.getByTestId("staff-status-select");
+    const submit = page.getByTestId("status-submit");
+
+    await select.selectOption("RESOLVED");
+    await submit.click();
+    await expect(page.getByTestId("status-gate-reasons").locator("li")).toHaveText(["Complete or cancel planned actions"]);
+    await expect(page.getByTestId("ticket-status-badge")).toHaveText("IN_PROGRESS");
+
+    const planned = page.getByTestId("action-row").filter({ hasText: "Update the VPN client profile" });
+    await planned.getByTestId("action-complete-btn").click();
+    await page.getByTestId("action-result").fill("Profile updated; no drops during a 2-hour test");
+    await page.getByTestId("action-complete-confirm").click();
+    await expect(planned.getByTestId("action-status")).toHaveText("Completed");
+
+    for (const [target, expectedOptions] of [
+      ["RESOLVED", ["RESOLVED", "CLOSED", "REOPENED"]],
+      ["CLOSED", ["CLOSED", "REOPENED"]],
+      ["REOPENED", ["REOPENED", "IN_PROGRESS", "WAITING_FOR_REQUESTER", "RESOLVED", "CANCELLED"]],
+    ] as const) {
+      await select.selectOption(target);
+      await submit.click();
+      await expect(page.getByTestId("ticket-status-badge")).toHaveText(target);
+      await expect(select.locator("option")).toHaveText([...expectedOptions]);
+    }
+  });
+});
