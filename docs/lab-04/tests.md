@@ -71,6 +71,7 @@ then re-run on `main` before the final report.
 | HARD-07 | Hardening | AC-21, AC-23 | `GET /api/staff/tickets` with an unknown `status`, `requestedPriority` or `itPriority` (#69, CL-07) | 400 VALIDATION with `fields`; valid values 200 | server/tests/lab-04/filter-validation.api.test.ts | Pass |
 | HARD-08 | Hardening | AC-23 | A rejected async route handler (#69, CL-07) | 500 `{ error: "Something went wrong.", code: "INTERNAL" }`, no internal detail, process keeps running | server/tests/lab-04/filter-validation.api.test.ts | Pass |
 | HARD-09 | Hardening | AC-21 | My Tickets status filter "New" (#69, CL-07) | Option value `NEW`; request sends `status=NEW`, never `status=New` | client/src/components/lab-04/MyTicketsFilter.test.tsx | Pass |
+| RESP-02 | Responsive | AC-21, AC-22 | Lab 3 Admin Users at 1280/768/320 (#71, CL-08): table in a scroll container; Active column reachable; list and edit panel | No page-level horizontal scroll | e2e/lab-04/admin-users-responsive.spec.ts | Pass |
 
 ## 3. Acceptance Criteria Traceability
 | AC | Tests |
@@ -95,8 +96,8 @@ then re-run on `main` before the final report.
 | AC-18 | UI-05, UI-06, E2E-02 |
 | AC-19 | UI-07, UI-08, E2E-03 |
 | AC-20 | MIG-01, MIG-02 |
-| AC-21 | REG-01..03, HARD-06, HARD-07, HARD-09 |
-| AC-22 | RESP-01, A11Y-01, A11Y-02, STYLE-01 |
+| AC-21 | REG-01..03, HARD-06, HARD-07, HARD-09, RESP-02 |
+| AC-22 | RESP-01, RESP-02, A11Y-01, A11Y-02, STYLE-01 |
 | AC-23 | HARD-01, HARD-02, HARD-04, HARD-05, HARD-06, HARD-07, HARD-08 |
 
 ## 4. Allowed Changes to Earlier Tests
