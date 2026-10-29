@@ -1,6 +1,6 @@
 # command : (cd server && npx vitest run --reporter=verbose)
-# commit  : 97f11ff24e787db540157d80ae9931edd67afa2d (feature/69-ticket-filter-validation)
-# date    : 2026-10-29T06:34:11Z (UTC)
+# commit  : d3c012638a5f14463053c0f118499043dd39548b (feature/69-ticket-filter-validation)
+# date    : 2026-10-29T06:41:55Z (UTC)
 # host    : MINGW64_NT-10.0-26200 node v24.19.0
 
 The CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.
@@ -8,80 +8,79 @@ The CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troub
  RUN  v2.1.9 C:/dev/toktickit/server
 
 [test setup] using fresh test database "toktickit_test" (migrated and seeded)
- ✓ tests/lab-04/actions-taken.api.test.ts > Lab 4 — actions-taken.api > API-01 (AC-01): staff creates a valid action; performer = caller, assignee defaults to caller 1286ms
- ✓ tests/lab-04/actions-taken.api.test.ts > Lab 4 — actions-taken.api > API-02 (AC-03): invalid create payloads return 400 VALIDATION with field errors and store nothing 926ms
- ✓ tests/lab-04/actions-taken.api.test.ts > Lab 4 — actions-taken.api > API-03 (AC-04): inactive or Requester-role assignee is rejected; active staff assignee is accepted 1394ms
- ✓ tests/lab-04/actions-taken.api.test.ts > Lab 4 — actions-taken.api > API-04 (AC-05): PLANNED actions can be edited; COMPLETED/CANCELLED are locked (422 ACTION_LOCKED) 969ms
- ✓ tests/lab-04/actions-taken.api.test.ts > Lab 4 — actions-taken.api > API-05 (AC-06): complete requires a result; cancel sets CANCELLED; no DELETE endpoint 959ms
- ✓ tests/lab-04/actions-taken.api.test.ts > Lab 4 — actions-taken.api > API-06 (AC-07): staff B acts on a Ticket owned by staff A; list is stable (actionAt desc, id desc) 1395ms
- ✓ tests/lab-04/actions-taken.api.test.ts > Lab 4 — actions-taken.api > API-07 (AC-08): stale action updates return 409 STALE_UPDATE and leave data unchanged 893ms
- ✓ tests/lab-04/actions-taken.api.test.ts > Lab 4 — actions-taken.api > API-08 (AC-09): the same clientRequestId creates exactly one action 797ms
- ✓ tests/lab-04/actions-taken.api.test.ts > Lab 4 — actions-taken.api > API-09 (AC-02): Requesters cannot write actions, can read their own Ticket's actions, get 404 on others 1825ms
- ✓ tests/lab-04/actions-taken.api.test.ts > Lab 4 — actions-taken.api > API-10 (L4-BR-11): actions cannot be created on CLOSED or CANCELLED Tickets 857ms
- ✓ tests/lab-04/actions-taken.api.test.ts > Lab 4 — actions-taken.api > Ticket version is exposed on Ticket Detail and staff queue items (api-spec conventions) 1192ms
- ✓ tests/lab-04/staff-dashboard.api.test.ts > Lab 4 — staff-dashboard.api > API-14 (AC-14): every metric equals a direct SQL count (null itPriority counted as requestedPriority) 558ms
+ ✓ tests/lab-04/actions-taken.api.test.ts > Lab 4 — actions-taken.api > API-01 (AC-01): staff creates a valid action; performer = caller, assignee defaults to caller 852ms
+ ✓ tests/lab-04/actions-taken.api.test.ts > Lab 4 — actions-taken.api > API-02 (AC-03): invalid create payloads return 400 VALIDATION with field errors and store nothing 409ms
+ ✓ tests/lab-04/actions-taken.api.test.ts > Lab 4 — actions-taken.api > API-03 (AC-04): inactive or Requester-role assignee is rejected; active staff assignee is accepted 677ms
+ ✓ tests/lab-04/actions-taken.api.test.ts > Lab 4 — actions-taken.api > API-04 (AC-05): PLANNED actions can be edited; COMPLETED/CANCELLED are locked (422 ACTION_LOCKED) 551ms
+ ✓ tests/lab-04/actions-taken.api.test.ts > Lab 4 — actions-taken.api > API-05 (AC-06): complete requires a result; cancel sets CANCELLED; no DELETE endpoint 507ms
+ ✓ tests/lab-04/actions-taken.api.test.ts > Lab 4 — actions-taken.api > API-06 (AC-07): staff B acts on a Ticket owned by staff A; list is stable (actionAt desc, id desc) 678ms
+ ✓ tests/lab-04/actions-taken.api.test.ts > Lab 4 — actions-taken.api > API-07 (AC-08): stale action updates return 409 STALE_UPDATE and leave data unchanged 396ms
+ ✓ tests/lab-04/actions-taken.api.test.ts > Lab 4 — actions-taken.api > API-08 (AC-09): the same clientRequestId creates exactly one action 399ms
+ ✓ tests/lab-04/actions-taken.api.test.ts > Lab 4 — actions-taken.api > API-09 (AC-02): Requesters cannot write actions, can read their own Ticket's actions, get 404 on others 841ms
+ ✓ tests/lab-04/actions-taken.api.test.ts > Lab 4 — actions-taken.api > API-10 (L4-BR-11): actions cannot be created on CLOSED or CANCELLED Tickets 455ms
+ ✓ tests/lab-04/actions-taken.api.test.ts > Lab 4 — actions-taken.api > Ticket version is exposed on Ticket Detail and staff queue items (api-spec conventions) 606ms
+ ✓ tests/lab-04/staff-dashboard.api.test.ts > Lab 4 — staff-dashboard.api > API-14 (AC-14): every metric equals a direct SQL count (null itPriority counted as requestedPriority) 570ms
  ✓ tests/lab-04/staff-dashboard.api.test.ts > Lab 4 — staff-dashboard.api > API-14 (AC-14): lists follow the specified filters, order and cap of 5
  ✓ tests/lab-04/staff-dashboard.api.test.ts > Lab 4 — staff-dashboard.api > API-15 (AC-14): zero state for a new staff member and the 7-day recent window
- ✓ tests/lab-04/staff-dashboard.api.test.ts > Lab 4 — staff-dashboard.api > API-16 (AC-15): administrators get userCounts, staff do not, Requesters get 403 364ms
- ✓ tests/lab-04/staff-dashboard.api.test.ts > Lab 4 — staff-dashboard.api > API-17 (AC-16): each card count equals its drill-down total (queue and actions lists) 684ms
- ✓ tests/lab-04/staff-dashboard.api.test.ts > Lab 4 — staff-dashboard.api > API-17: the Lab 3 itPriority filter stays exact; new filters validate their values 623ms
+ ✓ tests/lab-04/staff-dashboard.api.test.ts > Lab 4 — staff-dashboard.api > API-16 (AC-15): administrators get userCounts, staff do not, Requesters get 403 360ms
+ ✓ tests/lab-04/staff-dashboard.api.test.ts > Lab 4 — staff-dashboard.api > API-17 (AC-16): each card count equals its drill-down total (queue and actions lists) 426ms
+ ✓ tests/lab-04/staff-dashboard.api.test.ts > Lab 4 — staff-dashboard.api > API-17: the Lab 3 itPriority filter stays exact; new filters validate their values
 stdout | tests/lab-04/staff-dashboard.api.test.ts > Lab 4 — staff-dashboard.api > PERF-01 (AC-14): both dashboards respond in under 500 ms on seeded data
-PERF-01 staff dashboard 32.9 ms, requester dashboard 303.1 ms
+PERF-01 staff dashboard 13.8 ms, requester dashboard 205.7 ms
 
- ✓ tests/lab-04/staff-dashboard.api.test.ts > Lab 4 — staff-dashboard.api > PERF-01 (AC-14): both dashboards respond in under 500 ms on seeded data 899ms
- ✓ tests/lab-04/ticket-workflow.api.test.ts > Lab 4 — ticket-workflow.api > WF-01 (AC-10): every allowed transition succeeds for staff and bumps version 551ms
+ ✓ tests/lab-04/staff-dashboard.api.test.ts > Lab 4 — staff-dashboard.api > PERF-01 (AC-14): both dashboards respond in under 500 ms on seeded data 457ms
+ ✓ tests/lab-04/ticket-workflow.api.test.ts > Lab 4 — ticket-workflow.api > WF-01 (AC-10): every allowed transition succeeds for staff and bumps version 1108ms
  ✓ tests/lab-04/ticket-workflow.api.test.ts > Lab 4 — ticket-workflow.api > WF-01 (AC-10): an Administrator can change status too
- ✓ tests/lab-04/ticket-workflow.api.test.ts > Lab 4 — ticket-workflow.api > WF-02 (AC-10): disallowed, same-status and from-CANCELLED transitions return 422 INVALID_TRANSITION with the allowed list 429ms
+ ✓ tests/lab-04/ticket-workflow.api.test.ts > Lab 4 — ticket-workflow.api > WF-02 (AC-10): disallowed, same-status and from-CANCELLED transitions return 422 INVALID_TRANSITION with the allowed list 489ms
  ✓ tests/lab-04/ticket-workflow.api.test.ts > Lab 4 — ticket-workflow.api > WF-03 (AC-10): a Requester cannot change status (403)
  ✓ tests/lab-04/ticket-workflow.api.test.ts > Lab 4 — ticket-workflow.api > WF-04 (AC-11): the resolution gate blocks RESOLVED with the failing reasons
  ✓ tests/lab-04/ticket-workflow.api.test.ts > Lab 4 — ticket-workflow.api > WF-05 (AC-11): the gate passes when all conditions hold; the Requester's indicator alone never resolves
  ✓ tests/lab-04/ticket-workflow.api.test.ts > Lab 4 — ticket-workflow.api > WF-06 (AC-12): moving to REOPENED resets requesterIndicatedResolved
- ✓ tests/lab-04/ticket-workflow.api.test.ts > Lab 4 — ticket-workflow.api > WF-07 (AC-08): a stale status update from a second user is rejected with 409 and not written 654ms
+ ✓ tests/lab-04/ticket-workflow.api.test.ts > Lab 4 — ticket-workflow.api > WF-07 (AC-08): a stale status update from a second user is rejected with 409 and not written 319ms
  ✓ tests/lab-04/ticket-workflow.api.test.ts > Lab 4 — ticket-workflow.api > WF-07 (L4-BR-15): owner and priority check expectedVersion only when supplied and always bump version
  ✓ tests/lab-04/ticket-workflow.api.test.ts > Lab 4 — ticket-workflow.api > WF-08 (AC-08): a status change without expectedVersion returns 400
  ✓ tests/lab-04/ticket-workflow.api.test.ts > Lab 4 — ticket-workflow.api > status change checks 404 before validation and validation before conflicts (api-spec section 6 order)
  ✓ tests/lab-04/migration.test.ts > Lab 4 — migration (scratch database) > the lab4_actions_taken migration exists and is additive only
- ✓ tests/lab-04/migration.test.ts > Lab 4 — migration (scratch database) > MIG-01 (AC-20): Lab 3 data is preserved after migrating and every Ticket gets version = 1 18418ms
- ✓ tests/lab-04/migration.test.ts > Lab 4 — migration (scratch database) > MIG-02 (AC-20): rollback.sql removes Lab 4 objects cleanly, the migration re-applies, and seeding twice creates no duplicates 13838ms
- ✓ tests/lab-03/staff-ticket-detail.api.test.ts > Lab 3 — staff-ticket-detail.api > IT Staff can retrieve any Ticket by id, not just their own 924ms
- ✓ tests/lab-03/staff-ticket-detail.api.test.ts > Lab 3 — staff-ticket-detail.api > AC-08: IT Staff can claim an unassigned ticket, becoming Ticket Owner 375ms
- ✓ tests/lab-03/staff-ticket-detail.api.test.ts > Lab 3 — staff-ticket-detail.api > IT Staff can reassign ownership to another active staff member 493ms
- ✓ tests/lab-03/staff-ticket-detail.api.test.ts > Lab 3 — staff-ticket-detail.api > assigning ownership to an inactive or non-staff user is rejected 470ms
- ✓ tests/lab-03/staff-ticket-detail.api.test.ts > Lab 3 — staff-ticket-detail.api > IT Priority can be changed by IT Staff, independent of Requested Priority 362ms
- ✓ tests/lab-03/staff-ticket-detail.api.test.ts > Lab 3 — staff-ticket-detail.api > a permitted status change is accepted 361ms
- ✓ tests/lab-03/staff-ticket-detail.api.test.ts > Lab 3 — staff-ticket-detail.api > an invalid status value is rejected 341ms
- ✓ tests/lab-03/staff-ticket-detail.api.test.ts > Lab 3 — staff-ticket-detail.api > a Requester cannot claim, reassign, change priority, or change status 378ms
- ✓ tests/lab-04/requester-dashboard.api.test.ts > Lab 4 — requester-dashboard.api > API-11 (AC-13): counts and lists are scoped to the authenticated Requester 484ms
+ ✓ tests/lab-04/migration.test.ts > Lab 4 — migration (scratch database) > MIG-01 (AC-20): Lab 3 data is preserved after migrating and every Ticket gets version = 1 18215ms
+ ✓ tests/lab-04/migration.test.ts > Lab 4 — migration (scratch database) > MIG-02 (AC-20): rollback.sql removes Lab 4 objects cleanly, the migration re-applies, and seeding twice creates no duplicates 15357ms
+ ✓ tests/lab-03/staff-ticket-detail.api.test.ts > Lab 3 — staff-ticket-detail.api > IT Staff can retrieve any Ticket by id, not just their own 874ms
+ ✓ tests/lab-03/staff-ticket-detail.api.test.ts > Lab 3 — staff-ticket-detail.api > AC-08: IT Staff can claim an unassigned ticket, becoming Ticket Owner 445ms
+ ✓ tests/lab-03/staff-ticket-detail.api.test.ts > Lab 3 — staff-ticket-detail.api > IT Staff can reassign ownership to another active staff member 495ms
+ ✓ tests/lab-03/staff-ticket-detail.api.test.ts > Lab 3 — staff-ticket-detail.api > assigning ownership to an inactive or non-staff user is rejected 511ms
+ ✓ tests/lab-03/staff-ticket-detail.api.test.ts > Lab 3 — staff-ticket-detail.api > IT Priority can be changed by IT Staff, independent of Requested Priority 376ms
+ ✓ tests/lab-03/staff-ticket-detail.api.test.ts > Lab 3 — staff-ticket-detail.api > a permitted status change is accepted 429ms
+ ✓ tests/lab-03/staff-ticket-detail.api.test.ts > Lab 3 — staff-ticket-detail.api > an invalid status value is rejected 375ms
+ ✓ tests/lab-03/staff-ticket-detail.api.test.ts > Lab 3 — staff-ticket-detail.api > a Requester cannot claim, reassign, change priority, or change status 365ms
+ ✓ tests/lab-04/requester-dashboard.api.test.ts > Lab 4 — requester-dashboard.api > API-11 (AC-13): counts and lists are scoped to the authenticated Requester 718ms
  ✓ tests/lab-04/requester-dashboard.api.test.ts > Lab 4 — requester-dashboard.api > API-11 (AC-13): a Requester with zero Tickets gets zeros and empty lists
- ✓ tests/lab-04/requester-dashboard.api.test.ts > Lab 4 — requester-dashboard.api > API-12 (AC-13): staff and administrators get 403, anonymous gets 401 486ms
- ✓ tests/lab-04/requester-dashboard.api.test.ts > Lab 4 — requester-dashboard.api > API-13 (AC-16): each card count equals the total of its My Tickets drill-down 318ms
+ ✓ tests/lab-04/requester-dashboard.api.test.ts > Lab 4 — requester-dashboard.api > API-12 (AC-13): staff and administrators get 403, anonymous gets 401 512ms
+ ✓ tests/lab-04/requester-dashboard.api.test.ts > Lab 4 — requester-dashboard.api > API-13 (AC-16): each card count equals the total of its My Tickets drill-down
  ✓ tests/lab-04/requester-dashboard.api.test.ts > Lab 4 — requester-dashboard.api > API-13: an unknown statusGroup on My Tickets returns 400
- ✓ tests/lab-04/hardening.api.test.ts > Lab 4 — hardening.api (#55) > HARD-02: a user who must change their password is blocked from the API until they do 1064ms
- ✓ tests/lab-04/hardening.api.test.ts > Lab 4 — hardening.api (#55) > HARD-02: a token issued before deactivation stops working (401) 347ms
+ ✓ tests/lab-04/hardening.api.test.ts > Lab 4 — hardening.api (#55) > HARD-02: a user who must change their password is blocked from the API until they do 1031ms
+ ✓ tests/lab-04/hardening.api.test.ts > Lab 4 — hardening.api (#55) > HARD-02: a token issued before deactivation stops working (401) 428ms
  ✓ tests/lab-04/hardening.api.test.ts > Lab 4 — hardening.api (#55) > HARD-03: a clientRequestId conflict maps to the same outcome as the pre-check
- ✓ tests/lab-04/hardening.api.test.ts > Lab 4 — hardening.api (#55) > HARD-03: concurrent reuse of one clientRequestId on two Tickets never returns 500 1105ms
+ ✓ tests/lab-04/hardening.api.test.ts > Lab 4 — hardening.api (#55) > HARD-03: concurrent reuse of one clientRequestId on two Tickets never returns 500 1174ms
  ✓ tests/lab-04/hardening.api.test.ts > Lab 4 — hardening.api (#55) > HARD-05: /api/auth/me?optional=1 answers 200 null when logged out; plain /me keeps its 401
- ✓ tests/lab-04/hardening.api.test.ts > Lab 4 — hardening.api (#55) > HARD-02: the seeded first-login flow still works (forced change, then access) 628ms
- ✓ tests/lab-03/comments-notes.api.test.ts > Lab 3 — comments-notes.api > BR-04: a Requester can post and read Public Comments on their own ticket 650ms
- ✓ tests/lab-03/comments-notes.api.test.ts > Lab 3 — comments-notes.api > BR-04: a Public Comment posted by IT Staff is visible to the Requester 508ms
+ ✓ tests/lab-04/hardening.api.test.ts > Lab 4 — hardening.api (#55) > HARD-02: the seeded first-login flow still works (forced change, then access) 701ms
+ ✓ tests/lab-03/comments-notes.api.test.ts > Lab 3 — comments-notes.api > BR-04: a Requester can post and read Public Comments on their own ticket 704ms
+ ✓ tests/lab-03/comments-notes.api.test.ts > Lab 3 — comments-notes.api > BR-04: a Public Comment posted by IT Staff is visible to the Requester 530ms
  ✓ tests/lab-03/comments-notes.api.test.ts > Lab 3 — comments-notes.api > BR-13: an empty or whitespace-only comment is rejected
- ✓ tests/lab-03/comments-notes.api.test.ts > Lab 3 — comments-notes.api > BR-04: IT Staff can post and read Internal Notes; content never appears via the Public Comments endpoint 528ms
- ✓ tests/lab-03/comments-notes.api.test.ts > Lab 3 — comments-notes.api > BR-13: an empty Internal Note is rejected 446ms
+ ✓ tests/lab-03/comments-notes.api.test.ts > Lab 3 — comments-notes.api > BR-04: IT Staff can post and read Internal Notes; content never appears via the Public Comments endpoint 496ms
+ ✓ tests/lab-03/comments-notes.api.test.ts > Lab 3 — comments-notes.api > BR-13: an empty Internal Note is rejected 341ms
  ✓ tests/lab-03/comments-notes.api.test.ts > Lab 3 — comments-notes.api > a Requester cannot post or read Internal Notes on their own ticket
- ✓ tests/lab-03/users-admin.api.test.ts > Lab 3 — users-admin.api > AC-13: creating a user with a duplicate email is rejected 604ms
- ✓ tests/lab-03/users-admin.api.test.ts > Lab 3 — users-admin.api > AC-15: resetting a user's password forces mustChangePassword at next login 504ms
- ✓ tests/lab-03/users-admin.api.test.ts > Lab 3 — users-admin.api > AC-14 / BR-14: an Administrator cannot deactivate their own account 323ms
- ✓ tests/lab-03/users-admin.api.test.ts > Lab 3 — users-admin.api > BR-15: the last active Administrator cannot be deactivated or have their role changed 480ms
- ✓ tests/lab-03/users-admin.api.test.ts > Lab 3 — users-admin.api > a non-Administrator cannot list, create, or edit users 363ms
- ✓ tests/lab-03/staff-queue.api.test.ts > Lab 3 — staff-queue.api > IT Staff can retrieve the queue with pagination metadata 798ms
- ✓ tests/lab-03/staff-queue.api.test.ts > Lab 3 — staff-queue.api > search matches ticket summary text 335ms
- ✓ tests/lab-03/staff-queue.api.test.ts > Lab 3 — staff-queue.api > unassigned=true returns only tickets with no Ticket Owner 658ms
- ✓ tests/lab-03/staff-queue.api.test.ts > Lab 3 — staff-queue.api > status filter only returns tickets in that status 437ms
- ✓ tests/lab-03/staff-queue.api.test.ts > Lab 3 — staff-queue.api > GET /api/staff/users returns only active IT Staff and Administrator accounts 399ms
+ ✓ tests/lab-03/users-admin.api.test.ts > Lab 3 — users-admin.api > AC-13: creating a user with a duplicate email is rejected 673ms
+ ✓ tests/lab-03/users-admin.api.test.ts > Lab 3 — users-admin.api > AC-15: resetting a user's password forces mustChangePassword at next login 537ms
+ ✓ tests/lab-03/users-admin.api.test.ts > Lab 3 — users-admin.api > AC-14 / BR-14: an Administrator cannot deactivate their own account 348ms
+ ✓ tests/lab-03/users-admin.api.test.ts > Lab 3 — users-admin.api > BR-15: the last active Administrator cannot be deactivated or have their role changed 522ms
+ ✓ tests/lab-03/users-admin.api.test.ts > Lab 3 — users-admin.api > a non-Administrator cannot list, create, or edit users 358ms
+ ✓ tests/lab-03/staff-queue.api.test.ts > Lab 3 — staff-queue.api > IT Staff can retrieve the queue with pagination metadata 841ms
+ ✓ tests/lab-03/staff-queue.api.test.ts > Lab 3 — staff-queue.api > search matches ticket summary text 393ms
+ ✓ tests/lab-03/staff-queue.api.test.ts > Lab 3 — staff-queue.api > unassigned=true returns only tickets with no Ticket Owner 579ms
+ ✓ tests/lab-03/staff-queue.api.test.ts > Lab 3 — staff-queue.api > status filter only returns tickets in that status 370ms
+ ✓ tests/lab-03/staff-queue.api.test.ts > Lab 3 — staff-queue.api > GET /api/staff/users returns only active IT Staff and Administrator accounts 360ms
  ✓ tests/lab-03/staff-queue.api.test.ts > Lab 3 — staff-queue.api > a Requester calling the Queue gets 403
- ✓ tests/lab-04/filter-validation.api.test.ts > Lab 4 — ticket list filter validation (#69) > HARD-06: GET /api/tickets rejects an unknown status or priority with 400 VALIDATION 888ms
- ✓ tests/lab-04/filter-validation.api.test.ts > Lab 4 — ticket list filter validation (#69) > HARD-06: GET /api/tickets still filters by a valid status and priority 362ms
- ✓ tests/lab-04/filter-validation.api.test.ts > Lab 4 — ticket list filter validation (#69) > HARD-07: GET /api/staff/tickets rejects an unknown status, requestedPriority or itPriority with 400 VALIDATION 398ms
+ ✓ tests/lab-04/filter-validation.api.test.ts > Lab 4 — ticket list filter validation (#69) > HARD-06: GET /api/tickets rejects an unknown status or priority with 400 VALIDATION 777ms
+ ✓ tests/lab-04/filter-validation.api.test.ts > Lab 4 — ticket list filter validation (#69) > HARD-06: GET /api/tickets still filters by a valid status and priority 323ms
 stderr | tests/lab-04/filter-validation.api.test.ts > Lab 4 — ticket list filter validation (#69) > HARD-08: a rejected async route handler returns the safe 500 INTERNAL instead of crashing
 Unhandled route error: Error: database exploded: secret detail
     at C:\dev\toktickit\server\tests\lab-04\filter-validation.api.test.ts:94:13
@@ -95,6 +94,7 @@ Unhandled route error: Error: database exploded: secret detail
     at next (C:\dev\toktickit\server\node_modules\express\lib\router\index.js:280:10)
     at router.handle (C:\dev\toktickit\server\node_modules\express\lib\router\index.js:175:3)
 
+ ✓ tests/lab-04/filter-validation.api.test.ts > Lab 4 — ticket list filter validation (#69) > HARD-07: GET /api/staff/tickets rejects an unknown status, requestedPriority or itPriority with 400 VALIDATION 382ms
  ✓ tests/lab-04/filter-validation.api.test.ts > Lab 4 — ticket list filter validation (#69) > HARD-08: a rejected async route handler returns the safe 500 INTERNAL instead of crashing
  ✓ src/utils/actionValidation.test.ts > Lab 4 — UNIT-03 action input validation (L4-BR-05/06) > accepts a minimal valid payload and applies defaults
  ✓ src/utils/actionValidation.test.ts > Lab 4 — UNIT-03 action input validation (L4-BR-05/06) > rejects a missing or too short description (trimmed)
@@ -106,18 +106,18 @@ Unhandled route error: Error: database exploded: secret detail
  ✓ src/utils/actionValidation.test.ts > Lab 4 — UNIT-03 action input validation (L4-BR-05/06) > rejects an invalid or out-of-range actionAt (1 year ahead / 5 years back)
  ✓ src/utils/actionValidation.test.ts > Lab 4 — UNIT-03 action input validation (L4-BR-05/06) > rejects a non-integer assigneeId
  ✓ src/utils/actionValidation.test.ts > Lab 4 — UNIT-03 action input validation (L4-BR-05/06) > validates the completion result (required, 1-1000, trimmed)
- ✓ tests/lab-03/authorization.api.test.ts > Lab 3 — authorization.api > AC-06: a client-supplied requesterId is ignored; ownership always comes from the authenticated user 846ms
+ ✓ tests/lab-03/authorization.api.test.ts > Lab 3 — authorization.api > AC-06: a client-supplied requesterId is ignored; ownership always comes from the authenticated user 800ms
  ✓ tests/lab-03/authorization.api.test.ts > Lab 3 — authorization.api > AC-07: a Requester calling the Internal Notes endpoint is rejected without leaking note content
  ✓ tests/lab-03/authorization.api.test.ts > Lab 3 — authorization.api > AC-12: a non-Administrator calling /api/admin/users gets 403
  ✓ tests/lab-03/authorization.api.test.ts > Lab 3 — authorization.api > a Requester calling the IT Staff Ticket Queue gets 403
- ✓ tests/lab-03/authorization.api.test.ts > Lab 3 — authorization.api > IT Staff and Administrator can both reach the Ticket Queue 752ms
- ✓ tests/lab-03/auth.api.test.ts > Lab 3 — auth.api > AC-01: valid active-user login returns authenticated identity and role 495ms
+ ✓ tests/lab-03/authorization.api.test.ts > Lab 3 — authorization.api > IT Staff and Administrator can both reach the Ticket Queue 604ms
+ ✓ tests/lab-03/auth.api.test.ts > Lab 3 — auth.api > AC-01: valid active-user login returns authenticated identity and role 443ms
  ✓ tests/lab-03/auth.api.test.ts > Lab 3 — auth.api > AC-02: wrong password returns a generic error, no account details
  ✓ tests/lab-03/auth.api.test.ts > Lab 3 — auth.api > AC-02: inactive account returns the same generic error as a wrong password
-Thu, 29 Oct 2026 06:35:59 GMT express deprecated res.clearCookie: Passing "options.maxAge" is deprecated. In v5.0.0 of Express, this option will be ignored, as res.clearCookie will automatically set cookies to expire immediately. Please update your code to omit this option. at src\routes\auth.ts:43:7
- ✓ tests/lab-03/auth.api.test.ts > Lab 3 — auth.api > AC-05: logout invalidates the session; a later request with the old cookie is rejected
+Thu, 29 Oct 2026 06:43:35 GMT express deprecated res.clearCookie: Passing "options.maxAge" is deprecated. In v5.0.0 of Express, this option will be ignored, as res.clearCookie will automatically set cookies to expire immediately. Please update your code to omit this option. at src\routes\auth.ts:43:7
+ ✓ tests/lab-03/auth.api.test.ts > Lab 3 — auth.api > AC-05: logout invalidates the session; a later request with the old cookie is rejected 353ms
  ✓ tests/lab-03/auth.api.test.ts > Lab 3 — auth.api > GET /api/auth/me with no cookie at all returns 401
- ✓ tests/lab-02/attachments.api.test.ts > Attachments > POST /api/tickets/:id/attachments > rejects a file type that isn't JPG, PNG, WEBP, or PDF
+ ✓ tests/lab-02/attachments.api.test.ts > Attachments > POST /api/tickets/:id/attachments > rejects a file type that isn't JPG, PNG, WEBP, or PDF 310ms
  ✓ tests/lab-02/attachments.api.test.ts > Attachments > Attachment removal and download > soft-removes an attachment and still returns its metadata
  ✓ tests/lab-02/attachments.api.test.ts > Attachments > Attachment removal and download > blocks downloading an attachment after it has been removed
  ✓ src/utils/ticketWorkflow.test.ts > Lab 4 — UNIT-01 transition matrix (L4-BR-12) > returns true for exactly the 20 allowed pairs out of 64
@@ -125,7 +125,7 @@ Thu, 29 Oct 2026 06:35:59 GMT express deprecated res.clearCookie: Passing "optio
  ✓ src/utils/ticketWorkflow.test.ts > Lab 4 — UNIT-01 transition matrix (L4-BR-12) > lists the allowed next statuses for each status
  ✓ src/utils/ticketWorkflow.test.ts > Lab 4 — UNIT-02 resolution gate (L4-BR-13) > passes with an owner, a completed action and no planned action
  ✓ src/utils/ticketWorkflow.test.ts > Lab 4 — UNIT-02 resolution gate (L4-BR-13) > reports every failing condition in a stable order
- ✓ tests/lab-02/my-tickets.api.test.ts > GET /api/tickets > never returns another requester's tickets 373ms
+ ✓ tests/lab-02/my-tickets.api.test.ts > GET /api/tickets > never returns another requester's tickets
  ✓ tests/lab-02/my-tickets.api.test.ts > GET /api/tickets > combines category and priority filters
  ✓ tests/lab-02/ticket-detail.api.test.ts > GET /api/tickets/:id > does not leak a ticket that belongs to another requester
  ✓ tests/lab-02/ticket-detail.api.test.ts > GET /api/tickets/:id > returns the full ticket when the requester owns it
@@ -141,8 +141,8 @@ Thu, 29 Oct 2026 06:35:59 GMT express deprecated res.clearCookie: Passing "optio
 
  Test Files  23 passed (23)
       Tests  113 passed (113)
-   Start at  13:34:15
-   Duration  114.72s (transform 1.14s, setup 0ms, collect 13.07s, tests 80.77s, environment 5ms, prepare 3.19s)
+   Start at  13:41:59
+   Duration  107.84s (transform 539ms, setup 0ms, collect 11.98s, tests 77.77s, environment 6ms, prepare 3.16s)
 
 
 # exit code: 0
