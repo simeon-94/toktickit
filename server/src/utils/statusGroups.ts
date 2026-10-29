@@ -34,6 +34,21 @@ export function isPriority(value: unknown): value is Priority {
   return typeof value === "string" && (Object.values(Priority) as string[]).includes(value);
 }
 
+export function isTicketStatus(value: unknown): value is TicketStatus {
+  return typeof value === "string" && (Object.values(TicketStatus) as string[]).includes(value);
+}
+
+// Ticket list query filters that must be enum values (#69, CL-07); returns field errors for the others.
+export function invalidEnumFilters(filters: Record<string, string | undefined>) {
+  const fields: Record<string, string> = {};
+  for (const [name, value] of Object.entries(filters)) {
+    if (value === undefined) continue;
+    const valid = name === "status" ? isTicketStatus(value) : isPriority(value);
+    if (!valid) fields[name] = "invalid";
+  }
+  return fields;
+}
+
 // Effective priority = itPriority, or requestedPriority when IT has not set one (spec CL-01).
 export function effectivePriorityWhere(priority: Priority): Prisma.TicketWhereInput {
   return { OR: [{ itPriority: priority }, { itPriority: null, requestedPriority: priority }] };

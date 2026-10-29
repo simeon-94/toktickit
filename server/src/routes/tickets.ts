@@ -7,7 +7,7 @@ import { generateTicketNumber } from "../utils/ticketNumber";
 import { requireAuth, requireRole } from "../middleware/auth";
 import { parseExpectedVersion } from "../utils/actionValidation";
 import { allowedTransitions, isTransitionAllowed, resolutionGateReasons } from "../utils/ticketWorkflow";
-import { isStatusGroup, statusGroupWhere } from "../utils/statusGroups";
+import { invalidEnumFilters, isStatusGroup, statusGroupWhere } from "../utils/statusGroups";
 
 const router = Router();
 const prisma = new PrismaClient();
@@ -106,6 +106,15 @@ router.get("/", async (req, res) => {
       { summary: { contains: search, mode: "insensitive" } },
     ];
   }
+  const invalidFields = invalidEnumFilters({ status: status || undefined, priority: priority || undefined });
+  if (Object.keys(invalidFields).length > 0) {
+    return res.status(400).json({
+      error: "status must be a ticket status and priority must be LOW, MEDIUM, or HIGH.",
+      code: "VALIDATION",
+      fields: invalidFields,
+    });
+  }
+
   if (categoryId) where.categoryId = categoryId;
   if (priority) where.requestedPriority = priority;
   if (status) where.currentStatus = status;
