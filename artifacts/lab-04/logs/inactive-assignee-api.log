@@ -1,6 +1,6 @@
 # command : (cd /c/dev/toktickit && bash e2e/lab-04/inactive-assignee-api.sh)
-# commit  : ddfa11272cf399df3427468ab6a2bbd6c0e7b0ec (feature/68-evidence-completion)
-# date    : 2026-10-29T07:30:12Z (UTC)
+# commit  : 333da7e5328520e2a24d7e0fc5999b3a4e03001c (feature/68-evidence-completion)
+# date    : 2026-10-29T07:40:34Z (UTC)
 # host    : MINGW64_NT-10.0-26200 node v24.19.0
 
 ## 1. Precondition (as e2e.admin): the assignee is an inactive IT Staff user
@@ -8,7 +8,7 @@ $ curl -b <admin session> GET /api/admin/users  | filter name = "Mark Diaz"
 {"id":9,"name":"Mark Diaz","role":"IT_STAFF","isActive":false}
 
 ## 2. Request (as e2e.staff, IT_STAFF) on Ticket E2E-L4-ACTIONS (id 9); actions before: 3
-$ curl -i -b <staff session> -H 'Content-Type: application/json' -X POST http://localhost:4000/api/tickets/9/actions -d '{"clientRequestId":"1e8c51c1-57ed-4adf-9fb9-f70b31e6430d","actionAt":"2026-10-29T07:30:14.000Z","description":"Hand the follow-up to a colleague","assigneeId":9,"followUpRequired":false}'
+$ curl -i -b <staff session> -H 'Content-Type: application/json' -X POST http://localhost:4000/api/tickets/9/actions -d '{"clientRequestId":"a11e442d-58f0-42c0-bdb0-05dafebd00ce","actionAt":"2026-10-29T07:40:36.000Z","description":"Hand the follow-up to a colleague","assigneeId":9,"followUpRequired":false}'
 
 ## 3. Response
 HTTP/1.1 400 Bad Request

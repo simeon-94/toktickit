@@ -1,0 +1,16 @@
+# command : (cd client && npm run build)
+# commit  : 333da7e5328520e2a24d7e0fc5999b3a4e03001c (feature/68-evidence-completion)
+# date    : 2026-10-29T07:34:20Z (UTC)
+# host    : MINGW64_NT-10.0-26200 node v24.19.0
+
+vite v5.4.21 building for production...
+transforming...
+✓ 50 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                   0.41 kB │ gzip:  0.27 kB
+dist/assets/index-CWKeYfLL.css  234.63 kB │ gzip: 31.70 kB
+dist/assets/index-CA3nOnLf.js   224.78 kB │ gzip: 62.81 kB
+✓ built in 1.22s
+
+# exit code: 0
