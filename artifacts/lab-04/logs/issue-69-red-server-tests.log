@@ -1,0 +1,26 @@
+# command : (cd server && npx vitest run tests/lab-04/filter-validation.api.test.ts --reporter=verbose)
+# commit  : deac387c5bd288770962dfb19ef262b9329b3d41 (feature/69-ticket-filter-validation)
+# date    : 2026-10-29T06:31:21Z (UTC)
+# host    : MINGW64_NT-10.0-26200 node v24.19.0
+
+The CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.
+
+ RUN  v2.1.9 C:/dev/toktickit/server
+
+[test setup] using fresh test database "toktickit_test" (migrated and seeded)
+
+⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/lab-04/filter-validation.api.test.ts [ tests/lab-04/filter-validation.api.test.ts ]
+Error: Failed to load url ../../src/middleware/errors (resolved id: ../../src/middleware/errors) in C:/dev/toktickit/server/tests/lab-04/filter-validation.api.test.ts. Does the file exist?
+ ❯ loadAndTransform node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:51969:17
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+ Test Files  1 failed (1)
+      Tests  no tests
+   Start at  13:31:33
+   Duration  16.04s (transform 140ms, setup 0ms, collect 0ms, tests 0ms, environment 0ms, prepare 1.41s)
+
+
+# exit code: 1

@@ -55,6 +55,14 @@ Git history of #52-#54 were taken on the shared dev database that also held auto
 | logs/issue-55-client-tests.log | `npx vitest run` (client) | #55 |
 | logs/issue-55-server-build.log | `npm run build` (server) | #55 |
 | logs/issue-55-client-build.log | `npm run build` (client) | #55 |
+| logs/issue-69-red-server-tests.log | Red run of HARD-06..08 before any fix: the file fails to load (`middleware/errors` missing) | #69 |
+| logs/issue-69-red2-server-tests.log | Red run after the async safety net only: HARD-08 passes, HARD-06/07 fail (`status=New` gives 500, expected 400) | #69 |
+| logs/issue-69-red-client-tests.log | Red run of HARD-09: the "New" option value is `New`, expected `NEW` | #69 |
+| logs/issue-69-server-tests.log | `npx vitest run --reporter=verbose` (server, all labs, own test database) | #69 |
+| logs/issue-69-client-tests.log | `npx vitest run --reporter=verbose` (client) | #69 |
+| logs/issue-69-server-build.log | `npm run build` (server) | #69 |
+| logs/issue-69-client-build.log | `npm run build` (client) | #69 |
+| logs/issue-69-e2e-all.log | `npx playwright test` (Lab 2, 3 and 4) against the fixed API | #69 |
 | logs/release-staging-migrate-deploy.log | `npx prisma migrate deploy` on lab4-staging `7a0cb17` before the release PR | Release |
 | logs/release-staging-server-tests.log | `npx vitest run` (server) on lab4-staging `7a0cb17` before the release PR | Release |
 | logs/release-staging-client-tests.log | `npx vitest run` (client) on lab4-staging `7a0cb17` before the release PR | Release |
