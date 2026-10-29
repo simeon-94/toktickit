@@ -1,10 +1,36 @@
-# command : git log --graph --oneline --decorate --all
-# commit  : b83e85b98334bde9a54492f570b3a5d327df03ef (docs/lab4-final-evidence, branched from main after the release merge)
-# date    : 2026-10-29T04:58:01Z (UTC)
-
-*   b83e85b (HEAD -> docs/lab4-final-evidence, origin/main, origin/HEAD, main) Merge pull request #66 from simeon-94/lab4-staging
+*   ca4f614 (HEAD -> docs/lab4-evidence-final-main, origin/main, origin/HEAD, main) Merge pull request #74 from simeon-94/lab4-staging
 |\  
-| *   7a0cb17 (origin/lab4-staging, lab4-staging) Merge pull request #65 from simeon-94/feature/55-final-hardening
+| *   aa74121 (origin/lab4-staging, lab4-staging) Merge pull request #73 from simeon-94/feature/68-evidence-completion
+| |\  
+| | * 8113497 (origin/feature/68-evidence-completion, feature/68-evidence-completion) docs: 54 evidence screenshots (E2E-04, REG-04) and run logs on the committed head 333da7e (#68)
+| | * 333da7e docs: E2E-04 and REG-04 in tests.md, #68 INDEX rows, ai-use row 11, inactive-assignee API log
+| | * ddfa112 test(e2e): regression-my-tickets uses the working New filter with a search (#68)
+| | * 4204795 test(e2e): add evidence completion spec for Actions Taken and Lab 1-3 screens (#68)
+| |/  
+| *   f6dc072 Merge pull request #72 from simeon-94/feature/71-admin-users-320
+| |\  
+| | * 993a3b0 (origin/feature/71-admin-users-320, feature/71-admin-users-320) docs: #71 run logs on the committed head a856414
+| | * a856414 docs: CL-08, RESP-02 in tests.md, #71 INDEX rows and ai-use row 10
+| | * 281dd26 fix(client): Admin Users table scrolls inside .table-responsive, not the page (#71)
+| | * 31683c9 test(e2e): failing RESP-02 for Admin Users page overflow at 320px (#71)
+| |/  
+| * 4b480db Merge pull request #70 from simeon-94/feature/69-ticket-filter-validation
+|/| 
+| * 2e0f157 (origin/feature/69-ticket-filter-validation, feature/69-ticket-filter-validation) docs: re-run #69 suites on the committed head d3c0126
+| * d3c0126 docs: CL-07, HARD-06..09 in tests.md, #69 logs and INDEX rows, ai-use row 9
+| * b8eb6c4 fix: validate ticket list status/priority filters (400 VALIDATION); My Tickets sends NEW (#69)
+| * 97f11ff fix(server): forward rejected async route handlers to a safe 500 INTERNAL handler (#69)
+| * deac387 test: failing tests for ticket list filter validation and async error safety net (#69)
+|/  
+*   63024b8 Merge pull request #67 from simeon-94/docs/lab4-final-evidence
+|\  
+| * 8296695 (origin/docs/lab4-final-evidence, docs/lab4-final-evidence) docs: add git graph, final results on main in tests.md and INDEX rows
+| * 2ad0d7e docs: add release (lab4-staging) and final main verification logs
+| * 82006fc docs: log Yanis's reviews of #63, #64, #65 and the release PR #66 in reviewer.md
+|/  
+*   b83e85b Merge pull request #66 from simeon-94/lab4-staging
+|\  
+| *   7a0cb17 Merge pull request #65 from simeon-94/feature/55-final-hardening
 | |\  
 | | * b837a1a (origin/feature/55-final-hardening, feature/55-final-hardening) docs: retake all 78 screenshots on a clean database; add #55, Batch B and verify-dashboard logs
 | | * 89a1c76 docs: complete ai-use.md rows (8) and add a reflection draft for the author to edit

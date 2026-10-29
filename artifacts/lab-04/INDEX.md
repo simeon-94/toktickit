@@ -89,9 +89,24 @@ Git history of #52-#54 were taken on the shared dev database that also held auto
 | logs/final-main-server-build.log | `npm run build` (server) on main `b83e85b` after the release merge | Final |
 | logs/final-main-client-build.log | `npm run build` (client) on main `b83e85b` after the release merge | Final |
 | logs/final-main-e2e-all.log | `npx playwright test` (Lab 2, 3, 4) on main `b83e85b` after the release merge | Final |
+| logs/release-evidence-staging-migrate-deploy.log | `npx prisma migrate deploy` on lab4-staging `aa74121` before the release PR #74 | Release #74 |
+| logs/release-evidence-staging-server-tests.log | `npx vitest run --reporter=verbose` (server) on lab4-staging `aa74121` before #74 | Release #74 |
+| logs/release-evidence-staging-client-tests.log | `npx vitest run --reporter=verbose` (client) on lab4-staging `aa74121` before #74 | Release #74 |
+| logs/release-evidence-staging-server-build.log | `npm run build` (server) on lab4-staging `aa74121` before #74 | Release #74 |
+| logs/release-evidence-staging-client-build.log | `npm run build` (client) on lab4-staging `aa74121` before #74 | Release #74 |
+| logs/release-evidence-staging-e2e-all.log | `npx playwright test` (Lab 2, 3, 4) on lab4-staging `aa74121` before #74 | Release #74 |
+| logs/final-main-evidence-migrate-deploy.log | `npx prisma migrate deploy` on main `ca4f614` after the #74 merge | Final |
+| logs/final-main-evidence-server-tests.log | `npx vitest run --reporter=verbose` (server, every test named) on main `ca4f614` | Final |
+| logs/final-main-evidence-client-tests.log | `npx vitest run --reporter=verbose` (client, every test named) on main `ca4f614` | Final |
+| logs/final-main-evidence-server-build.log | `npm run build` (server) on main `ca4f614` | Final |
+| logs/final-main-evidence-client-build.log | `npm run build` (client) on main `ca4f614` | Final |
+| logs/final-main-evidence-e2e-all.log | `npx playwright test` (Lab 2, 3, 4) on main `ca4f614` | Final |
+| logs/final-main-evidence-verify-dashboard-staff.log | `npm run verify:dashboard` as IT Staff (priya.nair) + Requester (jennifer.anderson) on main `ca4f614` | Final |
+| logs/final-main-evidence-verify-dashboard-admin.log | `npm run verify:dashboard` as Administrator (olivia.grant, incl. user counts) + Requester (michael.brown) on main `ca4f614` | Final |
+| logs/final-main-evidence-verify-dashboard-fixtures.log | `npm run verify:dashboard` as e2e.staff + Requester e2e.requester (fixture data) on main `ca4f614` | Final |
 
 ## Repository history
-`git-graph.txt` - `git log --graph --oneline --decorate --all` after the release merge.
+`git-graph.txt` - `git log --graph --oneline --decorate --all` after the second release merge (#74, `ca4f614`).
 
 ## Screenshots (`screenshots/`)
 | File | Screen / state | Width | Issue |
